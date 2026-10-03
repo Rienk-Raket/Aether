@@ -1,0 +1,66 @@
+/* Design tokens: every color, font and timing used in the app lives here. */
+
+:root {
+  /* Brand */
+  --color-primary: #00f0ff;
+  --color-secondary: #ff00e6;
+  --color-accent: #8b00ff;
+
+  /* Surfaces (dark theme, default) */
+  --color-bg: #0a0e27;
+  --color-surface: #12163a;
+  --color-glass: rgba(18, 22, 58, 0.7);
+  --color-glass-border: rgba(0, 240, 255, 0.2);
+  --color-overlay: rgba(10, 14, 39, 0.85);
+
+  /* Text */
+  --color-text: #ffffff;
+  --color-text-muted: #b0b8d8;
+  --color-text-on-primary: #0a0e27;
+
+  /* Status */
+  --color-success: #00ff88;
+  --color-warning: #ffb800;
+  --color-error: #ff3366;
+
+  /* Glow */
+  --glow-primary: 0 0 20px rgba(0, 240, 255, 0.5);
+  --glow-primary-strong: 0 0 30px rgba(0, 240, 255, 0.6);
+  --glow-secondary: 0 0 20px rgba(255, 0, 230, 0.45);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  --gradient-text: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+
+  /* Typography */
+  --font-heading: 'Rajdhani', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
+  --text-h1: 28px;
+  --text-h2: 22px;
+  --text-body: 16px;
+  --text-label: 14px;
+  --text-data: 13px;
+
+  /* Spacing & shape */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-pill: 999px;
+
+  /* Layout */
+  --nav-height: 64px;
+  --header-height: 60px;
+  --content-max: 640px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 200ms;
+  --dur-med: 400ms;
+  --dur-slow: 700ms;
+}

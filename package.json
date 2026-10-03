@@ -1,0 +1,19 @@
+{
+  "name": "aether-app",
+  "version": "0.1.1",
+  "private": true,
+  "description": "Offline-first PWA that finds the fairest meeting place for a group.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "start": "npx serve .",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "vitest": "^5.0.3"
+  }
+}
