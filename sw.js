@@ -1,7 +1,7 @@
 // Service worker: stores the app files on the device so Aether works offline.
 // Bump CACHE_VERSION (and APP_VERSION in js/version.js) on every release.
 
-const CACHE_VERSION = 'aether-v0.1.1';
+const CACHE_VERSION = 'aether-v0.2.0';
 
 const APP_SHELL = [
   './',
@@ -15,6 +15,10 @@ const APP_SHELL = [
   './js/router.js',
   './js/version.js',
   './js/i18n/nl.js',
+  './js/core/geo.js',
+  './js/core/travel-estimate.js',
+  './js/core/fairness.js',
+  './js/core/group-warnings.js',
   './js/ui/icons.js',
   './js/ui/nav.js',
   './js/ui/toast.js',
