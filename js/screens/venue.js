@@ -10,12 +10,14 @@ import { sourceBadge, offlineNotice } from '../ui/source-badge.js';
 import { navigate } from '../router.js';
 import { getVenue, OfflineError, PROVIDER_NAME as PLACES_NAME } from '../services/places.js';
 import { travelTimesTo, PROVIDER_NAME as ROUTING_NAME } from '../services/routing.js';
-import { openLabel, formatHours, crowdLevel } from '../core/venues.js';
+import { openLabel, formatHours, crowdLevel, formatPriceRange } from '../core/venues.js';
 import { travelStats, fairnessScore } from '../core/fairness.js';
 import { personLevel, fairnessLevel } from '../core/levels.js';
 import { formatTime } from '../core/dates.js';
-import { getAppointment, saveAppointment } from '../data/appointments.js';
-import { logActivity } from '../data/activity.js';
+import { getAppointment } from '../data/appointments.js';
+import { pickVenue } from '../data/venue-choice.js';
+import { listProviders } from '../data/offer.js';
+import { venueArt } from '../ui/venue-art.js';
 import { transportIcon } from '../ui/transport.js';
 import { loadParticipants } from './results-data.js';
 
@@ -54,6 +56,7 @@ export async function renderVenue(container, { id }, query) {
     }
   }
 
+  const providers = await listProviders();
   const status = openLabel(venue, when);
   const crowd = crowdLevel(venue, when);
   const chosen = appointment?.selected_poi?.id === venue.id;
@@ -65,14 +68,12 @@ export async function renderVenue(container, { id }, query) {
       <div class="dashboard">
         <div>
           <div class="card">
-            <div class="photo-grid" aria-hidden="true">
-              ${venue.photos.map((h, i) => `<span class="venue-photo big" style="--h1:${h};--h2:${venue.photos[(i + 1) % 4]}">${i === 0 ? icon(venue.type) : ''}</span>`).join('')}
-            </div>
+            ${venueArt(venue)}
             <div class="eyebrow section-gap">${t.placeTypes[venue.type]} · ${esc(venue.cuisine)}</div>
             <h1 class="section-gap">${esc(venue.name)}</h1>
             <div class="chips section-gap">
               <span class="chip active">★ ${venue.rating.toFixed(1)} (${venue.review_count})</span>
-              <span class="chip">${'€'.repeat(venue.price_level)}</span>
+              <span class="chip">${formatPriceRange(venue)}</span>
               <span class="chip level-${status.open ? 'good' : 'bad'}">${esc(status.text)}</span>
             </div>
             ${status.open ? '' : `<p class="notice" role="status">${t.venues.closedWarning(formatTime(when))}</p>`}
@@ -80,12 +81,16 @@ export async function renderVenue(container, { id }, query) {
             <p class="section-gap">${esc(venue.address)}
               <a class="link-btn" href="https://www.openstreetmap.org/?mlat=${venue.lat}&amp;mlon=${venue.lng}#map=17/${venue.lat}/${venue.lng}" target="_blank" rel="noopener noreferrer">${t.venue.openMap} ${icon('external')}</a>
             </p>
-            <p class="muted small section-gap">${sourceBadge(source, PLACES_NAME)} ${t.venue.fictional}</p>
+            <p class="muted small section-gap">${sourceBadge(source, PLACES_NAME)} ${t.venueCard.fictional}</p>
           </div>
 
           <div class="card">
-            <h2>${t.venue.features}</h2>
-            <div class="chips section-gap">${features(venue)}</div>
+            <h2>${t.venueCard.services}</h2>
+            <div class="chips section-gap">${venue.services.map((s) => `<span class="chip feature">${t.serviceNames[s]}</span>`).join('')}</div>
+            ${venue.diets.length ? `<div class="section-title section-gap">${t.venueCard.diets}</div><div class="chips">${venue.diets.map((d) => `<span class="chip feature">${icon('leaf')} ${t.dietNames[d]}</span>`).join('')}</div>` : ''}
+            <div class="section-title section-gap">${t.venue.features}</div>
+            <div class="chips">${features(venue)}</div>
+            <p class="muted small section-gap">${t.venueCard.capacity(venue.capacity, venue.price_unit)} · ${t.venueCard.bookVia}: ${esc(venue.booking_partners.map((id) => providers.find((p) => p.id === id)?.name).filter(Boolean).join(', '))}</p>
             <p class="section-gap"><span class="level-${crowd === 'low' ? 'good' : crowd === 'medium' ? 'medium' : 'bad'}">${t.venues.crowd[crowd]}</span>
               <span class="muted small"> ${t.venue.crowdAt(formatTime(when))}</span></p>
           </div>
@@ -103,19 +108,7 @@ export async function renderVenue(container, { id }, query) {
     </section>`;
 
   container.querySelector('[data-choose-venue]')?.addEventListener('click', async () => {
-    appointment.selected_poi = {
-      id: venue.id,
-      name: venue.name,
-      type: venue.type,
-      address: venue.address,
-      lat: venue.lat,
-      lng: venue.lng,
-      price_level: venue.price_level,
-      rating: venue.rating,
-      booking_partner: venue.booking_partner,
-    };
-    await saveAppointment(appointment);
-    await logActivity('place', t.activity.venueChosen(venue.name), appointment.selected_area?.name ?? '', `#/plek/${venue.id}?afspraak=${appointment.id}`);
+    await pickVenue(appointment, venue);
     showToast(t.venue.chosenToast(venue.name));
     navigate(`/ontdek?afspraak=${appointment.id}`);
   });

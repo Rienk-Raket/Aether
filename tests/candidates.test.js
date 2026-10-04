@@ -98,3 +98,34 @@ describe('createProjection', () => {
     expect(Number.isFinite(x) && Number.isFinite(y)).toBe(true);
   });
 });
+
+import { spreadPoints } from '../js/core/projection.js';
+
+describe('spreadPoints', () => {
+  const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+  it('pushes overlapping points apart without changing the input', () => {
+    const input = [{ x: 100, y: 100 }, { x: 102, y: 101 }, { x: 100, y: 100 }];
+    const out = spreadPoints(input, 24, { width: 400, height: 280, margin: 18 });
+    expect(input[0]).toEqual({ x: 100, y: 100 });
+    for (let i = 0; i < out.length; i++) for (let j = i + 1; j < out.length; j++) expect(distance(out[i], out[j])).toBeGreaterThan(20);
+  });
+
+  it('leaves points that are far enough apart where they are', () => {
+    const input = [{ x: 50, y: 50 }, { x: 200, y: 150 }];
+    expect(spreadPoints(input, 24)).toEqual(input);
+  });
+
+  it('keeps points inside the box', () => {
+    const out = spreadPoints([{ x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 2 }], 30, { width: 100, height: 100, margin: 10 });
+    for (const p of out) {
+      expect(p.x).toBeGreaterThanOrEqual(10);
+      expect(p.y).toBeGreaterThanOrEqual(10);
+    }
+  });
+
+  it('is repeatable', () => {
+    const input = Array.from({ length: 8 }, () => ({ x: 120, y: 120 }));
+    expect(spreadPoints(input, 20)).toEqual(spreadPoints(input, 20));
+  });
+});

@@ -99,7 +99,22 @@ export async function renderDiscover(container, _params, query) {
       <div class="card section-gap" data-venues></div>
     </section>`;
 
-  const venues = createVenueSection(container.querySelector('[data-venues]'), { appointmentId: appointment.id, when: start });
+  // The map shows how many venues fit the wishes in the selected area (and links to them).
+  let panel = null;
+  let venueCount = null;
+  const venues = createVenueSection(container.querySelector('[data-venues]'), {
+    appointment,
+    when: start,
+    onCount: (n) => {
+      if (n === venueCount) return;
+      venueCount = n;
+      panel?.update();
+    },
+    onChosen: () => renderDiscover(container, _params, query),
+  });
+  container.querySelector('[data-map]').addEventListener('click', (event) => {
+    if (event.target.closest('[data-jump-venues]')) container.querySelector('[data-venues]').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 
   container.querySelector('[data-vote]').addEventListener('click', async () => {
     await openPollSheet(data, { alpha: appointment.fairness_priority ?? self.preferences.fairness_priority, selfId: self.id });
@@ -108,7 +123,7 @@ export async function renderDiscover(container, _params, query) {
 
   container.querySelector('[data-pick]')?.addEventListener('change', (event) => navigate(`/ontdek?afspraak=${event.target.value}`));
 
-  createFairnessPanel(
+  panel = createFairnessPanel(
     data,
     {
       map: container.querySelector('[data-map]'),
@@ -121,7 +136,11 @@ export async function renderDiscover(container, _params, query) {
       alpha: appointment.fairness_priority ?? self.preferences.fairness_priority,
       topN: TOP,
       detail: true,
-      onSelect: (area) => venues.show(area),
+      onSelect: (area) => {
+        venueCount = null; // unknown until the venues of this area are loaded
+        venues.show(area);
+      },
+      venueCount: () => venueCount,
       onAlpha: (alpha) => {
         appointment.fairness_priority = alpha;
         return saveAppointment(appointment);

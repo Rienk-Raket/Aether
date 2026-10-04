@@ -24,3 +24,36 @@ export function createProjection(points, { width, height, padding = 24 }) {
     y: height - (offsetY + (point.lat - minY) * scale), // north is up
   });
 }
+
+// Nudges points apart that lie closer together than `minDistance`, so map markers do not hide
+// each other. Same input → same output. Returns new points in the same order.
+export function spreadPoints(points, minDistance, { width = Infinity, height = Infinity, margin = 0, iterations = 40 } = {}) {
+  const spread = points.map((p) => ({ x: p.x, y: p.y }));
+
+  for (let round = 0; round < iterations; round++) {
+    let moved = false;
+    for (let i = 0; i < spread.length; i++) {
+      for (let j = i + 1; j < spread.length; j++) {
+        const dx = spread[j].x - spread[i].x;
+        const dy = spread[j].y - spread[i].y;
+        const distance = Math.hypot(dx, dy);
+        if (distance >= minDistance) continue;
+
+        // Identical points: separate along a direction that depends on their position in the list.
+        const angle = distance === 0 ? (j * 2.399963) : Math.atan2(dy, dx);
+        const push = (minDistance - distance) / 2;
+        spread[i].x -= Math.cos(angle) * push;
+        spread[i].y -= Math.sin(angle) * push;
+        spread[j].x += Math.cos(angle) * push;
+        spread[j].y += Math.sin(angle) * push;
+        moved = true;
+      }
+    }
+    for (const p of spread) {
+      p.x = Math.min(width - margin, Math.max(margin, p.x));
+      p.y = Math.min(height - margin, Math.max(margin, p.y));
+    }
+    if (!moved) break;
+  }
+  return spread;
+}

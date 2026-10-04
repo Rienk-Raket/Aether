@@ -90,3 +90,9 @@ export function openLabel(venue, date) {
   if (today && minute < today[0]) return { open: false, text: `Gesloten · opent ${clock(today[0])}` };
   return { open: false, text: 'Gesloten op dit tijdstip' };
 }
+
+// "€25–40 p.p." or "€95–140 per kamer/nacht"
+export function formatPriceRange(venue) {
+  const [low, high] = venue.price_range;
+  return `€${low}–${high} ${venue.price_unit === 'room' ? 'per kamer/nacht' : 'p.p.'}`;
+}

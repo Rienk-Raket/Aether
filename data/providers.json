@@ -1,0 +1,10 @@
+{
+  "source": "Fictieve boekingssites en bureaus (demo). Geen echte bedrijven.",
+  "providers": [
+    { "id": "tafelaar", "name": "Tafelaar", "kind": "site", "description": "Restaurants reserveren voor groepen.", "services": ["lunch", "dinner", "drinks"] },
+    { "id": "overnachter", "name": "Overnachter", "kind": "site", "description": "Hotels en logies boeken, met ontbijt.", "services": ["stay", "breakfast"] },
+    { "id": "zaalmeester", "name": "Zaalmeester", "kind": "site", "description": "Vergaderzalen en werkplekken per dagdeel.", "services": ["meeting", "coffee", "lunch"] },
+    { "id": "samenzijn", "name": "Bureau Samenzijn", "kind": "agency", "description": "Evenementenbureau: regelt locatie, catering en logies in één offerte.", "services": ["event", "meeting", "stay", "dinner"] },
+    { "id": "direct", "name": "Direct bij de zaak", "kind": "direct", "description": "Zelf contact opnemen via de website of telefoon van de zaak.", "services": ["coffee", "lunch", "drinks", "dinner"] }
+  ]
+}

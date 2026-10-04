@@ -31,6 +31,13 @@
   --red-tint: rgba(255, 127, 143, 0.12);
   --orange-tint: rgba(255, 189, 114, 0.12);
 
+  /* One color per kind of business (venue map, legends) */
+  --type-restaurant: #ff9d72;
+  --type-cafe: #ffd479;
+  --type-bar: #c08cff;
+  --type-meeting_room: #6fd0ff;
+  --type-hotel: #ff8fb3;
+
   --gradient-brand: linear-gradient(135deg, var(--mint), #73a8ff);
   --gradient-bar: linear-gradient(90deg, var(--mint-2), var(--blue));
   --gradient-page: radial-gradient(circle at 80% -10%, #17455b 0, var(--bg) 36rem);

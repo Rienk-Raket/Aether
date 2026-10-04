@@ -4,11 +4,13 @@
 
 import { services } from './nl-services.js';
 import { collab } from './nl-collab.js';
+import { offerStrings } from './nl-offer.js';
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 export const t = {
   ...services,
+  ...offerStrings,
   poll: collab.poll,
   invite: collab.invite,
   importInvite: collab.importInvite,
@@ -17,6 +19,7 @@ export const t = {
   nav: {
     overview: 'Overzicht',
     discover: 'Ontdek plekken',
+    offer: 'Aanbod & wensen',
     groups: 'Mijn groepen',
     agenda: 'Agenda',
     activity: 'Activiteit',

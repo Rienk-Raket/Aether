@@ -1,7 +1,7 @@
 // Service worker: stores the app files on the device so Aether works offline.
 // APP_SHELL and CACHE_VERSION are generated: run `npm run sw` after adding files or bumping the version.
 
-const CACHE_VERSION = 'aether-v0.7.0';
+const CACHE_VERSION = 'aether-v0.8.0';
 
 const APP_SHELL = [
   './',
@@ -12,6 +12,7 @@ const APP_SHELL = [
   './css/components.css',
   './css/fonts.css',
   './css/forms.css',
+  './css/offer.css',
   './css/results.css',
   './css/tokens.css',
   './css/venues.css',
@@ -26,6 +27,7 @@ const APP_SHELL = [
   './js/core/hash.js',
   './js/core/invite.js',
   './js/core/levels.js',
+  './js/core/offer.js',
   './js/core/poll.js',
   './js/core/projection.js',
   './js/core/selection.js',
@@ -38,10 +40,13 @@ const APP_SHELL = [
   './js/data/db.js',
   './js/data/demo-seed.js',
   './js/data/groups.js',
+  './js/data/offer.js',
   './js/data/people.js',
   './js/data/polls.js',
   './js/data/settings.js',
+  './js/data/venue-choice.js',
   './js/i18n/nl-collab.js',
+  './js/i18n/nl-offer.js',
   './js/i18n/nl-services.js',
   './js/i18n/nl.js',
   './js/router.js',
@@ -56,6 +61,7 @@ const APP_SHELL = [
   './js/screens/new/step-group.js',
   './js/screens/new/step-when.js',
   './js/screens/new/step-where.js',
+  './js/screens/offer.js',
   './js/screens/profile-locations.js',
   './js/screens/profile-preferences.js',
   './js/screens/results-data.js',
@@ -91,6 +97,9 @@ const APP_SHELL = [
   './js/ui/source-badge.js',
   './js/ui/toast.js',
   './js/ui/transport.js',
+  './js/ui/venue-art.js',
+  './js/ui/venue-card.js',
+  './js/ui/venue-map.js',
   './js/ui/venue-section.js',
   './js/version.js',
   './assets/fonts/dmsans-latin.woff2',
@@ -101,6 +110,7 @@ const APP_SHELL = [
   './assets/icons/icon-maskable-512.png',
   './data/addresses.json',
   './data/nl-places.json',
+  './data/providers.json',
   './data/venues.json',
   './vendor/idb.js',
   './vendor/qrcode.js',

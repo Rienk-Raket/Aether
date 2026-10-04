@@ -1,0 +1,49 @@
+/* Aanbod & wensen, venue card, venue map. */
+
+/* ---------- Venue card (also used in the sheet) ---------- */
+.venue-art { display: block; width: 100%; height: auto; max-height: 220px; border-radius: var(--radius-md); }
+.venue-card-body { display: flex; flex-direction: column; gap: var(--space-3); padding-top: var(--space-3); }
+.venue-card-body .section-title { margin: var(--space-2) 0 0; }
+.venue-card-title { font: 600 26px / 1.1 var(--font-display); letter-spacing: -0.03em; }
+
+
+/* ---------- Venue map ---------- */
+.vm-marker { cursor: pointer; outline: none; }
+.vm-marker .halo { fill: transparent; transition: fill var(--dur-fast); }
+.vm-marker .dot { stroke: #071a28; stroke-width: 2; transition: all var(--dur-fast); }
+.vm-marker .glyph { fill: none; stroke: #071a28; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.vm-marker:hover .dot, .vm-marker:focus-visible .dot { stroke: var(--text); }
+.vm-marker.selected .halo { fill: rgba(157, 240, 207, 0.18); stroke: var(--mint); stroke-dasharray: 3 3; }
+.vm-marker text { fill: var(--text); font: 600 11px var(--font-body); text-anchor: middle; paint-order: stroke; stroke: #071a28; stroke-width: 3px; pointer-events: none; }
+.vm-centre circle { fill: rgba(157, 240, 207, 0.07); stroke: var(--mint); stroke-dasharray: 3 4; }
+.vm-centre path { fill: var(--mint); }
+.vm-centre text { fill: var(--mint); font: 600 11px var(--font-body); text-anchor: middle; paint-order: stroke; stroke: #132c39; stroke-width: 3px; }
+
+.vm-marker.restaurant .dot { fill: var(--type-restaurant); }
+.vm-marker.cafe .dot { fill: var(--type-cafe); }
+.vm-marker.bar .dot { fill: var(--type-bar); }
+.vm-marker.meeting_room .dot { fill: var(--type-meeting_room); }
+.vm-marker.hotel .dot { fill: var(--type-hotel); }
+
+.vm-legends { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-top: var(--space-2); padding: 0 var(--space-2); font-size: 12px; color: var(--muted); }
+.vm-legend { display: inline-flex; align-items: center; gap: 6px; }
+.vm-legend i { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+.vm-legend.restaurant i { background: var(--type-restaurant); }
+.vm-legend.cafe i { background: var(--type-cafe); }
+.vm-legend.bar i { background: var(--type-bar); }
+.vm-legend.meeting_room i { background: var(--type-meeting_room); }
+.vm-legend.hotel i { background: var(--type-hotel); }
+
+/* ---------- Venue list and wishes ---------- */
+.venue.selected { border-color: var(--mint-line); background: var(--mint-tint); }
+.wishes-line { margin: 0 0 var(--space-3); color: var(--muted); font-size: 13px; line-height: 1.6; }
+.wishes-line:empty { display: none; }
+.wishes-line svg { display: inline-block; width: 16px; height: 16px; margin-right: 6px; vertical-align: -3px; color: var(--mint); }
+.wishes-line .link-btn { margin-left: var(--space-2); }
+.nowrap { white-space: nowrap; }
+
+/* ---------- Aanbod & wensen ---------- */
+.provider-row { align-items: flex-start; padding: var(--space-3) 0; }
+.type-row { display: inline-flex; align-items: center; gap: var(--space-3); }
+.type-row svg { width: 24px; height: 24px; color: var(--mint); flex-shrink: 0; }
+.dashboard > div > .card + .card { margin-top: var(--space-3); }

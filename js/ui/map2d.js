@@ -10,7 +10,7 @@ const HEIGHT = 280;
 
 // participants: [{ id, name, location }]
 // candidates: ranked best-first, each { id, name, lat, lng, fairness }
-export function renderMap2d(container, { participants, candidates, selectedId, onSelect }) {
+export function renderMap2d(container, { participants, candidates, selectedId, venueCount = null, onSelect }) {
   const project = createProjection([...participants.map((p) => p.location), ...candidates], {
     width: WIDTH,
     height: HEIGHT,
@@ -70,7 +70,9 @@ export function renderMap2d(container, { participants, candidates, selectedId, o
         <g>${people}</g>
       </svg>
     </div>
-    <p class="map-legend"><span class="legend-dot"></span>${selected ? esc(t.results.legend(selected.name, participants.length)) : ''}</p>`;
+    <p class="map-legend"><span class="legend-dot"></span>${selected ? esc(t.results.legend(selected.name, participants.length)) : ''}${
+      venueCount > 0 ? ` · <button type="button" class="link-btn" data-jump-venues>${t.venueMap.jump(venueCount)}</button>` : ''
+    }</p>`;
 
   container.querySelectorAll('[data-candidate]').forEach((el) => {
     const select = () => onSelect?.(el.dataset.candidate);

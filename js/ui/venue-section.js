@@ -1,34 +1,43 @@
-// "Zaken in <gebied>": venues around the selected area, with filters. Follows the area that is
-// selected in the fairness panel. Filtering is done on the device, so changing a filter is instant.
+// "Zaken in <gebied>": the venues around the selected area, on a map and in a list.
+// Only venues that pass the user's wishes ("Aanbod & wensen") are shown; the kind-of-business
+// chips here are just a temporary view filter. Everything is filtered on the device.
 
 import { t } from '../i18n/nl.js';
 import { icon } from './icons.js';
 import { esc } from './dom.js';
 import { loadingBlock } from './loading.js';
 import { sourceBadge } from './source-badge.js';
+import { renderVenueMap } from './venue-map.js';
+import { openVenueCard } from './venue-card.js';
 import { findVenues, OfflineError, PROVIDER_NAME } from '../services/places.js';
 import { onConnectivityChange } from '../services/connectivity.js';
-import { filterVenues, sortVenues, openLabel, crowdLevel, VENUE_TYPES } from '../core/venues.js';
+import { getPrefs } from '../data/offer.js';
+import { filterByPrefs, wishCount } from '../core/offer.js';
+import { filterVenues, sortVenues, openLabel, crowdLevel, formatPriceRange, VENUE_TYPES } from '../core/venues.js';
 
-const FILTER_KEY = 'aether.venueFilters';
-const SWITCHES = ['accessible', 'quiet', 'vegetarian'];
+const TYPE_FILTER_KEY = 'aether.venueTypes';
 const NORMAL_RADIUS_KM = 10;
 const WIDE_RADIUS_KM = 25;
 
-function loadFilters() {
+function loadTypes() {
   try {
-    return { types: [], accessible: false, quiet: false, vegetarian: false, ...JSON.parse(localStorage.getItem(FILTER_KEY)) };
+    const saved = JSON.parse(localStorage.getItem(TYPE_FILTER_KEY));
+    return Array.isArray(saved) ? saved.filter((type) => VENUE_TYPES.includes(type)) : [];
   } catch {
-    return { types: [], accessible: false, quiet: false, vegetarian: false };
+    return [];
   }
 }
 
-// when: Date of the appointment. Returns { show(area) }.
-export function createVenueSection(container, { appointmentId, when }) {
-  const filters = loadFilters();
+// appointment: the appointment object (to choose a venue for it). when: Date of the appointment.
+// onCount(n): called with the number of venues shown. onChosen(): a venue was chosen.
+// Returns { show(area) }.
+export function createVenueSection(container, { appointment, when, onCount, onChosen }) {
+  let types = loadTypes();
+  let prefs = getPrefs();
   let area = null;
   let radius = NORMAL_RADIUS_KM;
   let state = { status: 'idle', venues: [], source: null };
+  let selectedId = null;
   let requestId = 0;
   let timer = null;
 
@@ -36,38 +45,36 @@ export function createVenueSection(container, { appointmentId, when }) {
     <div class="section-head">
       <div><h2 data-title></h2><p class="muted small" data-source></p></div>
     </div>
+    <p class="wishes-line" data-wishes></p>
     <div class="chips" data-types role="group" aria-label="${t.venues.typeFilter}"></div>
-    <div class="filter-grid" data-switches></div>
     <div data-body aria-live="polite"></div>`;
 
   const body = container.querySelector('[data-body]');
 
-  function saveFilters() {
-    try {
-      localStorage.setItem(FILTER_KEY, JSON.stringify(filters));
-    } catch {
-      // not remembered, that is fine
-    }
-  }
+  // What passes the wishes, and then the temporary type filter.
+  const allowed = () => filterByPrefs(state.venues, prefs);
+  const shown = () => sortVenues(filterVenues(allowed(), { types }), when);
 
-  function renderFilters() {
-    const noneSelected = filters.types.length === 0;
+  function renderChrome() {
+    container.querySelector('[data-title]').textContent = area ? t.venues.title(area.name) : '';
+    container.querySelector('[data-source]').innerHTML = state.source ? sourceBadge(state.source, PROVIDER_NAME) : '';
+
+    const wishes = container.querySelector('[data-wishes]');
+    wishes.innerHTML =
+      state.status === 'ready'
+        ? `${icon('sliders')}<span>${t.offer.activeSummary(wishCount(prefs))} · ${t.offer.shown(allowed().length, state.venues.length)}</span><a class="link-btn" href="#/aanbod">${t.offer.adjust}</a>`
+        : '';
+
+    const noneSelected = types.length === 0;
     container.querySelector('[data-types]').innerHTML =
       `<button type="button" class="chip-btn" data-type="" aria-pressed="${noneSelected}">${t.venues.all}</button>` +
-      VENUE_TYPES.map((type) => `<button type="button" class="chip-btn" data-type="${type}" aria-pressed="${filters.types.includes(type)}">${t.placeTypes[type]}</button>`).join('');
-
-    container.querySelector('[data-switches]').innerHTML = SWITCHES.map(
-      (name) => `
-      <label class="toggle-row">
-        <span>${t.venues.switches[name]}</span>
-        <span class="toggle"><input type="checkbox" data-switch="${name}" ${filters[name] ? 'checked' : ''} /><span class="toggle-track"></span></span>
-      </label>`,
-    ).join('');
+      prefs.types
+        .map((type) => `<button type="button" class="chip-btn" data-type="${type}" aria-pressed="${types.includes(type)}">${t.placeTypes[type]}</button>`)
+        .join('');
   }
 
   function renderBody() {
-    container.querySelector('[data-title]').textContent = area ? t.venues.title(area.name) : '';
-    container.querySelector('[data-source]').innerHTML = state.source ? sourceBadge(state.source, PROVIDER_NAME) : '';
+    renderChrome();
 
     if (state.status === 'loading') {
       body.innerHTML = loadingBlock(t.loading.venues);
@@ -84,31 +91,53 @@ export function createVenueSection(container, { appointmentId, when }) {
       return;
     }
 
-    const shown = sortVenues(filterVenues(state.venues, filters), when);
-    if (!shown.length) {
+    const list = shown();
+    onCount?.(list.length);
+
+    if (!list.length) {
       body.innerHTML = `
         <div class="empty-state">${icon('search')}<h2>${t.venues.empty}</h2>
         <div class="hero-buttons">
-          <button type="button" class="btn" data-clear>${t.venues.adjustFilters}</button>
+          <a class="btn" href="#/aanbod">${t.offer.adjust}</a>
+          ${types.length ? `<button type="button" class="btn" data-clear-types>${t.venues.adjustFilters}</button>` : ''}
           ${radius < WIDE_RADIUS_KM ? `<button type="button" class="btn btn-primary" data-wider>${t.venues.widerZone}</button>` : ''}
         </div></div>`;
       return;
     }
-    body.innerHTML = `<p class="muted small section-gap">${t.venues.count(shown.length, state.venues.length)}</p><div class="venue-grid">${shown.map(venueCard).join('')}</div>`;
+
+    body.innerHTML = `
+      <div data-map></div>
+      <p class="muted small section-gap">${t.venues.count(list.length, state.venues.length)}</p>
+      <div class="venue-grid">${list.map(venueRow).join('')}</div>`;
+    drawMap(list);
   }
 
-  function venueCard(v) {
+  function drawMap(list) {
+    renderVenueMap(body.querySelector('[data-map]'), {
+      area,
+      venues: list,
+      selectedId,
+      radiusKm: radius,
+      onSelect: (id) => {
+        selectedId = id;
+        drawMap(list);
+        const venue = list.find((v) => v.id === id);
+        if (venue) openVenueCard(venue, { when, appointment, onChosen });
+      },
+    });
+  }
+
+  function venueRow(v) {
     const status = openLabel(v, when);
-    const crowd = crowdLevel(v, when);
-    const href = `#/plek/${encodeURIComponent(v.id)}${appointmentId ? `?afspraak=${appointmentId}` : ''}`;
+    const href = `#/plek/${encodeURIComponent(v.id)}${appointment ? `?afspraak=${appointment.id}` : ''}`;
     return `
-      <a class="venue" href="${href}">
+      <a class="venue ${v.id === selectedId ? 'selected' : ''}" href="${href}">
         <span class="venue-photo" style="--h1:${v.photos[0]};--h2:${v.photos[1]}">${icon(v.type)}</span>
         <span class="grow">
           <span class="venue-name">${esc(v.name)}</span>
-          <span class="muted small venue-line">${esc(v.cuisine)} · ${'€'.repeat(v.price_level)} · ★ ${v.rating.toFixed(1)} (${v.review_count})</span>
+          <span class="muted small venue-line">${esc(v.cuisine)} · ★ ${v.rating.toFixed(1)} (${v.review_count}) · <span class="nowrap">${formatPriceRange(v)}</span></span>
           <span class="small venue-line level-${status.open ? 'good' : 'bad'}">${esc(status.open || status.text.includes('opent') ? status.text : t.venues.closedAt)}</span>
-          <span class="muted small venue-line">${t.venues.crowd[crowd]} · ${v.distance_km} km</span>
+          <span class="muted small venue-line">${t.venues.crowd[crowdLevel(v, when)]} · ${v.distance_km} km</span>
         </span>
         ${icon('chevron')}
       </a>`;
@@ -134,15 +163,16 @@ export function createVenueSection(container, { appointmentId, when }) {
     const typeButton = event.target.closest('[data-type]');
     if (typeButton) {
       const type = typeButton.dataset.type;
-      filters.types = type === '' ? [] : filters.types.includes(type) ? filters.types.filter((x) => x !== type) : [...filters.types, type];
-      saveFilters();
-      renderFilters();
+      types = type === '' ? [] : types.includes(type) ? types.filter((x) => x !== type) : [...types, type];
+      try {
+        localStorage.setItem(TYPE_FILTER_KEY, JSON.stringify(types));
+      } catch {
+        // not remembered, that is fine
+      }
       renderBody();
     }
-    if (event.target.closest('[data-clear]')) {
-      Object.assign(filters, { types: [], accessible: false, quiet: false, vegetarian: false });
-      saveFilters();
-      renderFilters();
+    if (event.target.closest('[data-clear-types]')) {
+      types = [];
       renderBody();
     }
     if (event.target.closest('[data-wider]')) {
@@ -152,21 +182,23 @@ export function createVenueSection(container, { appointmentId, when }) {
     if (event.target.closest('[data-retry]')) load();
   });
 
-  container.addEventListener('change', (event) => {
-    const input = event.target.closest('[data-switch]');
-    if (!input) return;
-    filters[input.dataset.switch] = input.checked;
-    saveFilters();
-    renderBody();
-  });
-
   // Going back online (or switching "Simuleer offline" off) retries a failed search.
-  const stopListening = onConnectivityChange(() => {
-    if (!container.isConnected) stopListening(); // the screen is gone
+  const stopConnectivity = onConnectivityChange(() => {
+    if (!container.isConnected) stopConnectivity(); // the screen is gone
     else if (area && state.status === 'offline') load();
   });
 
-  renderFilters();
+  // Changed wishes apply immediately.
+  const onOffer = () => {
+    if (!container.isConnected) {
+      document.removeEventListener('aether:offer', onOffer);
+      return;
+    }
+    prefs = getPrefs();
+    renderBody();
+  };
+  document.addEventListener('aether:offer', onOffer);
+
   renderBody();
 
   return {
@@ -176,6 +208,7 @@ export function createVenueSection(container, { appointmentId, when }) {
       if (area?.id === newArea.id) return;
       area = newArea;
       radius = NORMAL_RADIUS_KM;
+      selectedId = null;
       clearTimeout(timer);
       state = { ...state, status: 'loading' };
       renderBody();

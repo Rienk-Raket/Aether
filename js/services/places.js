@@ -9,6 +9,9 @@ import { venuesNear } from '../core/venues.js';
 
 export const PROVIDER_NAME = 'Plekwijzer (demo)';
 const TTL_MS = 24 * 60 * 60 * 1000;
+// Part of every cache key. Raise it when the shape of a venue changes, so answers saved by an
+// older version are not mixed with new ones.
+const CACHE_VERSION = 'v2';
 
 // Thrown when we are offline and nothing was stored earlier.
 export class OfflineError extends Error {
@@ -21,7 +24,7 @@ export class OfflineError extends Error {
 // Venues within radiusKm of a point, nearest first.
 // Returns { venues, source: 'live' | 'cache' | 'stale' }
 export async function findVenues({ lat, lng, radiusKm = 10 }) {
-  const key = `venues:${lat.toFixed(2)},${lng.toFixed(2)}:${radiusKm}`;
+  const key = `venues:${CACHE_VERSION}:${lat.toFixed(2)},${lng.toFixed(2)}:${radiusKm}`;
   const cached = await cacheGet(key);
   if (cached && !cached.expired) return { venues: cached.data, source: 'cache' };
 
@@ -37,14 +40,14 @@ export async function findVenues({ lat, lng, radiusKm = 10 }) {
 
 // One venue by id. Returns { venue, source } or { venue: null }.
 export async function getVenue(id) {
-  const key = `venue:${id}`;
+  const key = `venue:${CACHE_VERSION}:${id}`;
   const cached = await cacheGet(key);
   if (cached && !cached.expired) return { venue: cached.data, source: 'cache' };
 
   if (isOffline()) {
     if (cached) return { venue: cached.data, source: 'stale' };
     // Seen in a list before? Then we still know it.
-    const fromList = await cacheFind('venues:', (list) => list.some((v) => v.id === id));
+    const fromList = await cacheFind(`venues:${CACHE_VERSION}:`, (list) => list.some((v) => v.id === id));
     if (fromList) return { venue: fromList.data.find((v) => v.id === id), source: 'stale' };
     throw new OfflineError();
   }

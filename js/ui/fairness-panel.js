@@ -14,7 +14,8 @@ import { getSettings } from '../data/settings.js';
 
 // data:   result of loadResults()
 // slots:  { map, metrics, slider, stats, list } — any of them may be missing
-// options: { alpha, topN, detail, onChoose(candidate, alpha), onAlpha(alpha), onSelect(candidate) }
+// options: { alpha, topN, detail, onChoose(candidate, alpha), onAlpha(alpha), onSelect(candidate),
+//            venueCount() → number of venues that fit the wishes at the selected area }
 export function createFairnessPanel(data, slots, options) {
   const { participants, candidates, appointment } = data;
   let alpha = options.alpha;
@@ -38,6 +39,7 @@ export function createFairnessPanel(data, slots, options) {
         participants,
         candidates: ranked,
         selectedId,
+        venueCount: options.venueCount?.() ?? null,
         onSelect: (id) => {
           selectedId = id;
           update();

@@ -25,11 +25,11 @@ const NOUN = ['Spar', 'Lepel', 'Kade', 'Vlinder', 'Anker', 'Molen', 'Tafel', 'Ko
 const STREETS = ['Lindelaan', 'Kastanjestraat', 'Zonnebloemweg', 'Havenkade', 'Molenpad', 'Vlinderhof', 'Sterrenlaan', 'Duinroosstraat', 'IJsvogelweg', 'Hazelaarlaan', 'Lichtbaken', 'Morgenrood'];
 
 const TYPES = {
-  restaurant: { cuisines: ['Europees', 'Italiaans', 'Aziatisch', 'Mediterraan', 'Vegetarisch', 'Streekkeuken', 'Wereldkeuken', 'Visrestaurant'], price: [2, 4], quiet: 0.4, veg: 0.7, partner: 'tafelaar' },
-  cafe: { cuisines: ['Koffie & gebak', 'Lunchcafé', 'Brouwcafé'], price: [1, 2], quiet: 0.5, veg: 0.6, partner: null },
-  bar: { cuisines: ['Cocktails', 'Craft beer', 'Wijnbar'], price: [2, 3], quiet: 0.15, veg: 0.3, partner: null },
-  meeting_room: { cuisines: ['Vergaderruimte', 'Werkcafé'], price: [2, 3], quiet: 0.9, veg: 0.5, partner: 'overnachter' },
-  hotel: { cuisines: ['Stadshotel', 'Boetiekhotel', 'Businesshotel'], price: [2, 4], quiet: 0.6, veg: 0.5, partner: 'overnachter' },
+  restaurant: { cuisines: ['Europees', 'Italiaans', 'Aziatisch', 'Mediterraan', 'Vegetarisch', 'Streekkeuken', 'Wereldkeuken', 'Visrestaurant'], price: [2, 4], quiet: 0.4, veg: 0.7 },
+  cafe: { cuisines: ['Koffie & gebak', 'Lunchcafé', 'Brouwcafé'], price: [1, 2], quiet: 0.5, veg: 0.6 },
+  bar: { cuisines: ['Cocktails', 'Craft beer', 'Wijnbar'], price: [2, 3], quiet: 0.15, veg: 0.3 },
+  meeting_room: { cuisines: ['Vergaderruimte', 'Werkcafé'], price: [2, 3], quiet: 0.9, veg: 0.5 },
+  hotel: { cuisines: ['Stadshotel', 'Boetiekhotel', 'Businesshotel'], price: [2, 4], quiet: 0.6, veg: 0.5 },
 };
 
 // Opening hours: 7 entries (Sunday first) of [openMinute, closeMinute] or null when closed.
@@ -67,6 +67,62 @@ function makeName(r, type) {
   return `${type} ${used.size}`;
 }
 
+
+// ---- Services, diets, prices and booking routes (own random sequence per venue, so the
+// ---- fields above never change when this part changes) ----
+// Chance (0–1) that a venue of this type offers each service. 1 = always.
+const SERVICE_CHANCE = {
+  restaurant: { lunch: 0.7, dinner: 1, drinks: 0.3, breakfast: 0.1, event: 0.25 },
+  cafe: { coffee: 1, lunch: 0.7, breakfast: 0.5, drinks: 0.2, meeting: 0.1 },
+  bar: { drinks: 1, dinner: 0.2, event: 0.4 },
+  meeting_room: { meeting: 1, coffee: 1, lunch: 0.8, event: 0.5 },
+  hotel: { stay: 1, breakfast: 0.95, dinner: 0.6, lunch: 0.4, coffee: 0.8, meeting: 0.5, event: 0.4 },
+};
+const DIET_CHANCE = { gluten_free: 0.5, halal: 0.2, lactose_free: 0.4 }; // vegetarian/vegan come from `vegetarian`
+// Average price per person (in euro) for price levels 1–4; hotels: per room per night.
+const PRICE_RANGE = {
+  restaurant: [[10, 22], [18, 35], [32, 55], [55, 95]],
+  cafe: [[3, 9], [6, 14], [10, 20], [15, 28]],
+  bar: [[6, 14], [10, 22], [18, 35], [28, 50]],
+  meeting_room: [[10, 25], [18, 40], [30, 60], [50, 90]],
+  hotel: [[60, 95], [90, 140], [130, 200], [190, 320]],
+};
+const CAPACITY = { restaurant: [20, 120], cafe: [15, 60], bar: [30, 150], meeting_room: [8, 80], hotel: [15, 120] };
+
+function addFacets(venue) {
+  const f = seeded(hashText(`${venue.id}:facets`));
+  const services = Object.entries(SERVICE_CHANCE[venue.type])
+    .filter(([, chance]) => f() < chance)
+    .map(([name]) => name);
+
+  const diets = [];
+  if (venue.vegetarian) {
+    diets.push('vegetarian');
+    if (f() < 0.35) diets.push('vegan');
+  }
+  for (const [diet, chance] of Object.entries(DIET_CHANCE)) if (f() < chance) diets.push(diet);
+
+  const [low, high] = PRICE_RANGE[venue.type][venue.price_level - 1];
+  const spread = (value) => Math.round(value * (0.92 + f() * 0.16));
+
+  // Ways to book: the venue's own website always works for cafés and bars; restaurants,
+  // hotels and meeting rooms mostly go through a booking site; events through the agency.
+  const partners = { restaurant: ['tafelaar'], cafe: ['direct'], bar: ['direct'], meeting_room: ['zaalmeester'], hotel: ['overnachter'] }[venue.type];
+  if (['restaurant', 'hotel'].includes(venue.type) && f() < 0.5) partners.push('direct');
+  if (services.includes('event') || (venue.type === 'hotel' && services.includes('meeting'))) partners.push('samenzijn');
+
+  const [minCap, maxCap] = CAPACITY[venue.type];
+  return {
+    ...venue,
+    services,
+    diets,
+    price_range: [spread(low), spread(high)],
+    price_unit: venue.type === 'hotel' ? 'room' : 'pp',
+    capacity: Math.round(minCap + f() * (maxCap - minCap)),
+    booking_partners: partners,
+  };
+}
+
 const venues = [];
 places.forEach((place, index) => {
   const r = seeded(hashText(place.id));
@@ -76,7 +132,7 @@ places.forEach((place, index) => {
   kinds.forEach((type, i) => {
     const spec = TYPES[type];
     const reviews = Math.round(range(r, 40, 1200));
-    venues.push({
+    venues.push(addFacets({
       id: `${place.id}-${type}-${i + 1}`,
       area_id: place.id,
       name: makeName(r, type),
@@ -93,10 +149,9 @@ places.forEach((place, index) => {
       quiet: r() < spec.quiet,
       vegetarian: r() < spec.veg,
       popularity: Math.min(1, reviews / 1000), // 0–1, used for the crowd forecast
-      booking_partner: spec.partner,
       photos: [0, 1, 2, 3].map(() => Math.floor(r() * 360)), // hues for the generated photo tiles
       last_updated: '2026-10-01T08:00:00.000Z',
-    });
+    }));
   });
 });
 
