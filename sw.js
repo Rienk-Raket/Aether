@@ -1,7 +1,7 @@
 // Service worker: stores the app files on the device so Aether works offline.
 // APP_SHELL and CACHE_VERSION are generated: run `npm run sw` after adding files or bumping the version.
 
-const CACHE_VERSION = 'aether-v0.5.0';
+const CACHE_VERSION = 'aether-v0.5.1';
 
 const APP_SHELL = [
   './',
@@ -97,34 +97,36 @@ self.addEventListener('message', (event) => {
   if (event.data === 'SKIP_WAITING') self.skipWaiting();
 });
 
+// How long we wait for the network before falling back to the saved copy (slow connections).
+const NETWORK_TIMEOUT_MS = 4000;
+
+// Network first, saved copy as backup. This keeps all files of one version together: with
+// "saved copy first", an old app.js could end up next to a new index.html and crash.
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
-
-  // Pages: try the network first (fresh version), fall back to the cached copy offline.
-  if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).catch(() => caches.match('./index.html')));
-    return;
-  }
-
-  // While developing on localhost: always fresh files, cache only when the server is down.
-  if (self.location.hostname === 'localhost') {
-    event.respondWith(fetch(request).catch(() => caches.match(request)));
-    return;
-  }
-
-  // Everything else: cached copy first, network as backup (and remember the result).
-  event.respondWith(
-    caches.match(request).then(
-      (cached) =>
-        cached ||
-        fetch(request).then((response) => {
-          if (response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE_VERSION).then((cache) => cache.put(request, copy));
-          }
-          return response;
-        }),
-    ),
-  );
+  event.respondWith(networkFirst(request));
 });
+
+async function savedCopy(request) {
+  const cached = await caches.match(request, { ignoreSearch: true });
+  if (cached) return cached;
+  // A page that is not saved (for example "#/..." variants): show the app shell.
+  return request.mode === 'navigate' ? caches.match('./index.html') : undefined;
+}
+
+function networkFirst(request) {
+  // "no-cache" = always check with the server whether the file changed (cheap if it did not).
+  const options = request.mode === 'navigate' ? undefined : { cache: 'no-cache' };
+  const fresh = fetch(request, options).then((response) => {
+    if (response.ok) {
+      const copy = response.clone();
+      caches.open(CACHE_VERSION).then((cache) => cache.put(request, copy));
+    }
+    return response;
+  });
+
+  const slow = new Promise((resolve) => setTimeout(resolve, NETWORK_TIMEOUT_MS)).then(async () => (await savedCopy(request)) ?? fresh);
+
+  return Promise.race([fresh, slow]).catch(async () => (await savedCopy(request)) ?? Response.error());
+}
