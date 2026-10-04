@@ -36,8 +36,8 @@
 select { min-height: var(--tap); }
 
 /* Touch targets of at least 44px (see --tap) */
-[data-profile-form] .chip-label span { display: inline-flex; align-items: center; min-height: var(--tap); }
-[data-profile-form] input[type='range'] { min-height: var(--tap); }
+.form .chip-label span { display: inline-flex; align-items: center; min-height: var(--tap); }
+.form input[type='range'] { min-height: var(--tap); }
 .screen .back-link { display: inline-flex; align-items: center; min-height: var(--tap); }
 legend.field-label { padding: 0; }
 

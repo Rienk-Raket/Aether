@@ -15,6 +15,8 @@ import { groupWarnings, isBlocking } from '../../core/group-warnings.js';
 import { getGroup, saveGroup } from '../../data/groups.js';
 import { getPerson, savePerson, addLocation, defaultLocation } from '../../data/people.js';
 import { normalizeAppointmentPrefs } from '../../core/requirements.js';
+import { availableModes } from '../../core/profile-model.js';
+import { usableMode } from '../../core/pref-match.js';
 import { newAppointment, saveAppointment } from '../../data/appointments.js';
 import { now } from '../../data/db.js';
 import { logActivity } from '../../data/activity.js';
@@ -31,11 +33,16 @@ export async function renderStepWhere(container) {
   const people = (await Promise.all(group.members.map((m) => getPerson(m.user_id)))).filter(Boolean);
   const rerender = () => renderStepWhere(container);
 
+  const usePrefs = normalizeAppointmentPrefs(draft.preferences).include_participants;
+
   // Each participant: chosen location (or their default) and transport.
   const rows = people.map((person) => {
     const choice = draft.participants[person.id];
     const loc = person.locations.find((l) => l.id === choice?.location_id) ?? defaultLocation(person);
-    return { person, loc, mode: choice?.transport_mode ?? loc?.transport_mode ?? 'transit' };
+    const wanted = choice?.transport_mode ?? loc?.transport_mode ?? 'transit';
+    // With participants' preferences on, nobody is sent by a car or bike they do not have.
+    const mode = usePrefs && person.preferences ? usableMode(wanted, availableModes(person.preferences), person.preferences.default_transport) : wanted;
+    return { person, loc, mode };
   });
 
   const warnings = groupWarnings(rows.map((r) => ({ name: r.person.name, location: r.loc })));
@@ -79,9 +86,14 @@ export async function renderStepWhere(container) {
     }),
   );
 
+  const modesFor = (personId) => {
+    const person = people.find((p) => p.id === personId);
+    return usePrefs && person?.preferences ? TRANSPORT_OPTIONS.filter((m) => availableModes(person.preferences).includes(m)) : TRANSPORT_OPTIONS;
+  };
+
   container.querySelectorAll('[data-pick-mode]').forEach((btn) =>
     btn.addEventListener('click', async () => {
-      const mode = await actionSheet(t.transport.label, TRANSPORT_OPTIONS.map((m) => ({ label: transportLabel(m), value: m })));
+      const mode = await actionSheet(t.transport.label, modesFor(btn.dataset.pickMode).map((m) => ({ label: transportLabel(m), value: m })));
       if (mode) setChoice(btn.dataset.pickMode, { transport_mode: mode });
     }),
   );

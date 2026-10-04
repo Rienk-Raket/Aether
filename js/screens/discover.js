@@ -17,6 +17,8 @@ import { formatTime } from '../core/dates.js';
 import { listAppointments, saveAppointment } from '../data/appointments.js';
 import { logActivity } from '../data/activity.js';
 import { ensureSelf } from '../data/people.js';
+import { requirementsSummary, ruleTitle } from '../ui/requirements-summary.js';
+import { getPerson } from '../data/people.js';
 import { loadResults } from './results-data.js';
 import { nextAppointment } from './home.js';
 
@@ -47,6 +49,7 @@ export async function renderDiscover(container, _params, query) {
   const self = await ensureSelf();
   const upcoming = (await listAppointments()).filter((a) => new Date(a.datetime) >= startOfToday());
   const start = new Date(appointment.datetime);
+  const organizer = await getPerson(appointment.preferences?.set_by ?? appointment.created_by);
 
   container.innerHTML = `
     <section class="screen">
@@ -96,6 +99,8 @@ export async function renderDiscover(container, _params, query) {
         </div>
       </div>
 
+      ${prefsCard(data, organizer)}
+
       <div class="card section-gap" data-venues></div>
     </section>`;
 
@@ -105,6 +110,8 @@ export async function renderDiscover(container, _params, query) {
   const venues = createVenueSection(container.querySelector('[data-venues]'), {
     appointment,
     when: start,
+    requirements: data.requirements,
+    travelers: data.travelers,
     onCount: (n) => {
       if (n === venueCount) return;
       venueCount = n;
@@ -165,4 +172,19 @@ function startOfToday() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
   return d;
+}
+
+// Which preferences count for this appointment, and which conflict rule the organizer chose.
+function prefsCard(data, organizer) {
+  const prefs = data.appointment.preferences;
+  if (!prefs || !data.requirements) return '';
+  const text = t.apptPrefs;
+  const rule = prefs.include_participants ? text.chosenRule(ruleTitle(prefs.conflict_rule), esc(organizer?.name ?? '?')) : text.setByOrganizer(esc(organizer?.name ?? '?'));
+  return `
+    <details class="card section-gap">
+      <summary class="card-title">${text.resultTitle}</summary>
+      <p class="muted small">${prefs.include_participants ? text.resultOn : text.resultOff}</p>
+      <p class="small">${rule}</p>
+      ${requirementsSummary(data.requirements)}
+    </details>`;
 }

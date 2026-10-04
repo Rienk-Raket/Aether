@@ -7,6 +7,9 @@ import { groupWarnings } from '../core/group-warnings.js';
 import { getAppointment } from '../data/appointments.js';
 import { getGroup } from '../data/groups.js';
 import { getPerson } from '../data/people.js';
+import { resolveRequirements, travelLimits } from '../core/requirements.js';
+import { applyTravelPreferences } from '../core/pref-match.js';
+import { hasElectricCar } from '../core/profile-model.js';
 
 export async function listAreas() {
   return (await loadBundledJson('data/nl-places.json')).places;
@@ -19,7 +22,7 @@ export async function loadParticipants(appointment) {
     appointment.participants.map(async (p) => {
       const person = await getPerson(p.user_id);
       const location = person?.locations.find((l) => l.id === p.location_id) ?? null;
-      return { id: p.user_id, name: person?.name ?? '?', location, mode: p.transport_mode };
+      return { id: p.user_id, name: person?.name ?? '?', location, mode: p.transport_mode, preferences: person?.preferences ?? null };
     }),
   );
   return {
@@ -36,6 +39,15 @@ export async function loadResults(appointmentId) {
   const group = await getGroup(appointment.group_id);
   const { participants, missing } = await loadParticipants(appointment);
 
+  // Per participant: personal travel limits and what they need at the venue (see core/requirements.js).
+  const travelers = participants.map((p) => ({
+    id: p.id,
+    name: p.name,
+    mode: p.mode,
+    electric: hasElectricCar(p.preferences),
+    limits: travelLimits(p, appointment.preferences),
+  }));
+  const requirements = appointment.preferences ? resolveRequirements(participants, appointment.preferences) : null;
   let candidates = [];
   let source = 'estimate';
   let fetchedAt = null;
@@ -48,9 +60,13 @@ export async function loadResults(appointmentId) {
     });
     candidates = places.map((place, i) => ({ ...place, times: matrix.times[i] }));
     ({ source, fetchedAt } = matrix);
+    if (appointment.preferences) {
+      const when = new Date(appointment.datetime);
+      candidates = applyTravelPreferences(candidates, travelers, when, appointment.duration_minutes);
+    }
   }
 
   const warnings = groupWarnings(participants.map((p) => ({ name: p.name, location: p.location })));
 
-  return { appointment, group, participants, candidates, missing, warnings, source, fetchedAt };
+  return { appointment, group, participants, candidates, missing, warnings, source, fetchedAt, requirements, travelers };
 }

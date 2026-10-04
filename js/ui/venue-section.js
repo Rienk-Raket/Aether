@@ -13,6 +13,7 @@ import { findVenues, OfflineError, PROVIDER_NAME } from '../services/places.js';
 import { onConnectivityChange } from '../services/connectivity.js';
 import { getPrefs } from '../data/offer.js';
 import { filterByPrefs, wishCount } from '../core/offer.js';
+import { applyVenuePrefs, venueTravelNotes } from '../core/pref-match.js';
 import { filterVenues, sortVenues, openLabel, crowdLevel, formatPriceRange, VENUE_TYPES } from '../core/venues.js';
 
 const TYPE_FILTER_KEY = 'aether.venueTypes';
@@ -31,7 +32,7 @@ function loadTypes() {
 // appointment: the appointment object (to choose a venue for it). when: Date of the appointment.
 // onCount(n): called with the number of venues shown. onChosen(): a venue was chosen.
 // Returns { show(area) }.
-export function createVenueSection(container, { appointment, when, onCount, onChosen }) {
+export function createVenueSection(container, { appointment, when, onCount, onChosen, requirements = null, travelers = [] }) {
   let types = loadTypes();
   let prefs = getPrefs();
   let area = null;
@@ -52,8 +53,15 @@ export function createVenueSection(container, { appointment, when, onCount, onCh
   const body = container.querySelector('[data-body]');
 
   // What passes the wishes, and then the temporary type filter.
-  const allowed = () => filterByPrefs(state.venues, prefs);
-  const shown = () => sortVenues(filterVenues(allowed(), { types }), when);
+  const allowed = () => {
+    const fitting = filterByPrefs(state.venues, prefs);
+    return requirements ? applyVenuePrefs(fitting, requirements) : fitting;
+  };
+  // Best match for the appointment's preferences first; the sort is stable, so open and rating order stays within equal scores.
+  const shown = () => {
+    const list = sortVenues(filterVenues(allowed(), { types }), when);
+    return requirements ? list.sort((a, b) => b.pref_score - a.pref_score) : list;
+  };
 
   function renderChrome() {
     container.querySelector('[data-title]').textContent = area ? t.venues.title(area.name) : '';
@@ -127,6 +135,15 @@ export function createVenueSection(container, { appointment, when, onCount, onCh
     });
   }
 
+  function prefNotes(v) {
+    if (!requirements) return '';
+    const text = t.apptPrefs;
+    const missed = (v.pref_missed ?? []).map((key) => (key === 'price' ? text.missed.price : key.startsWith('wish:') ? text.missed[key.slice(5)] : text.missedDiet(t.profile.dining.dietOptions[key.slice(5)])));
+    const travel = venueTravelNotes(v, travelers).map((n) => (n.kind === 'parking' ? text.noteParking : text.noteCharger)(esc(n.name), n.minutes));
+    const notes = [...missed, ...travel];
+    return notes.length ? notes.map((n) => `<span class="pref-note">${n}</span>`).join('') : `<span class="small pref-ok">${text.fits}</span>`;
+  }
+
   function venueRow(v) {
     const status = openLabel(v, when);
     const href = `#/plek/${encodeURIComponent(v.id)}${appointment ? `?afspraak=${appointment.id}` : ''}`;
@@ -138,6 +155,7 @@ export function createVenueSection(container, { appointment, when, onCount, onCh
           <span class="muted small venue-line">${esc(v.cuisine)} · ★ ${v.rating.toFixed(1)} (${v.review_count}) · <span class="nowrap">${formatPriceRange(v)}</span></span>
           <span class="small venue-line level-${status.open ? 'good' : 'bad'}">${esc(status.open || status.text.includes('opent') ? status.text : t.venues.closedAt)}</span>
           <span class="muted small venue-line">${t.venues.crowd[crowdLevel(v, when)]} · ${v.distance_km} km</span>
+          ${prefNotes(v)}
         </span>
         ${icon('chevron')}
       </a>`;

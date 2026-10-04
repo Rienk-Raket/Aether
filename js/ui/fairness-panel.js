@@ -95,6 +95,12 @@ export function createFairnessPanel(data, slots, options) {
   return { update };
 }
 
+function violationText(v) {
+  if (v.kind === 'max_time') return t.apptPrefs.violationMax(esc(v.name), v.minutes, v.limit);
+  const hour = `${String(v.limit % 24).padStart(2, '0')}:00`;
+  return t.apptPrefs.violationLate(esc(v.name), hour);
+}
+
 function metricsLine(c) {
   return `
     <span class="level-${fairnessLevel(c.fairness)}">${t.results.fairness} ${c.fairness.toFixed(2)}</span>
@@ -132,6 +138,7 @@ function placeCard(c, rank, participants, isSelected, isChosen, detail) {
         <h3>${esc(c.name)} ${isChosen ? `<span class="badge">${t.results.chosen}</span>` : ''}</h3>
         <p class="level-${durationLevel(c.stats.mean)}">${t.results.everyoneWithin(worstCase)}</p>
         <p>${t.results.avg} ${Math.round(c.stats.mean)} min · Δ ${Math.round(c.stats.stddev)} min</p>
+        ${(c.violations ?? []).map((v) => `<p class="pref-note">${violationText(v)}</p>`).join('')}
       </div>
       <div class="score"><strong class="level-${fairnessLevel(c.fairness)}">${Math.round(c.fairness * 100)}</strong><small>${t.results.fairnessWord}</small></div>
       ${
