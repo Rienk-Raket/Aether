@@ -32,7 +32,7 @@ export function partnerUrl(partnerId, { appointmentId, venueName, startIso, pers
     wens: String(requests ?? '').slice(0, MAX_REQUEST_LENGTH),
     ref: makeReference(partnerId, appointmentId),
   });
-  return `partners/${encodeURIComponent(partnerId)}.html?${query}`;
+  return `partners/${encodeURIComponent(partnerId)}.html#${query}`; // after "#": survives redirects of some servers
 }
 
 // What the partner page sends back: #/bevestigd?afspraak=…&partner=…&ref=…&n=…&wens=…

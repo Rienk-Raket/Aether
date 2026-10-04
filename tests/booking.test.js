@@ -26,8 +26,8 @@ describe('clampPersons', () => {
 describe('partnerUrl', () => {
   it('points to the partner page and carries the details', () => {
     const url = partnerUrl('tafelaar', { appointmentId: 'a1', venueName: 'Keuken Kade', startIso: '2026-10-09T15:00:00.000Z', persons: 5, requests: 'Raam' });
-    expect(url.startsWith('partners/tafelaar.html?')).toBe(true);
-    const query = new URLSearchParams(url.split('?')[1]);
+    expect(url.startsWith('partners/tafelaar.html#')).toBe(true);
+    const query = new URLSearchParams(url.split('#')[1]);
     expect(query.get('plek')).toBe('Keuken Kade');
     expect(query.get('n')).toBe('5');
     expect(query.get('ref')).toBe(makeReference('tafelaar', 'a1'));

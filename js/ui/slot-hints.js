@@ -3,6 +3,7 @@
 
 import { t } from '../i18n/nl.js';
 import { esc } from './dom.js';
+import { plusBadge } from './plus-badge.js';
 import { scoreSlot, bestSlots } from '../core/slots.js';
 import { combine, formatTime } from '../core/dates.js';
 import { getGroup } from '../data/groups.js';
@@ -33,7 +34,7 @@ export async function attachSlotHints(slots, { draft, onPick }) {
 
   const top = bestSlots({ from: new Date(), durationMinutes: current.duration, travelers, count: 3 });
   slots.best.innerHTML = `
-    <span class="field-label">${t.slots.bestTitle}</span>
+    <div class="section-head"><span class="field-label">${t.slots.bestTitle}</span>${plusBadge()}</div>
     <div class="chips">${top
       .map((s, i) => `<button type="button" class="chip-btn" data-best="${i}" title="${esc(s.reasons.map(reasonText).join(', '))}"><span class="dot level-${s.level}"></span> ${esc(dayLabel(s.start))} ${formatTime(s.start)}</button>`)
       .join('')}</div>

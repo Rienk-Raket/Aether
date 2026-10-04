@@ -5,6 +5,7 @@
 import { services } from './nl-services.js';
 import { collab } from './nl-collab.js';
 import { offerStrings } from './nl-offer.js';
+import { bookingStrings } from './nl-booking.js';
 import { profileStrings, profileScreen, appointmentPrefs } from './nl-profile.js';
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -13,6 +14,7 @@ export const t = {
   ...services,
   ...offerStrings,
   ...profileStrings,
+  ...bookingStrings,
   profile: profileScreen,
   apptPrefs: appointmentPrefs,
   poll: collab.poll,

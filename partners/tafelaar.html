@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Tafelaar — reserveren (demo)</title>
+    <link rel="stylesheet" href="../css/tokens.css" />
+    <link rel="stylesheet" href="../css/fonts.css" />
+    <link rel="stylesheet" href="partner.css" />
+    <script type="module" src="partner.js"></script>
+  </head>
+  <body data-partner="tafelaar" data-button="Reservering bevestigen">
+    <header class="demo-banner">Fictieve boekingssite · demo · geen echt bedrijf</header>
+    <main class="page">
+      <h1>Tafelaar</h1>
+      <p class="lead">Restaurants reserveren voor groepen.</p>
+
+      <section class="summary" aria-live="polite">
+        <h2>Jouw reservering</h2>
+        <dl>
+          <dt>Plek</dt><dd data-venue></dd>
+          <dt>Wanneer</dt><dd data-when></dd>
+          <dt>Personen</dt><dd data-persons></dd>
+          <dt>Wensen</dt><dd data-requests></dd>
+          <dt>Referentie</dt><dd data-ref class="mono"></dd>
+        </dl>
+      </section>
+
+      <p class="error" data-error hidden>Deze pagina mist gegevens. Ga terug naar Aether en start de reservering opnieuw.</p>
+      <div class="actions">
+        <button type="button" class="primary" data-confirm>Reservering bevestigen</button>
+        <button type="button" class="secondary" data-cancel>Terug naar Aether</button>
+      </div>
+      <p class="note">Je ontvangt (in deze demo) geen e-mail: alles blijft in de app.</p>
+    </main>
+  </body>
+</html>

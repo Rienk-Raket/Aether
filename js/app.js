@@ -17,6 +17,8 @@ import { renderGroupDetail } from './screens/group-detail.js';
 import { renderAgenda } from './screens/agenda.js';
 import { renderActivity } from './screens/activity.js';
 import { renderSettings } from './screens/settings.js';
+import { renderBooking } from './screens/booking.js';
+import { renderBookingDone } from './screens/booking-done.js';
 import { renderProfile } from './screens/profile.js';
 import { renderStepGroup } from './screens/new/step-group.js';
 import { renderStepWhen } from './screens/new/step-when.js';
@@ -42,6 +44,8 @@ const TITLES = {
   nieuw: t.newAppointment.title,
   welkom: t.welcome.title,
   start: t.start.eyebrow,
+  reserveren: t.booking.eyebrow,
+  bevestigd: t.bookingDone.eyebrow,
   profiel: t.profile.eyebrow,
 };
 
@@ -68,6 +72,8 @@ const router = createRouter({
     '/welkom': renderWelcome,
     '/start': renderStartMenu,
     '/profiel': renderProfile,
+    '/reserveren': renderBooking,
+    '/bevestigd': renderBookingDone,
   },
   onChange(path, render, params, query) {
     setActiveRoute(path);

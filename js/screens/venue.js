@@ -175,5 +175,6 @@ function actions(appointment, chosen) {
           ? `<p><span class="badge">${t.results.chosen}</span> ${t.venue.alreadyChosen}</p>`
           : `<button type="button" class="btn btn-primary btn-block btn-large" data-choose-venue>${icon('check')} ${t.venue.choose}</button>`
       }
+      ${chosen ? `<a class="btn btn-primary btn-block btn-large section-gap" href="#/${appointment.booking ? 'bevestigd' : 'reserveren'}?afspraak=${appointment.id}">${icon('calendar')} ${appointment.booking ? t.booking.viewBooking : t.booking.reserve}</a>` : ''}
     </div>`;
 }

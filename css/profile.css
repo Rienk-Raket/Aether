@@ -60,3 +60,7 @@ details.card > summary { cursor: pointer; min-height: var(--tap); display: flex;
 /* "When can everyone" */
 .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: currentColor; vertical-align: middle; }
 .slot-level { margin: 0; }
+
+/* Booking */
+.plus-badge { margin-left: auto; }
+.hero-buttons { display: flex; flex-wrap: wrap; gap: var(--space-3); }
