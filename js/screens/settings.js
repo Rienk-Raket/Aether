@@ -3,7 +3,8 @@
 import { t } from '../i18n/nl.js';
 import { icon } from '../ui/icons.js';
 import { esc, avatar } from '../ui/dom.js';
-import { openSheet, confirmDialog } from '../ui/modal.js';
+import { confirmDialog } from '../ui/modal.js';
+import { askName } from '../ui/name-form.js';
 import { showToast } from '../ui/toast.js';
 import { demoButtonHtml, wireDemoButtons } from '../ui/demo.js';
 import { APP_VERSION } from '../version.js';
@@ -110,28 +111,6 @@ function toggleRow(name, label, checked) {
       <span>${label}</span>
       <span class="toggle"><input type="checkbox" data-setting="${name}" ${checked ? 'checked' : ''} /><span class="toggle-track"></span></span>
     </label>`;
-}
-
-function askName(current) {
-  return openSheet({
-    title: t.settings.editName,
-    body: `
-      <form class="form">
-        <label class="field">
-          <span class="field-label">${t.form.name}</span>
-          <input name="name" value="${esc(current)}" maxlength="40" required autocomplete="off" />
-        </label>
-        <div class="sheet-actions"><button type="submit" class="btn btn-primary btn-block">${t.common.save}</button></div>
-      </form>`,
-    setup(el, close) {
-      const form = el.querySelector('form');
-      form.elements.name.select();
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        close(form.elements.name.value.trim() || null);
-      });
-    },
-  });
 }
 
 // navigator.storage.estimate() tells how much this site stores on the device.

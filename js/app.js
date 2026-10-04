@@ -21,6 +21,7 @@ import { renderStepGroup } from './screens/new/step-group.js';
 import { renderStepWhen } from './screens/new/step-when.js';
 import { renderStepWhere } from './screens/new/step-where.js';
 import { renderWelcome, ONBOARDED_KEY } from './screens/welcome.js';
+import { renderStartMenu } from './screens/start-menu.js';
 import { hasSeenSplash, showSplash } from './ui/splash.js';
 
 const main = document.querySelector('#main');
@@ -38,6 +39,8 @@ const TITLES = {
   instellingen: t.nav.settings,
   nieuw: t.newAppointment.title,
   welkom: t.welcome.title,
+  start: t.start.eyebrow,
+  profiel: t.nav.settings,
 };
 
 applySettings();
@@ -60,11 +63,13 @@ const router = createRouter({
     '/nieuw/wanneer': renderStepWhen,
     '/nieuw/waar': renderStepWhere,
     '/welkom': renderWelcome,
+    '/start': renderStartMenu,
+    '/profiel': renderSettings,
   },
   onChange(path, render, params, query) {
     setActiveRoute(path);
     // The welcome carousel is full screen: no sidebar, top bar or bottom navigation.
-    document.body.classList.toggle('fullscreen', path === '/welkom');
+    document.body.classList.toggle('fullscreen', ['/welkom', '/start'].includes(path));
     document.title = `${TITLES[path.split('/')[1]] ?? t.appName} — ${t.appName}`;
 
     // Every screen gets a fresh element. If the user navigates away while a screen is still
@@ -95,10 +100,13 @@ await ensureSelf();
 startSimulation();
 // Fresh start of the app: opening screen first.
 const landing = ['', '#', '#/overzicht'].includes(location.hash);
-if (!hasSeenSplash()) await showSplash();
+const freshStart = !hasSeenSplash();
+if (freshStart) await showSplash();
 // First visit: show the welcome carousel once.
 if (!localStorage.getItem(ONBOARDED_KEY) && landing) {
   history.replaceState(null, '', '#/welkom'); // no hashchange event, so no double render
+} else if (landing && freshStart) {
+  history.replaceState(null, '', '#/start'); // fresh start: startmenu
 }
 router.start();
 

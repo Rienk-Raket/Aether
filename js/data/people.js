@@ -44,7 +44,16 @@ export function newPerson({ name, isSelf = false }) {
 }
 
 // Creates "you" on first use. The id is kept in localStorage, as described in the spec.
-export async function ensureSelf() {
+// Several callers may ask at the same moment at startup: they share one pending request,
+// otherwise each would create its own profile.
+let pendingSelf = null;
+
+export function ensureSelf() {
+  pendingSelf ??= findOrCreateSelf().finally(() => (pendingSelf = null));
+  return pendingSelf;
+}
+
+async function findOrCreateSelf() {
   const id = localStorage.getItem(SELF_KEY);
   const existing = id && (await getPerson(id));
   if (existing) return existing;
@@ -53,6 +62,9 @@ export async function ensureSelf() {
   localStorage.setItem(SELF_KEY, self.id);
   return self;
 }
+
+export const getActiveId = () => localStorage.getItem(SELF_KEY);
+export const setActiveId = (id) => localStorage.setItem(SELF_KEY, id);
 
 export function forgetSelf() {
   localStorage.removeItem(SELF_KEY);
