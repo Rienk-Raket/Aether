@@ -1,13 +1,14 @@
 // Service worker: stores the app files on the device so Aether works offline.
 // APP_SHELL and CACHE_VERSION are generated: run `npm run sw` after adding files or bumping the version.
 
-const CACHE_VERSION = 'aether-v0.6.0';
+const CACHE_VERSION = 'aether-v0.7.0';
 
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './css/base.css',
+  './css/collab.css',
   './css/components.css',
   './css/fonts.css',
   './css/forms.css',
@@ -23,8 +24,11 @@ const APP_SHELL = [
   './js/core/geo.js',
   './js/core/group-warnings.js',
   './js/core/hash.js',
+  './js/core/invite.js',
   './js/core/levels.js',
+  './js/core/poll.js',
   './js/core/projection.js',
+  './js/core/selection.js',
   './js/core/traffic.js',
   './js/core/travel-estimate.js',
   './js/core/venues.js',
@@ -35,7 +39,9 @@ const APP_SHELL = [
   './js/data/demo-seed.js',
   './js/data/groups.js',
   './js/data/people.js',
+  './js/data/polls.js',
   './js/data/settings.js',
+  './js/i18n/nl-collab.js',
   './js/i18n/nl-services.js',
   './js/i18n/nl.js',
   './js/router.js',
@@ -45,6 +51,7 @@ const APP_SHELL = [
   './js/screens/group-detail.js',
   './js/screens/groups.js',
   './js/screens/home.js',
+  './js/screens/invite-import.js',
   './js/screens/new/flow.js',
   './js/screens/new/step-group.js',
   './js/screens/new/step-when.js',
@@ -64,6 +71,7 @@ const APP_SHELL = [
   './js/services/mock/routara-mock.js',
   './js/services/places.js',
   './js/services/routing.js',
+  './js/services/simulation.js',
   './js/ui/address-picker.js',
   './js/ui/appointment-card.js',
   './js/ui/datepicker.js',
@@ -73,10 +81,12 @@ const APP_SHELL = [
   './js/ui/fairness-slider.js',
   './js/ui/group-form.js',
   './js/ui/icons.js',
+  './js/ui/invite-sheet.js',
   './js/ui/loading.js',
   './js/ui/location-form.js',
   './js/ui/map2d.js',
   './js/ui/modal.js',
+  './js/ui/poll-sheet.js',
   './js/ui/shell.js',
   './js/ui/source-badge.js',
   './js/ui/toast.js',
@@ -93,6 +103,7 @@ const APP_SHELL = [
   './data/nl-places.json',
   './data/venues.json',
   './vendor/idb.js',
+  './vendor/qrcode.js',
 ];
 
 self.addEventListener('install', (event) => {

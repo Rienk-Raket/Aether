@@ -6,6 +6,7 @@ import { esc } from '../ui/dom.js';
 import { createFairnessPanel } from '../ui/fairness-panel.js';
 import { demoButtonHtml, wireDemoButtons } from '../ui/demo.js';
 import { loadingFor } from '../ui/loading.js';
+import { openPollSheet } from '../ui/poll-sheet.js';
 import { sourceBadge, offlineNotice } from '../ui/source-badge.js';
 import { PROVIDER_NAME as ROUTING_NAME } from '../services/routing.js';
 import { formatTime } from '../core/dates.js';
@@ -88,10 +89,17 @@ export async function renderHome(container) {
             </div>
           </div>
           <div class="place-list" data-list></div>
-          <a class="btn btn-primary btn-block section-gap" href="#/ontdek?afspraak=${appointment.id}">${t.home.allPlaces} ${icon('chevron')}</a>
+          <button type="button" class="btn btn-primary btn-block section-gap" data-vote>${icon('vote')} ${t.poll.button}</button>
+          <a class="btn btn-block section-gap" href="#/ontdek?afspraak=${appointment.id}">${t.home.allPlaces} ${icon('chevron')}</a>
         </div>
       </div>
     </section>`;
+
+  const currentAlpha = () => appointment.fairness_priority ?? self.preferences.fairness_priority;
+  container.querySelector('[data-vote]').addEventListener('click', async () => {
+    await openPollSheet(data, { alpha: currentAlpha(), selfId: self.id });
+    renderHome(container); // the vote may have chosen an area
+  });
 
   createFairnessPanel(
     data,

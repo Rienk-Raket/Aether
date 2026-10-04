@@ -1,0 +1,37 @@
+/* Voting, inviting (QR code) and pending members. */
+
+/* ---------- Vote ---------- */
+.vote-list { display: grid; gap: var(--space-3); }
+
+.vote-option {
+  padding: var(--space-3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.025);
+  transition: border-color var(--dur-fast), background var(--dur-fast);
+}
+
+.vote-option.mine { border-color: var(--mint-line); background: var(--mint-tint); }
+.vote-option.winner { border-color: var(--mint); box-shadow: var(--mint-glow); }
+.vote-head { display: flex; flex-direction: column; gap: 2px; }
+.vote-bar { height: 8px; margin: var(--space-3) 0; border-radius: var(--radius-pill); background: rgba(255, 255, 255, 0.07); overflow: hidden; }
+.vote-bar span { display: block; height: 100%; border-radius: inherit; background: var(--gradient-bar); transition: width var(--dur-med) var(--ease); }
+.vote-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: 36px; }
+.voters { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.voters .small { margin-left: var(--space-2); }
+.poll .place-list { margin: var(--space-3) 0; }
+
+/* ---------- Invite ---------- */
+.qr-box {
+  align-self: center;
+  width: min(100%, 260px);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: #fff; /* a QR code needs a light background to be read */
+  line-height: 0;
+}
+
+.qr-box svg { width: 100%; height: auto; }
+.pending { color: var(--orange); }
+.pending::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--orange); animation: pulse-dot 1.4s var(--ease) infinite; }
+@keyframes pulse-dot { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }

@@ -2,7 +2,10 @@
 // so the app loads them locally (offline) without a bundler. Run: npm run vendor
 import { copyFileSync, mkdirSync } from 'node:fs';
 
-const files = [['node_modules/idb/build/index.js', 'vendor/idb.js']];
+const files = [
+  ['node_modules/idb/build/index.js', 'vendor/idb.js'],
+  ['node_modules/qrcode-generator/dist/qrcode.mjs', 'vendor/qrcode.js'],
+];
 
 mkdirSync('vendor', { recursive: true });
 for (const [from, to] of files) {

@@ -125,7 +125,7 @@ Plus/Teams alleen als demo-label, bouwen in stappen met akkoord.
 |---|---|---|
 | **O1** | Nieuwe schil (zijbalk/onderbalk/bovenbalk), ontwerpsysteem, modules Overzicht, Ontdek plekken, Mijn groepen, Agenda, Activiteit, Instellingen, activiteitenlog, CO₂-vergelijking, toegankelijkheid | **klaar** |
 | **O2** | Fictieve diensten Routara + Plekwijzer: zaken met filters (toegankelijk, rustig, vegetarisch), detailscherm, cache en "Simuleer offline" | **klaar** |
-| **O3** | Demo-groepsleden die stemmen en vertrekpunten toevoegen; stemvenster; uitnodigen via link/QR | open |
+| **O3** | Demo-groepsleden die stemmen en vertrekpunten toevoegen; stemvenster; uitnodigen via link/QR | **klaar** |
 | **O4** | Agenda met "wanneer kan iedereen" en spitsdrukte-model | open |
 | **O5** | Reserveren via Tafelaar/Overnachter, `.ics`, delen, Plus-label | open |
 | **O6** | 3D-orb met 2D-terugval (optioneel) | open |

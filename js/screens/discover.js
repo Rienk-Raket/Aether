@@ -9,9 +9,10 @@ import { showToast } from '../ui/toast.js';
 import { loadingFor } from '../ui/loading.js';
 import { sourceBadge, offlineNotice } from '../ui/source-badge.js';
 import { createVenueSection } from '../ui/venue-section.js';
+import { openPollSheet } from '../ui/poll-sheet.js';
 import { PROVIDER_NAME as ROUTING_NAME } from '../services/routing.js';
 import { navigate } from '../router.js';
-import { rankCandidates } from '../core/fairness.js';
+import { areaSelection } from '../core/selection.js';
 import { formatTime } from '../core/dates.js';
 import { listAppointments, saveAppointment } from '../data/appointments.js';
 import { logActivity } from '../data/activity.js';
@@ -87,7 +88,10 @@ export async function renderDiscover(container, _params, query) {
           <div class="stats" data-stats></div>
         </div>
         <div class="card">
-          <div class="section-head"><h2>${t.discover.listTitle}</h2></div>
+          <div class="section-head">
+            <h2>${t.discover.listTitle}</h2>
+            <button type="button" class="btn btn-small" data-vote>${icon('vote')} ${t.poll.button}</button>
+          </div>
           <div class="place-list" data-list></div>
         </div>
       </div>
@@ -96,6 +100,11 @@ export async function renderDiscover(container, _params, query) {
     </section>`;
 
   const venues = createVenueSection(container.querySelector('[data-venues]'), { appointmentId: appointment.id, when: start });
+
+  container.querySelector('[data-vote]').addEventListener('click', async () => {
+    await openPollSheet(data, { alpha: appointment.fairness_priority ?? self.preferences.fairness_priority, selfId: self.id });
+    renderDiscover(container, _params, query); // the vote may have chosen an area
+  });
 
   container.querySelector('[data-pick]')?.addEventListener('change', (event) => navigate(`/ontdek?afspraak=${event.target.value}`));
 
@@ -118,14 +127,7 @@ export async function renderDiscover(container, _params, query) {
         return saveAppointment(appointment);
       },
       onChoose: async (candidate, alpha) => {
-        const ranked = rankCandidates([candidate], alpha)[0];
-        Object.assign(appointment, {
-          selected_area: { id: candidate.id, name: candidate.name, lat: candidate.lat, lng: candidate.lng },
-          fairness_score: Number(ranked.fairness.toFixed(2)),
-          average_travel_time: Math.round(ranked.stats.mean),
-          travel_time_stddev: Math.round(ranked.stats.stddev),
-          fairness_priority: alpha,
-        });
+        Object.assign(appointment, areaSelection(candidate, alpha));
         await saveAppointment(appointment);
         await logActivity('place', t.activity.placeChosen(candidate.name), `${group?.name ?? ''} · ${t.results.avg} ${appointment.average_travel_time} min`, `#/ontdek?afspraak=${appointment.id}`);
         showToast(t.results.saved(candidate.name));

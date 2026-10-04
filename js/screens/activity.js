@@ -12,6 +12,8 @@ const TYPE_ICONS = {
   appointment: ['calendar', 'blue'],
   place: ['pin', ''],
   demo: ['leaf', 'orange'],
+  vote: ['vote', 'blue'],
+  invite: ['group', ''],
   system: ['settings', 'orange'],
 };
 

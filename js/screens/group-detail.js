@@ -14,6 +14,7 @@ import { getPerson, savePerson, newPerson, addLocation, defaultLocation } from '
 import { listAppointmentsForGroup } from '../data/appointments.js';
 import { appointmentCard } from '../ui/appointment-card.js';
 import { logActivity } from '../data/activity.js';
+import { openInviteSheet } from '../ui/invite-sheet.js';
 
 export async function renderGroupDetail(container, { id }) {
   const group = await getGroup(id);
@@ -34,7 +35,8 @@ export async function renderGroupDetail(container, { id }) {
           ${group.description ? `<p class="sub">${esc(group.description)}</p>` : ''}
         </div>
         <div class="top-actions">
-          <button class="btn btn-primary" type="button" data-plan ${members.length < 2 ? 'disabled' : ''}>${icon('calendar')} ${t.groupDetail.plan}</button>
+          <button class="btn" type="button" data-invite>${icon('share')} ${t.invite.button}</button>
+          <button class="btn btn-primary" type="button" data-plan ${members.filter((p) => defaultLocation(p)).length < 2 ? 'disabled' : ''}>${icon('calendar')} ${t.groupDetail.plan}</button>
           <button type="button" class="icon-btn" data-menu aria-label="${t.common.more}">${icon('more')}</button>
         </div>
       </div>
@@ -86,6 +88,18 @@ export async function renderGroupDetail(container, { id }) {
   });
 
   container.querySelector('[data-plan]').addEventListener('click', () => navigate(`/nieuw?groep=${group.id}`));
+  container.querySelector('[data-invite]').addEventListener('click', async () => {
+    await openInviteSheet(group, members);
+    rerender();
+  });
+
+  // Invited people add their start point in the background: refresh when that happens.
+  if (container.__onData) document.removeEventListener('aether:data', container.__onData);
+  container.__onData = () => {
+    if (!container.isConnected) document.removeEventListener('aether:data', container.__onData);
+    else if (!document.querySelector('dialog[open]')) rerender();
+  };
+  document.addEventListener('aether:data', container.__onData);
   container.querySelector('[data-menu]').addEventListener('click', () => groupMenu(group, rerender));
 }
 
@@ -96,7 +110,13 @@ function memberRow(person) {
       ${avatar(person)}
       <div class="grow">
         <div>${esc(person.name)}${person.is_self ? ` <span class="badge">${t.common.you}</span>` : ''}</div>
-        <div class="muted small">${location ? esc(location.address) : `<span class="text-error">${t.groupDetail.noLocation}</span>`}</div>
+        <div class="muted small">${
+          location
+            ? esc(location.address)
+            : person.pending_until
+              ? `<span class="pending">${t.invite.pending}</span>`
+              : `<span class="text-error">${t.groupDetail.noLocation}</span>`
+        }</div>
       </div>
       ${location ? `<span class="transport-icon" title="${transportLabel(location.transport_mode)}">${transportIcon(location.transport_mode)}</span>` : ''}
       <button type="button" class="icon-btn ghost" data-member="${person.id}" aria-label="${t.common.more}">${icon('more')}</button>

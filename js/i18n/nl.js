@@ -3,11 +3,15 @@
 // result goes into HTML.
 
 import { services } from './nl-services.js';
+import { collab } from './nl-collab.js';
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 export const t = {
   ...services,
+  poll: collab.poll,
+  invite: collab.invite,
+  importInvite: collab.importInvite,
   appName: 'Aether',
 
   nav: {
@@ -83,6 +87,7 @@ export const t = {
     placeChosen: (name) => `${name} gekozen als ontmoetingsplek`,
     venueChosen: (name) => `${name} gekozen als zaak`,
     wiped: 'Alle gegevens zijn gewist',
+    ...collab.activity,
   },
 
   appointments: {
