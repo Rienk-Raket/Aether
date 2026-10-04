@@ -7,6 +7,8 @@ import { demoButtonHtml, wireDemoButtons } from '../ui/demo.js';
 import { appointmentCard } from '../ui/appointment-card.js';
 import { listAppointments, deleteAppointment } from '../data/appointments.js';
 import { listGroups } from '../data/groups.js';
+import { appointmentSlotCheck } from '../data/slot-travelers.js';
+import { reasonText } from '../ui/slot-hints.js';
 import { logActivity } from '../data/activity.js';
 
 const SORT_KEY = 'aether.appointmentSort';
@@ -28,7 +30,14 @@ export async function renderAgenda(container) {
   const sort = SORTS[localStorage.getItem(SORT_KEY)] ? localStorage.getItem(SORT_KEY) : 'date';
   upcoming.sort((a, b) => SORTS[sort](a, b, groupsById));
 
-  const card = (a) => appointmentCard(a, groupsById.get(a.group_id), true);
+  // Does the moment suit everyone? Only worth a note when it does not.
+  const checks = new Map(await Promise.all(upcoming.map(async (a) => [a.id, await appointmentSlotCheck(a).catch(() => null)])));
+  const note = (a) => {
+    const check = checks.get(a.id);
+    if (!check || check.level === 'good') return '';
+    return `<p class="pref-note">${t.slots.agendaNote}: ${check.reasons.map(reasonText).join(' · ')}</p>`;
+  };
+  const card = (a) => appointmentCard(a, groupsById.get(a.group_id), true) + note(a);
 
   container.innerHTML = `
     <section class="screen">

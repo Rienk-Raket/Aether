@@ -75,6 +75,21 @@ export const t = {
     listTitle: 'Voor jullie groep',
   },
 
+  slots: {
+    bestTitle: 'Beste momenten voor jullie',
+    estimateNote: 'Een schatting op basis van reistijd naar het midden, de spits en ieders grenzen.',
+    noLocations: 'Zodra iedereen een startlocatie heeft, tonen we hier de beste momenten.',
+    levels: { good: 'Goed moment voor iedereen', ok: 'Kan, maar let op', bad: 'Lastig moment' },
+    reasons: {
+      rush: 'Het is spitsdrukte: auto en OV zijn trager',
+      avoid_rush: (name) => `${name} wil de spits vermijden`,
+      max_time: (name) => `${name} is langer onderweg dan het gewenste maximum`,
+      late_return: (name) => `${name} is dan later thuis dan gewenst`,
+      night: 'Reizen in de nacht: weinig verbindingen',
+    },
+    agendaNote: 'Moment past niet voor iedereen',
+  },
+
   agenda: {
     title: 'Al jullie afspraken.',
     sub: 'Kies een afspraak om de plekken te bekijken of aan te passen.',

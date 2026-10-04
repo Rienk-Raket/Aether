@@ -5,6 +5,7 @@ import { esc } from '../../ui/dom.js';
 import { createDatePicker } from '../../ui/datepicker.js';
 import { navigate } from '../../router.js';
 import { combine, dayKey, suggestions, addMinutes, formatTime, formatDuration } from '../../core/dates.js';
+import { attachSlotHints } from '../../ui/slot-hints.js';
 import { getDraft, updateDraft, stepHeader } from './flow.js';
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 7); // 07–23
@@ -23,6 +24,8 @@ export function renderStepWhen(container) {
   container.innerHTML = `
     <section class="screen wizard">
       ${stepHeader(2, t.newAppointment.stepWhen)}
+
+      <div class="card section-gap" data-best></div>
 
       <div class="chips section-gap" aria-label="${t.newAppointment.suggestions}">
         ${chips.map((d, i) => `<button type="button" class="chip-btn" data-suggestion="${i}">${esc(suggestionLabel(d))}</button>`).join('')}
@@ -53,6 +56,7 @@ export function renderStepWhen(container) {
         </label>
       </details>
 
+      <div class="section-gap" data-slot-hint aria-live="polite"></div>
       <p class="form-error" role="alert" data-error></p>
       <div class="flow-actions">
         <button type="button" class="btn btn-primary btn-large" data-next>${t.common.next}</button>
@@ -70,7 +74,9 @@ export function renderStepWhen(container) {
   }
 
   // Updates the selected chips and the "until 20:30" preview without re-rendering everything.
+  let hints = { update() {} };
   function refresh() {
+    hints.update();
     container.querySelectorAll('[data-hour]').forEach((b) => b.setAttribute('aria-pressed', Number(b.dataset.hour) === draft.hour));
     container.querySelectorAll('[data-minute]').forEach((b) => b.setAttribute('aria-pressed', Number(b.dataset.minute) === draft.minute));
     const start = combine(draft.date ?? dayKey(new Date()), draft.hour, draft.minute);
@@ -104,6 +110,18 @@ export function renderStepWhen(container) {
 
   refresh();
   centerHourChip(container, draft.hour);
+
+  // Needs the group's people, so it arrives a moment later.
+  const bestEl = container.querySelector('[data-best]');
+  bestEl.hidden = true;
+  attachSlotHints(
+    { best: bestEl, hint: container.querySelector('[data-slot-hint]') },
+    { draft: getDraft, onPick: (d) => { save({ date: dayKey(d), hour: d.getHours(), minute: d.getMinutes() }); calendar.set(dayKey(d)); centerHourChip(container, d.getHours()); } },
+  ).then((attached) => {
+    hints = attached;
+    bestEl.hidden = !bestEl.innerHTML.trim();
+    hints.update();
+  });
 }
 
 // Scrolls the hour row sideways so the chosen hour is in the middle (without scrolling the page).

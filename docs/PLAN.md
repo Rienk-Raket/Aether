@@ -127,7 +127,7 @@ Plus/Teams alleen als demo-label, bouwen in stappen met akkoord.
 | **O2** | Fictieve diensten Routara + Plekwijzer: zaken met filters (toegankelijk, rustig, vegetarisch), detailscherm, cache en "Simuleer offline" | **klaar** |
 | **O3** | Demo-groepsleden die stemmen en vertrekpunten toevoegen; stemvenster; uitnodigen via link/QR | **klaar** |
 | **O3b** | Module "Aanbod & wensen": fictieve boekingssites/bureaus aan/uit, wensen (eten, overnachten, ontbijt, lunch, koffie, vergaderzaal, evenement, dieet, prijs), zakenkaart met aanklikbare zaken en kaartje (foto, diensten, beoordeling, prijsrange) | **klaar** |
-| **O4** | Agenda met "wanneer kan iedereen" en spitsdrukte-model | open |
+| **O4** | Agenda met "wanneer kan iedereen" en spitsdrukte-model | **klaar** |
 | **O5** | Reserveren via Tafelaar/Overnachter, `.ics`, delen, Plus-label | open |
 | **O6** | 3D-orb met 2D-terugval (optioneel) | open |
 
