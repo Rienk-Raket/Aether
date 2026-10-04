@@ -4,17 +4,14 @@ import { t } from '../i18n/nl.js';
 import { icon } from '../ui/icons.js';
 import { esc, avatar } from '../ui/dom.js';
 import { confirmDialog } from '../ui/modal.js';
-import { askName } from '../ui/name-form.js';
 import { showToast } from '../ui/toast.js';
 import { demoButtonHtml, wireDemoButtons } from '../ui/demo.js';
 import { APP_VERSION } from '../version.js';
-import { ensureSelf, savePerson, forgetSelf } from '../data/people.js';
+import { ensureSelf, forgetSelf } from '../data/people.js';
 import { deleteDatabase } from '../data/db.js';
 import { hasDemoData } from '../data/demo-seed.js';
 import { getSettings, setSetting } from '../data/settings.js';
 import { logActivity } from '../data/activity.js';
-import { locationsSection, wireLocations } from './profile-locations.js';
-import { preferencesSection, wirePreferences } from './profile-preferences.js';
 import { connectionsSection, wireConnections } from './settings-connections.js';
 
 export async function renderSettings(container) {
@@ -29,19 +26,17 @@ export async function renderSettings(container) {
       <div class="eyebrow">${t.nav.settings}</div>
       <h1 class="section-gap">${t.settings.title}</h1>
 
-      <div class="card section-gap card-row">
+      <a class="card card-link card-row section-gap" href="#/profiel">
         <div class="list-row">
           ${avatar(self, 56)}
           <div>
             <div class="card-title">${esc(self.name)}</div>
-            <div class="muted small">${t.settings.localProfile}</div>
+            <div class="muted small">${t.settings.profileLink}</div>
           </div>
         </div>
-        <button type="button" class="icon-btn" data-edit-name aria-label="${t.settings.editName}">${icon('edit')}</button>
-      </div>
+        ${icon('chevron')}
+      </a>
 
-      ${locationsSection(self)}
-      ${preferencesSection(self.preferences)}
       ${connectionsSection()}
 
       <div class="section">
@@ -72,8 +67,6 @@ export async function renderSettings(container) {
       </div>
     </section>`;
 
-  wireLocations(container, self, rerender);
-  wirePreferences(container, self);
   wireConnections(container);
   wireDemoButtons(container, rerender);
   showStorageUse(container.querySelector('[data-storage]'));
@@ -81,15 +74,6 @@ export async function renderSettings(container) {
   container.querySelectorAll('[data-setting]').forEach((input) =>
     input.addEventListener('change', () => setSetting(input.dataset.setting, input.checked)),
   );
-
-  container.querySelector('[data-edit-name]').addEventListener('click', async () => {
-    const name = await askName(self.name);
-    if (!name) return;
-    self.name = name;
-    await savePerson(self);
-    document.dispatchEvent(new CustomEvent('aether:profile'));
-    rerender();
-  });
 
   container.querySelector('[data-wipe]').addEventListener('click', async () => {
     if (!(await confirmDialog(t.settings.wipeConfirm, { confirmLabel: t.settings.wipeButton, danger: true }))) return;

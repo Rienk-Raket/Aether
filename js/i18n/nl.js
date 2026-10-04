@@ -5,7 +5,7 @@
 import { services } from './nl-services.js';
 import { collab } from './nl-collab.js';
 import { offerStrings } from './nl-offer.js';
-import { profileStrings } from './nl-profile.js';
+import { profileStrings, profileScreen } from './nl-profile.js';
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
@@ -13,6 +13,7 @@ export const t = {
   ...services,
   ...offerStrings,
   ...profileStrings,
+  profile: profileScreen,
   poll: collab.poll,
   invite: collab.invite,
   importInvite: collab.importInvite,
@@ -150,6 +151,7 @@ export const t = {
   settings: {
     title: 'Aether werkt zoals jullie willen.',
     localProfile: 'Lokaal profiel · alleen op dit toestel',
+    profileLink: 'Voertuigen, locaties en voorkeuren bekijken en aanpassen',
     editName: 'Naam wijzigen',
     sectionLocations: 'Standaard locaties',
     emptyLocations: 'Voeg je eerste locatie toe',

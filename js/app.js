@@ -17,6 +17,7 @@ import { renderGroupDetail } from './screens/group-detail.js';
 import { renderAgenda } from './screens/agenda.js';
 import { renderActivity } from './screens/activity.js';
 import { renderSettings } from './screens/settings.js';
+import { renderProfile } from './screens/profile.js';
 import { renderStepGroup } from './screens/new/step-group.js';
 import { renderStepWhen } from './screens/new/step-when.js';
 import { renderStepWhere } from './screens/new/step-where.js';
@@ -40,7 +41,7 @@ const TITLES = {
   nieuw: t.newAppointment.title,
   welkom: t.welcome.title,
   start: t.start.eyebrow,
-  profiel: t.nav.settings,
+  profiel: t.profile.eyebrow,
 };
 
 applySettings();
@@ -64,7 +65,7 @@ const router = createRouter({
     '/nieuw/waar': renderStepWhere,
     '/welkom': renderWelcome,
     '/start': renderStartMenu,
-    '/profiel': renderSettings,
+    '/profiel': renderProfile,
   },
   onChange(path, render, params, query) {
     setActiveRoute(path);

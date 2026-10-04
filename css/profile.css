@@ -29,3 +29,14 @@
 .start-text strong { font: 600 16px var(--font-display); }
 .start-text small { color: var(--muted); font-size: 13px; }
 .start-go svg { width: 18px; height: 18px; opacity: 0.7; }
+
+/* Profile screen */
+.why { margin-top: var(--space-1); }
+[data-profile-form] .section + .section { margin-top: var(--space-5); }
+select { min-height: var(--tap); }
+
+/* Touch targets of at least 44px (see --tap) */
+[data-profile-form] .chip-label span { display: inline-flex; align-items: center; min-height: var(--tap); }
+[data-profile-form] input[type='range'] { min-height: var(--tap); }
+.screen .back-link { display: inline-flex; align-items: center; min-height: var(--tap); }
+legend.field-label { padding: 0; }
