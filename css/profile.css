@@ -40,3 +40,19 @@ select { min-height: var(--tap); }
 [data-profile-form] input[type='range'] { min-height: var(--tap); }
 .screen .back-link { display: inline-flex; align-items: center; min-height: var(--tap); }
 legend.field-label { padding: 0; }
+
+/* Appointment preferences step */
+.req-people { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); }
+.req-person { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 14px; }
+.rule-list { display: grid; gap: var(--space-2); }
+.rule-option { display: flex; gap: var(--space-3); align-items: flex-start; min-height: var(--tap); padding: var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; }
+.rule-option:has(input:checked) { border-color: var(--mint-line); background: var(--mint-tint); }
+.rule-option input { margin-top: 4px; accent-color: var(--mint-2); }
+.rule-option span { display: grid; gap: 2px; }
+.rule-option small { color: var(--muted); font-size: 13px; }
+details.card > summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; }
+.req-group { display: grid; gap: var(--space-2); }
+.req-group + .req-group { margin-top: var(--space-3); }
+.req-chip small { color: var(--muted); }
+.pref-note { display: block; font-size: 13px; color: var(--orange); }
+.pref-ok { color: var(--mint); }

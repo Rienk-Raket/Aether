@@ -27,7 +27,7 @@ export async function deleteAppointment(id) {
 }
 
 // participants: [{ user_id, location_id, transport_mode }]
-export function newAppointment({ groupId, createdBy, datetime, durationMinutes, notes, participants }) {
+export function newAppointment({ groupId, createdBy, datetime, durationMinutes, notes, participants, preferences = null }) {
   return {
     id: newId(),
     group_id: groupId,
@@ -45,6 +45,8 @@ export function newAppointment({ groupId, createdBy, datetime, durationMinutes, 
     average_travel_time: null,
     travel_time_stddev: null,
     notes,
+    // How the participants' preferences count (see core/requirements.js). null on older appointments.
+    preferences,
     reminder_enabled: true,
   };
 }

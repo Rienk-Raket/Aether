@@ -104,3 +104,48 @@ export const profileScreen = {
 
   fairness: { title: 'Eerlijkheid', why: 'Je standaard: liever iedereen even lang onderweg, of de kortste totale reistijd. Per afspraak kun je dit aanpassen.' },
 };
+
+// "Nieuwe afspraak" → Voorkeuren, and how the chosen preferences show up on the results.
+export const appointmentPrefs = {
+  stepTitle: 'Voorkeuren',
+  includeLabel: 'Voorkeuren van deelnemers meenemen',
+  includeWhy: 'Aan: wat deelnemers in hun profiel hebben ingevuld telt mee. Uit: alleen wat jij als organisator hieronder instelt telt.',
+  participants: 'Deelnemers',
+  hasPrefs: 'voorkeuren ingevuld',
+  noPrefs: 'geen voorkeuren (telt niet mee)',
+  ruleTitle: 'Bij tegenstrijdige voorkeuren',
+  rules: {
+    strictest: { title: 'Strengste wint', hint: 'Elke eis van iemand telt voor iedereen (bijvoorbeeld vegetarisch of toegankelijk). Het laagste prijsniveau geldt.' },
+    organizer: { title: 'Organisator beslist', hint: 'Wat jij hieronder invult gaat voor de voorkeuren van de deelnemers. Wat je leeg laat, volgt de strengste.' },
+    majority: { title: 'Meerderheid beslist', hint: 'Een eis telt alleen als meer dan de helft hem heeft. Anders wordt het een wens: leuk als het past, maar geen reden om een plek te schrappen.' },
+  },
+  allergyNote: 'Allergieën tellen altijd mee, bij elke regel.',
+  organizerTitle: 'Jouw eisen als organisator',
+  organizerHint: 'Optioneel. Dit geldt voor alle deelnemers van deze afspraak en wordt bij de afspraak vermeld als door jou ingesteld.',
+  unset: 'Niet ingesteld',
+  noLimit: 'Geen limiet',
+  maxMinutes: 'Maximale reistijd voor iedereen',
+  latestReturn: 'Iedereen uiterlijk thuis',
+  summaryTitle: 'Dit nemen we mee',
+  summaryNone: 'Geen voorkeuren actief: alle plekken komen in aanmerking.',
+  requirements: 'Eisen',
+  wishes: 'Wensen',
+  from: { organizer: 'door organisator', participants: 'door deelnemers', both: 'organisator + deelnemers' },
+  price: (n) => `Maximaal ${'€'.repeat(n)}`,
+  next: 'Volgende',
+
+  // On the results screen
+  resultTitle: 'Voorkeuren bij deze afspraak',
+  resultOff: 'Voorkeuren van deelnemers zijn niet meegenomen.',
+  resultOn: 'Voorkeuren van deelnemers zijn meegenomen.',
+  chosenRule: (rule, name) => `Regel: ${rule} (gekozen door ${name})`,
+  setByOrganizer: (name) => `Door ${name} ingesteld als organisator`,
+  showDetails: 'Wat telt mee?',
+  violationMax: (name, minutes, limit) => `${name}: ${minutes} min onderweg, boven het maximum van ${limit} min`,
+  violationLate: (name, hour) => `${name}: dan later thuis dan ${hour}`,
+  noteParking: (name, minutes) => `${name}: geen parkeerplek, reken op ca. +${minutes} min`,
+  noteCharger: (name, minutes) => `${name}: geen laadpunt, reken op ca. +${minutes} min`,
+  missed: { price: 'Boven het prijsniveau', terrace: 'Geen terras', kid_friendly: 'Niet kindvriendelijk', dog_friendly: 'Geen honden', quiet: 'Niet rustig' },
+  missedDiet: (label) => `Geen ${label.toLowerCase()} aanbod`,
+  fits: 'Past bij de voorkeuren',
+};

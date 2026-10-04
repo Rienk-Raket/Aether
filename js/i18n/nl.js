@@ -5,7 +5,7 @@
 import { services } from './nl-services.js';
 import { collab } from './nl-collab.js';
 import { offerStrings } from './nl-offer.js';
-import { profileStrings, profileScreen } from './nl-profile.js';
+import { profileStrings, profileScreen, appointmentPrefs } from './nl-profile.js';
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
@@ -14,6 +14,7 @@ export const t = {
   ...offerStrings,
   ...profileStrings,
   profile: profileScreen,
+  apptPrefs: appointmentPrefs,
   poll: collab.poll,
   invite: collab.invite,
   importInvite: collab.importInvite,
@@ -250,6 +251,7 @@ export const t = {
     step: (n, title) => `Stap ${n}: ${title}`,
     stepGroup: 'Groep',
     stepWhen: 'Wanneer?',
+    stepPrefs: 'Voorkeuren',
     stepWhere: 'Waar starten jullie?',
     chooseGroup: 'Met wie spreek je af?',
     noGroup: 'Geen groep? Maak er een',

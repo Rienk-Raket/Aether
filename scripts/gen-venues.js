@@ -155,6 +155,32 @@ places.forEach((place, index) => {
   });
 });
 
+// Extra facts used by personal preferences (terrace, parking, allergies...). They are drawn from a
+// separate random stream per venue, so every other field in the file stays exactly as it was.
+const ALLERGENS = ['peanut', 'tree_nut', 'shellfish', 'egg', 'soy', 'fish', 'sesame'];
+const CHANCE = {
+  // terrace, kid-friendly, dog-friendly, parking, charger, allergen-safe (per allergen)
+  restaurant: { terrace: 0.45, kid: 0.6, dog: 0.3, parking: 0.5, charger: 0.2, safe: 0.7 },
+  cafe: { terrace: 0.6, kid: 0.6, dog: 0.45, parking: 0.4, charger: 0.15, safe: 0.85 },
+  bar: { terrace: 0.5, kid: 0.1, dog: 0.35, parking: 0.3, charger: 0.1, safe: 0.85 },
+  meeting_room: { terrace: 0.15, kid: 0.2, dog: 0.1, parking: 0.7, charger: 0.5, safe: 0.9 },
+  hotel: { terrace: 0.3, kid: 0.5, dog: 0.3, parking: 0.8, charger: 0.4, safe: 0.8 },
+};
+
+for (const venue of venues) {
+  const r = seeded(hashText(`${venue.id}:facts`));
+  const chance = CHANCE[venue.type];
+  Object.assign(venue, {
+    terrace: r() < chance.terrace,
+    kid_friendly: r() < chance.kid,
+    dog_friendly: r() < chance.dog,
+    parking: r() < chance.parking,
+    charger: r() < chance.charger,
+    accessible_toilet: venue.accessible && r() < 0.7,
+    allergen_safe: ALLERGENS.filter(() => r() < chance.safe),
+  });
+}
+
 const source = 'Plekwijzer (demo): alle zaken zijn fictief. Gegenereerd door scripts/gen-venues.js.';
 const lines = venues.map((v) => JSON.stringify(v)).join(',\n');
 writeFileSync('data/venues.json', `{\n"source": ${JSON.stringify(source)},\n"venues": [\n${lines}\n]\n}\n`);

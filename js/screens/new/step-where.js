@@ -14,6 +14,7 @@ import { combine } from '../../core/dates.js';
 import { groupWarnings, isBlocking } from '../../core/group-warnings.js';
 import { getGroup, saveGroup } from '../../data/groups.js';
 import { getPerson, savePerson, addLocation, defaultLocation } from '../../data/people.js';
+import { normalizeAppointmentPrefs } from '../../core/requirements.js';
 import { newAppointment, saveAppointment } from '../../data/appointments.js';
 import { now } from '../../data/db.js';
 import { logActivity } from '../../data/activity.js';
@@ -44,7 +45,7 @@ export async function renderStepWhere(container) {
 
   container.innerHTML = `
     <section class="screen wizard">
-      ${stepHeader(3, t.newAppointment.stepWhere)}
+      ${stepHeader(4, t.newAppointment.stepWhere)}
       <button type="button" class="btn btn-block" data-defaults>${t.newAppointment.useDefaults}</button>
 
       <div class="card list-card section-gap">
@@ -92,6 +93,7 @@ export async function renderStepWhere(container) {
       datetime: combine(draft.date, draft.hour, draft.minute).toISOString(),
       durationMinutes: draft.duration,
       notes: draft.notes,
+      preferences: normalizeAppointmentPrefs(draft.preferences),
       participants: rows.map((r) => ({ user_id: r.person.id, location_id: r.loc.id, transport_mode: r.mode })),
     });
     await saveAppointment(appointment);

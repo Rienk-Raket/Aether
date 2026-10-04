@@ -20,6 +20,7 @@ import { renderSettings } from './screens/settings.js';
 import { renderProfile } from './screens/profile.js';
 import { renderStepGroup } from './screens/new/step-group.js';
 import { renderStepWhen } from './screens/new/step-when.js';
+import { renderStepPrefs } from './screens/new/step-prefs.js';
 import { renderStepWhere } from './screens/new/step-where.js';
 import { renderWelcome, ONBOARDED_KEY } from './screens/welcome.js';
 import { renderStartMenu } from './screens/start-menu.js';
@@ -62,6 +63,7 @@ const router = createRouter({
     '/instellingen': renderSettings,
     '/nieuw': renderStepGroup,
     '/nieuw/wanneer': renderStepWhen,
+    '/nieuw/voorkeuren': renderStepPrefs,
     '/nieuw/waar': renderStepWhere,
     '/welkom': renderWelcome,
     '/start': renderStartMenu,

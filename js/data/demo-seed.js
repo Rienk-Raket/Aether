@@ -1,7 +1,8 @@
 // Fills the app with fictional demo data: two groups of made-up people.
 
 import { loadBundledJson } from '../services/mock/network.js';
-import { ensureSelf, newPerson, addLocation, savePerson } from './people.js';
+import { ensureSelf, newPerson, addLocation, savePerson, DEFAULT_PREFERENCES } from './people.js';
+import { normalizePreferences } from '../core/profile-model.js';
 import { newGroup, addMember, saveGroup, listGroups } from './groups.js';
 import { logActivity } from './activity.js';
 
@@ -15,18 +16,18 @@ const DEMO_GROUPS = [
     name: 'Vrijdagborrel',
     description: 'Elke laatste vrijdag van de maand',
     people: [
-      { name: 'Anna', address: 'amsterdam-2', transport: 'transit' },
-      { name: 'Bram', address: 'rotterdam-1', transport: 'car' },
-      { name: 'Cem', address: 'haarlem-1', transport: 'transit' },
-      { name: 'Dewi', address: 'amersfoort-2', transport: 'bike' },
+      { name: 'Anna', address: 'amsterdam-2', transport: 'transit', prefs: { dining: { diets: ['vegetarian'], terrace: 'prefer' }, budget_level: 3 } },
+      { name: 'Bram', address: 'rotterdam-1', transport: 'car', prefs: { vehicles: [{ id: 'demo-car', kind: 'petrol', label: '' }], travel: { max_minutes: 60, needs_parking: true } } },
+      { name: 'Cem', address: 'haarlem-1', transport: 'transit', prefs: { dining: { allergies: ['peanut'], quiet: 'prefer' } } },
+      { name: 'Dewi', address: 'amersfoort-2', transport: 'bike', prefs: { vehicles: [{ id: 'demo-bike', kind: 'bike', label: '' }], dining: { kid_friendly: 'must' } } },
     ],
   },
   {
     name: 'Projectteam Noord',
     description: 'Kwartaaloverleg',
     people: [
-      { name: 'Eva', address: 'groningen-1', transport: 'car' },
-      { name: 'Joris', address: 'zwolle-2', transport: 'transit' },
+      { name: 'Eva', address: 'groningen-1', transport: 'car', prefs: { vehicles: [{ id: 'demo-ev', kind: 'electric', label: 'Elektrisch' }], travel: { needs_charger: true, max_minutes: 90 } } },
+      { name: 'Joris', address: 'zwolle-2', transport: 'transit', prefs: { accessibility: ['wheelchair'] } },
       { name: 'Lot', address: 'leeuwarden-3', transport: 'transit' },
     ],
   },
@@ -54,6 +55,8 @@ export async function loadDemoData() {
     const group = { ...newGroup({ name: spec.name, description: spec.description, owner: self }), demo: true };
     for (const p of spec.people) {
       const person = { ...newPerson({ name: p.name }), demo: true };
+      // Some made-up people have filled in preferences, so the preferences step has something to show.
+      if (p.prefs) person.preferences = normalizePreferences({ ...DEFAULT_PREFERENCES, ...p.prefs });
       addLocation(person, { label: 'Thuis', place: place(p.address), transport: p.transport });
       await savePerson(person);
       addMember(group, person.id, 'qr');

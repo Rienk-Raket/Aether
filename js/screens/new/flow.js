@@ -2,6 +2,7 @@
 // Kept in sessionStorage so a page reload in the middle of the flow loses nothing.
 
 import { t } from '../../i18n/nl.js';
+import { defaultAppointmentPrefs } from '../../core/requirements.js';
 
 const KEY = 'aether.draft';
 
@@ -21,6 +22,7 @@ export function startDraft(groupId) {
     minute: 0,
     duration: 90,
     notes: '',
+    preferences: defaultAppointmentPrefs(),
     participants: {}, // personId → { location_id, transport_mode }
   };
   sessionStorage.setItem(KEY, JSON.stringify(draft));

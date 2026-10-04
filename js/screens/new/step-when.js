@@ -99,7 +99,7 @@ export function renderStepWhen(container) {
       container.querySelector('[data-error]').textContent = error;
       return;
     }
-    navigate('/nieuw/waar');
+    navigate('/nieuw/voorkeuren');
   });
 
   refresh();
