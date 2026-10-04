@@ -6,7 +6,7 @@ export const MIN_PERSONS = 1;
 export const MAX_PERSONS = 30;
 export const MAX_REQUEST_LENGTH = 200;
 
-// Cancellation policy per partner (the texts are in i18n: t.booking.policies).
+// Cancellation policy per partner (the texts are in the booking strings of js/i18n).
 const POLICIES = { tafelaar: 'free24', overnachter: 'free48', zaalmeester: 'free72', samenzijn: 'quote', direct: 'contact' };
 export const cancelPolicy = (partnerId) => POLICIES[partnerId] ?? 'contact';
 
