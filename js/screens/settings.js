@@ -14,6 +14,7 @@ import { getSettings, setSetting } from '../data/settings.js';
 import { logActivity } from '../data/activity.js';
 import { locationsSection, wireLocations } from './profile-locations.js';
 import { preferencesSection, wirePreferences } from './profile-preferences.js';
+import { connectionsSection, wireConnections } from './settings-connections.js';
 
 export async function renderSettings(container) {
   const self = await ensureSelf();
@@ -40,6 +41,7 @@ export async function renderSettings(container) {
 
       ${locationsSection(self)}
       ${preferencesSection(self.preferences)}
+      ${connectionsSection()}
 
       <div class="section">
         <h2 class="section-title">${t.settings.display}</h2>
@@ -71,6 +73,7 @@ export async function renderSettings(container) {
 
   wireLocations(container, self, rerender);
   wirePreferences(container, self);
+  wireConnections(container);
   wireDemoButtons(container, rerender);
   showStorageUse(container.querySelector('[data-storage]'));
 

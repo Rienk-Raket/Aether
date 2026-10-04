@@ -27,7 +27,7 @@ export async function renderGroupDetail(container, { id }) {
 
   container.innerHTML = `
     <section class="screen">
-      <a class="back-link" href="#/groepen">${icon('back')} ${t.groups.title}</a>
+      <a class="back-link" href="#/groepen">${icon('back')} ${t.nav.groups}</a>
       <div class="screen-header">
         <div>
           <h1>${esc(group.name)}</h1>

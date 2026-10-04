@@ -8,6 +8,7 @@ import { todayLabel } from '../core/dates.js';
 import { navigate } from '../router.js';
 import { ensureSelf } from '../data/people.js';
 import { hasUnseenActivity } from '../data/activity.js';
+import { isOffline, onConnectivityChange } from '../services/connectivity.js';
 import { t } from '../i18n/nl.js';
 
 // handlers: { newGroup() } — passed in by app.js so this file does not depend on screens.
@@ -34,13 +35,15 @@ export function initShell(handlers) {
 
   document.addEventListener('aether:activity', refreshBell);
   document.addEventListener('aether:profile', refreshProfile);
+  onConnectivityChange(refreshStatus);
+  refreshStatus();
   refreshProfile();
   refreshBell();
 }
 
 // Marks the link that belongs to the current screen (aria-current="page").
 export function setActiveRoute(path) {
-  const matches = (route) => path === route || path.startsWith(`${route}/`) || (route === '/overzicht' && path.startsWith('/nieuw'));
+  const matches = (route) => path === route || path.startsWith(`${route}/`) || (route === '/overzicht' && path.startsWith('/nieuw')) || (route === '/ontdek' && path.startsWith('/plek'));
 
   document.querySelectorAll('[data-route]').forEach((el) => {
     if (matches(el.dataset.route)) el.setAttribute('aria-current', 'page');
@@ -59,6 +62,15 @@ export async function refreshProfile() {
   avatar.textContent = initials(self.name);
   avatar.style.setProperty('--hue', hueFor(self.id));
   document.querySelector('[data-profile-name]').textContent = self.name;
+}
+
+// "Demo · lokaal opgeslagen" normally, "Offline · lokale data" without a connection.
+function refreshStatus() {
+  const state = isOffline() ? t.status.offline : t.status.online;
+  const chip = document.querySelector('[data-status]');
+  chip.classList.toggle('offline', isOffline());
+  chip.querySelector('[data-status-label]').textContent = state.label;
+  chip.querySelector('[data-status-long]').textContent = state.long;
 }
 
 async function refreshBell() {

@@ -1,0 +1,67 @@
+/* Venues (Plekwijzer), loading states, connection badges and the offline status. */
+
+/* ---------- Loading ---------- */
+.loading-card { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding: 36px var(--space-4); text-align: center; color: var(--muted); }
+.card.loading-card { margin-top: var(--space-5); }
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(157, 240, 207, 0.2);
+  border-top-color: var(--mint);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Venue list ---------- */
+.filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); column-gap: var(--space-5); margin-top: var(--space-3); }
+.venue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-3); margin-top: var(--space-3); }
+
+.venue {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.025);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast);
+}
+
+.venue:hover { border-color: var(--mint-line); background: var(--mint-tint); transform: translateY(-1px); }
+.venue > svg { width: 18px; height: 18px; color: var(--muted); flex-shrink: 0; }
+.venue-name { display: block; font: 600 16px var(--font-display); letter-spacing: -0.01em; }
+.venue-line { display: block; margin-top: 2px; }
+
+/* Generated "photo": two hues from the venue data, with the type icon on top. */
+.venue-photo {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, hsl(var(--h1) 55% 52%), hsl(var(--h2) 50% 26%));
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.venue-photo svg { width: 26px; height: 26px; }
+.photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+.venue-photo.big { width: auto; height: 110px; border-radius: 16px; }
+.venue-photo.big svg { width: 38px; height: 38px; }
+
+.chip.feature { display: inline-flex; align-items: center; gap: 6px; }
+.chip.feature svg { width: 16px; height: 16px; color: var(--mint); }
+.today-row { color: var(--text); font-weight: 600; }
+.today-row::before { content: ''; width: 4px; height: 20px; margin-right: var(--space-2); border-radius: 2px; background: var(--mint); }
+.today-row > span:first-child { flex: 1; }
+
+/* ---------- Connections and status ---------- */
+.badge.muted-badge { border-color: rgba(148, 171, 182, 0.4); color: var(--muted); }
+.status-chip.offline { color: var(--orange); }
+.status-chip.offline::before { background: var(--orange); box-shadow: 0 0 12px var(--orange); }
+.dashboard > div > .card + .card { margin-top: var(--space-3); }

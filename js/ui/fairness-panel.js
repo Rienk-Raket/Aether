@@ -14,12 +14,13 @@ import { getSettings } from '../data/settings.js';
 
 // data:   result of loadResults()
 // slots:  { map, metrics, slider, stats, list } — any of them may be missing
-// options: { alpha, topN, detail, onChoose(candidate, alpha), onAlpha(alpha) }
+// options: { alpha, topN, detail, onChoose(candidate, alpha), onAlpha(alpha), onSelect(candidate) }
 export function createFairnessPanel(data, slots, options) {
   const { participants, candidates, appointment } = data;
   let alpha = options.alpha;
   let selectedId = appointment.selected_area?.id ?? null;
   let ranked = [];
+  let notifiedId = null;
 
   const find = (id) => ranked.find((c) => c.id === id);
 
@@ -27,6 +28,10 @@ export function createFairnessPanel(data, slots, options) {
     ranked = rankCandidates(candidates, alpha).slice(0, options.topN);
     if (!find(selectedId)) selectedId = ranked[0].id;
     const selected = find(selectedId);
+    if (selectedId !== notifiedId) {
+      notifiedId = selectedId;
+      options.onSelect?.(selected);
+    }
 
     if (slots.map) {
       renderMap2d(slots.map, {

@@ -9,6 +9,7 @@ import { applySettings } from './data/settings.js';
 import { renderHome } from './screens/home.js';
 import { renderDiscover } from './screens/discover.js';
 import { renderGroups, createGroupFlow } from './screens/groups.js';
+import { renderVenue } from './screens/venue.js';
 import { renderGroupDetail } from './screens/group-detail.js';
 import { renderAgenda } from './screens/agenda.js';
 import { renderActivity } from './screens/activity.js';
@@ -24,6 +25,7 @@ const main = document.querySelector('#main');
 const TITLES = {
   overzicht: t.nav.overview,
   ontdek: t.nav.discover,
+  plek: t.nav.discover,
   groepen: t.nav.groups,
   agenda: t.nav.agenda,
   activiteit: t.nav.activity,
@@ -40,6 +42,7 @@ const router = createRouter({
   routes: {
     '/overzicht': renderHome,
     '/ontdek': renderDiscover,
+    '/plek/:id': renderVenue,
     '/groepen': renderGroups,
     '/groepen/:id': renderGroupDetail,
     '/agenda': renderAgenda,

@@ -11,7 +11,7 @@ export function appointmentCard(appointment, group, withMenu = false) {
   const end = addMinutes(start, appointment.duration_minutes);
   const longDate = start.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
   const date = longDate[0].toUpperCase() + longDate.slice(1); // "Vrijdag 9 oktober"
-  const place = appointment.selected_area?.name;
+  const place = appointment.selected_poi?.name ?? appointment.selected_area?.name;
   const avg = appointment.average_travel_time;
 
   return `

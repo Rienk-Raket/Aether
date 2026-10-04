@@ -5,6 +5,7 @@ const KEY = 'aether.settings';
 export const DEFAULT_SETTINGS = {
   showCo2: true, // show the CO₂ comparison in results
   reduceMotion: false, // switch off animations
+  simulateOffline: false, // demo: pretend there is no internet
 };
 
 export function getSettings() {
@@ -23,6 +24,7 @@ export function setSetting(name, value) {
     // storage full or blocked: the setting simply is not remembered
   }
   applySettings();
+  document.dispatchEvent(new CustomEvent('aether:settings', { detail: { name, value } }));
   return settings;
 }
 

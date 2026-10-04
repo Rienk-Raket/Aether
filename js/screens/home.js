@@ -5,6 +5,9 @@ import { icon } from '../ui/icons.js';
 import { esc } from '../ui/dom.js';
 import { createFairnessPanel } from '../ui/fairness-panel.js';
 import { demoButtonHtml, wireDemoButtons } from '../ui/demo.js';
+import { loadingFor } from '../ui/loading.js';
+import { sourceBadge, offlineNotice } from '../ui/source-badge.js';
+import { PROVIDER_NAME as ROUTING_NAME } from '../services/routing.js';
 import { formatTime } from '../core/dates.js';
 import { listAppointments, saveAppointment } from '../data/appointments.js';
 import { listGroups } from '../data/groups.js';
@@ -19,7 +22,9 @@ export async function nextAppointment() {
 
 export async function renderHome(container) {
   const next = await nextAppointment();
+  const stopLoading = loadingFor(container, t.loading.routes);
   const data = next && (await loadResults(next.id));
+  stopLoading();
   if (!data || !data.candidates.length) return renderEmpty(container, Boolean(next));
 
   const { appointment, group, participants } = data;
@@ -40,7 +45,7 @@ export async function renderHome(container) {
           <div class="chips">
             <span class="chip active">${t.home.participants(participants.length)}</span>
             <span class="chip">${esc(weekday[0].toUpperCase() + weekday.slice(1))} ${formatTime(start)}</span>
-            <span class="chip">${esc(appointment.selected_area?.name ?? t.appointments.noPlaceYet)}</span>
+            <span class="chip">${esc(appointment.selected_poi?.name ?? appointment.selected_area?.name ?? t.appointments.noPlaceYet)}</span>
           </div>
           <div class="hero-buttons">
             <a class="btn btn-primary" href="#/ontdek?afspraak=${appointment.id}">${t.home.viewPlaces} ${icon('chevron')}</a>
@@ -61,12 +66,13 @@ export async function renderHome(container) {
         </div>
       </div>
 
+      ${offlineNotice(data.source)}
       <div class="dashboard">
         <div class="card">
           <div class="section-head">
             <div>
               <h2>${t.home.mapTitle}</h2>
-              <p class="muted small">${esc(group.name)} · ${esc(start.toLocaleDateString('nl-NL', { weekday: 'long' }))}${t.home.mapSuffix}</p>
+              <p class="muted small">${esc(group.name)} · ${esc(start.toLocaleDateString('nl-NL', { weekday: 'long' }))} ${sourceBadge(data.source, ROUTING_NAME)}</p>
             </div>
             <a class="btn btn-small" href="#/ontdek?afspraak=${appointment.id}">${t.home.fullScreen}</a>
           </div>

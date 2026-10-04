@@ -2,9 +2,12 @@
 // Functions return text with a value filled in; escape user data before passing it in when the
 // result goes into HTML.
 
+import { services } from './nl-services.js';
+
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 export const t = {
+  ...services,
   appName: 'Aether',
 
   nav: {
@@ -38,7 +41,6 @@ export const t = {
     allReady: 'Iedereen heeft een startlocatie: de berekening is volledig.',
     addMissing: 'Voeg de ontbrekende startlocaties toe voor een eerlijke berekening.',
     mapTitle: 'Eerlijkheidskaart',
-    mapSuffix: ' · schatting op basis van afstand',
     fullScreen: 'Volledig scherm',
     topPlaces: 'Toplocaties',
     rankedBy: 'Gerangschikt op jullie balans',
@@ -79,6 +81,7 @@ export const t = {
     appointmentCreated: (group) => `Afspraak gepland met ${group}`,
     appointmentDeleted: 'Afspraak verwijderd',
     placeChosen: (name) => `${name} gekozen als ontmoetingsplek`,
+    venueChosen: (name) => `${name} gekozen als zaak`,
     wiped: 'Alle gegevens zijn gewist',
   },
 
@@ -165,7 +168,7 @@ export const t = {
     license: 'Open source (MIT)',
   },
 
-  placeTypes: { restaurant: 'Restaurant', cafe: 'Café', bar: 'Bar', meeting_room: 'Vergaderruimte' },
+  placeTypes: { restaurant: 'Restaurant', cafe: 'Café', bar: 'Bar', meeting_room: 'Vergaderruimte', hotel: 'Hotel' },
   fairness: {
     efficient: 'Kortste totale reistijd',
     fair: 'Niemand te zwaar',
@@ -293,6 +296,7 @@ export const t = {
     save: 'Opslaan',
     optional: 'Optioneel',
     searching: 'Zoeken…',
+    retry: 'Opnieuw proberen',
     edit: 'Bewerk',
     remove: 'Verwijder',
     delete: 'Verwijder',

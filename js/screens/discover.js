@@ -6,6 +6,10 @@ import { icon } from '../ui/icons.js';
 import { esc } from '../ui/dom.js';
 import { createFairnessPanel } from '../ui/fairness-panel.js';
 import { showToast } from '../ui/toast.js';
+import { loadingFor } from '../ui/loading.js';
+import { sourceBadge, offlineNotice } from '../ui/source-badge.js';
+import { createVenueSection } from '../ui/venue-section.js';
+import { PROVIDER_NAME as ROUTING_NAME } from '../services/routing.js';
 import { navigate } from '../router.js';
 import { rankCandidates } from '../core/fairness.js';
 import { formatTime } from '../core/dates.js';
@@ -19,7 +23,9 @@ const TOP = 10;
 
 export async function renderDiscover(container, _params, query) {
   const wantedId = query.get('afspraak') ?? (await nextAppointment())?.id;
+  const stopLoading = loadingFor(container, t.loading.routes);
   const data = wantedId && (await loadResults(wantedId));
+  stopLoading();
 
   if (!data) {
     container.innerHTML = `
@@ -65,6 +71,7 @@ export async function renderDiscover(container, _params, query) {
         <span class="chip">${esc(start.toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' }))} · ${formatTime(start)}</span>
       </div>
 
+      ${offlineNotice(data.source)}
       ${missing.length ? `<p class="notice">${esc(t.results.missing(missing.join(', ')))}</p>` : ''}
       ${warnings.filter((w) => w.code !== 'missing_location').map((w) => `<p class="notice">${t.warnings[w.code]}</p>`).join('')}
 
@@ -72,7 +79,7 @@ export async function renderDiscover(container, _params, query) {
         <div class="card">
           <div class="section-head">
             <h2>${t.discover.areaTitle}</h2>
-            <span class="badge badge-demo">${t.results.estimateNote}</span>
+            ${sourceBadge(data.source, ROUTING_NAME)}
           </div>
           <p class="metrics mono" data-metrics></p>
           <div data-map></div>
@@ -84,7 +91,11 @@ export async function renderDiscover(container, _params, query) {
           <div class="place-list" data-list></div>
         </div>
       </div>
+
+      <div class="card section-gap" data-venues></div>
     </section>`;
+
+  const venues = createVenueSection(container.querySelector('[data-venues]'), { appointmentId: appointment.id, when: start });
 
   container.querySelector('[data-pick]')?.addEventListener('change', (event) => navigate(`/ontdek?afspraak=${event.target.value}`));
 
@@ -101,6 +112,7 @@ export async function renderDiscover(container, _params, query) {
       alpha: appointment.fairness_priority ?? self.preferences.fairness_priority,
       topN: TOP,
       detail: true,
+      onSelect: (area) => venues.show(area),
       onAlpha: (alpha) => {
         appointment.fairness_priority = alpha;
         return saveAppointment(appointment);

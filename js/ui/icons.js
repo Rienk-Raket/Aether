@@ -31,6 +31,15 @@ const paths = {
   activity: '<path d="M3 12h4l3-8 4 16 3-8h4"/>',
   'more-h': '<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
   leaf: '<path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19c3-5 6-8 10-10"/>',
+  restaurant: '<path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2 1-3 4-3 7h3v11"/>',
+  cafe: '<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2M8 3v3M11 3v3"/>',
+  bar: '<path d="M5 4h14l-7 8z"/><path d="M12 12v8M8 20h8"/>',
+  meeting_room: '<rect x="3" y="7" width="18" height="12" rx="2"/><path d="M9 7V5h6v2M3 12h18"/>',
+  hotel: '<path d="M3 19V6M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11" r="1.5"/>',
+  wheelchair: '<circle cx="10" cy="4.5" r="1.8"/><path d="M10 8v6h5l2 5M10 11h5M8 15a4 4 0 1 0 6 3"/>',
+  quiet: '<path d="M4 10v4h4l5 4V6L8 10zM17 9l4 6M21 9l-4 6"/>',
+  refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>',
+  external: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
   group: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.5 3.4-5.5 7-5.5s6.2 2 7 5.5"/><path d="M19 4v4M17 6h4"/>',
 };
 
