@@ -6,6 +6,7 @@ import { navigate } from '../../router.js';
 import { listGroups } from '../../data/groups.js';
 import { listPeople } from '../../data/people.js';
 import { groupCard, createGroupFlow } from '../groups.js';
+import { demoButtonHtml, wireDemoButtons } from '../../ui/demo.js';
 import { startDraft, stepHeader } from './flow.js';
 
 export async function renderStepGroup(container, _params, query) {
@@ -28,8 +29,11 @@ export async function renderStepGroup(container, _params, query) {
         <button type="button" class="icon-btn" data-new-group aria-label="${t.groups.fab}">${icon('plus')}</button>
       </div>
       ${groups.map((g) => groupCard(g, peopleById, `#/nieuw?groep=${g.id}`)).join('')}
+      ${groups.length ? '' : `<div class="card empty-state">${icon('users')}<h2>${t.groups.empty}</h2>${demoButtonHtml()}</div>`}
       <p class="center section-gap"><button type="button" class="link-btn" data-new-group>${t.newAppointment.noGroup}</button></p>
     </section>`;
+
+  wireDemoButtons(container, () => renderStepGroup(container, _params, query));
 
   container.querySelectorAll('[data-new-group]').forEach((btn) =>
     btn.addEventListener('click', async () => {

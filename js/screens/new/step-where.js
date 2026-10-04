@@ -7,7 +7,6 @@ import { esc, avatar } from '../../ui/dom.js';
 import { actionSheet } from '../../ui/modal.js';
 import { openLocationForm } from '../../ui/location-form.js';
 import { TRANSPORT_OPTIONS, transportIcon, transportLabel } from '../../ui/transport.js';
-import { showToast } from '../../ui/toast.js';
 import { navigate } from '../../router.js';
 import { centroid } from '../../core/geo.js';
 import { estimateTravelMinutes } from '../../core/travel-estimate.js';
@@ -98,8 +97,7 @@ export async function renderStepWhere(container) {
     group.last_used_at = now();
     await saveGroup(group);
     clearDraft();
-    showToast(t.newAppointment.savedDraft);
-    navigate('/afspraken');
+    navigate(`/afspraak/${appointment.id}/resultaten`);
   });
 }
 

@@ -1,0 +1,485 @@
+{
+ "source": "Centra van Nederlandse plaatsen (benaderde coördinaten), gebruikt als mogelijke ontmoetingsgebieden.",
+ "places": [
+  {
+   "id": "amsterdam",
+   "name": "Amsterdam",
+   "lat": 52.373,
+   "lng": 4.8924
+  },
+  {
+   "id": "rotterdam",
+   "name": "Rotterdam",
+   "lat": 51.9225,
+   "lng": 4.4792
+  },
+  {
+   "id": "den-haag",
+   "name": "Den Haag",
+   "lat": 52.0799,
+   "lng": 4.3113
+  },
+  {
+   "id": "utrecht",
+   "name": "Utrecht",
+   "lat": 52.0907,
+   "lng": 5.1214
+  },
+  {
+   "id": "eindhoven",
+   "name": "Eindhoven",
+   "lat": 51.4416,
+   "lng": 5.4697
+  },
+  {
+   "id": "groningen",
+   "name": "Groningen",
+   "lat": 53.2194,
+   "lng": 6.5665
+  },
+  {
+   "id": "amersfoort",
+   "name": "Amersfoort",
+   "lat": 52.1561,
+   "lng": 5.3878
+  },
+  {
+   "id": "haarlem",
+   "name": "Haarlem",
+   "lat": 52.3874,
+   "lng": 4.6462
+  },
+  {
+   "id": "zwolle",
+   "name": "Zwolle",
+   "lat": 52.5168,
+   "lng": 6.083
+  },
+  {
+   "id": "leiden",
+   "name": "Leiden",
+   "lat": 52.1601,
+   "lng": 4.497
+  },
+  {
+   "id": "arnhem",
+   "name": "Arnhem",
+   "lat": 51.9851,
+   "lng": 5.8987
+  },
+  {
+   "id": "nijmegen",
+   "name": "Nijmegen",
+   "lat": 51.8126,
+   "lng": 5.8372
+  },
+  {
+   "id": "leeuwarden",
+   "name": "Leeuwarden",
+   "lat": 53.2012,
+   "lng": 5.7999
+  },
+  {
+   "id": "breda",
+   "name": "Breda",
+   "lat": 51.5719,
+   "lng": 4.7683
+  },
+  {
+   "id": "s-hertogenbosch",
+   "name": "’s-Hertogenbosch",
+   "lat": 51.6978,
+   "lng": 5.3037
+  },
+  {
+   "id": "delft",
+   "name": "Delft",
+   "lat": 52.0116,
+   "lng": 4.3571
+  },
+  {
+   "id": "hilversum",
+   "name": "Hilversum",
+   "lat": 52.2292,
+   "lng": 5.1669
+  },
+  {
+   "id": "almere",
+   "name": "Almere",
+   "lat": 52.3508,
+   "lng": 5.2647
+  },
+  {
+   "id": "gouda",
+   "name": "Gouda",
+   "lat": 52.0115,
+   "lng": 4.7105
+  },
+  {
+   "id": "woerden",
+   "name": "Woerden",
+   "lat": 52.0852,
+   "lng": 4.8836
+  },
+  {
+   "id": "alphen-aan-den-rijn",
+   "name": "Alphen aan den Rijn",
+   "lat": 52.1291,
+   "lng": 4.6553
+  },
+  {
+   "id": "zoetermeer",
+   "name": "Zoetermeer",
+   "lat": 52.0607,
+   "lng": 4.494
+  },
+  {
+   "id": "hoofddorp",
+   "name": "Hoofddorp",
+   "lat": 52.3061,
+   "lng": 4.6907
+  },
+  {
+   "id": "amstelveen",
+   "name": "Amstelveen",
+   "lat": 52.3114,
+   "lng": 4.8701
+  },
+  {
+   "id": "zaandam",
+   "name": "Zaandam",
+   "lat": 52.4389,
+   "lng": 4.8264
+  },
+  {
+   "id": "dordrecht",
+   "name": "Dordrecht",
+   "lat": 51.8133,
+   "lng": 4.6901
+  },
+  {
+   "id": "tilburg",
+   "name": "Tilburg",
+   "lat": 51.5555,
+   "lng": 5.0913
+  },
+  {
+   "id": "apeldoorn",
+   "name": "Apeldoorn",
+   "lat": 52.2112,
+   "lng": 5.9699
+  },
+  {
+   "id": "deventer",
+   "name": "Deventer",
+   "lat": 52.2551,
+   "lng": 6.1639
+  },
+  {
+   "id": "enschede",
+   "name": "Enschede",
+   "lat": 52.2215,
+   "lng": 6.8937
+  },
+  {
+   "id": "assen",
+   "name": "Assen",
+   "lat": 52.9925,
+   "lng": 6.5649
+  },
+  {
+   "id": "heerenveen",
+   "name": "Heerenveen",
+   "lat": 52.9599,
+   "lng": 5.9202
+  },
+  {
+   "id": "meppel",
+   "name": "Meppel",
+   "lat": 52.6956,
+   "lng": 6.1944
+  },
+  {
+   "id": "lelystad",
+   "name": "Lelystad",
+   "lat": 52.5185,
+   "lng": 5.4714
+  },
+  {
+   "id": "ede",
+   "name": "Ede",
+   "lat": 52.0402,
+   "lng": 5.6649
+  },
+  {
+   "id": "veenendaal",
+   "name": "Veenendaal",
+   "lat": 52.0287,
+   "lng": 5.5589
+  },
+  {
+   "id": "houten",
+   "name": "Houten",
+   "lat": 52.0283,
+   "lng": 5.168
+  },
+  {
+   "id": "nieuwegein",
+   "name": "Nieuwegein",
+   "lat": 52.0292,
+   "lng": 5.0808
+  },
+  {
+   "id": "bodegraven",
+   "name": "Bodegraven",
+   "lat": 52.0825,
+   "lng": 4.75
+  },
+  {
+   "id": "maarssen",
+   "name": "Maarssen",
+   "lat": 52.1351,
+   "lng": 5.0413
+  },
+  {
+   "id": "driebergen",
+   "name": "Driebergen",
+   "lat": 52.0526,
+   "lng": 5.2833
+  },
+  {
+   "id": "weesp",
+   "name": "Weesp",
+   "lat": 52.3076,
+   "lng": 5.0416
+  },
+  {
+   "id": "purmerend",
+   "name": "Purmerend",
+   "lat": 52.505,
+   "lng": 4.9597
+  },
+  {
+   "id": "hoorn",
+   "name": "Hoorn",
+   "lat": 52.6425,
+   "lng": 5.0597
+  },
+  {
+   "id": "alkmaar",
+   "name": "Alkmaar",
+   "lat": 52.6324,
+   "lng": 4.7534
+  },
+  {
+   "id": "schiedam",
+   "name": "Schiedam",
+   "lat": 51.9192,
+   "lng": 4.3988
+  },
+  {
+   "id": "gorinchem",
+   "name": "Gorinchem",
+   "lat": 51.8306,
+   "lng": 4.9742
+  },
+  {
+   "id": "culemborg",
+   "name": "Culemborg",
+   "lat": 51.955,
+   "lng": 5.227
+  },
+  {
+   "id": "tiel",
+   "name": "Tiel",
+   "lat": 51.8861,
+   "lng": 5.4292
+  },
+  {
+   "id": "zutphen",
+   "name": "Zutphen",
+   "lat": 52.1381,
+   "lng": 6.2012
+  },
+  {
+   "id": "emmen",
+   "name": "Emmen",
+   "lat": 52.7792,
+   "lng": 6.9006
+  },
+  {
+   "id": "venlo",
+   "name": "Venlo",
+   "lat": 51.3704,
+   "lng": 6.1724
+  },
+  {
+   "id": "roermond",
+   "name": "Roermond",
+   "lat": 51.1942,
+   "lng": 5.987
+  },
+  {
+   "id": "maastricht",
+   "name": "Maastricht",
+   "lat": 50.8514,
+   "lng": 5.691
+  },
+  {
+   "id": "sittard",
+   "name": "Sittard",
+   "lat": 50.998,
+   "lng": 5.8691
+  },
+  {
+   "id": "heerlen",
+   "name": "Heerlen",
+   "lat": 50.8882,
+   "lng": 5.9795
+  },
+  {
+   "id": "middelburg",
+   "name": "Middelburg",
+   "lat": 51.4988,
+   "lng": 3.611
+  },
+  {
+   "id": "vlissingen",
+   "name": "Vlissingen",
+   "lat": 51.4426,
+   "lng": 3.5736
+  },
+  {
+   "id": "bergen-op-zoom",
+   "name": "Bergen op Zoom",
+   "lat": 51.4949,
+   "lng": 4.2911
+  },
+  {
+   "id": "roosendaal",
+   "name": "Roosendaal",
+   "lat": 51.5308,
+   "lng": 4.4653
+  },
+  {
+   "id": "oss",
+   "name": "Oss",
+   "lat": 51.765,
+   "lng": 5.518
+  },
+  {
+   "id": "helmond",
+   "name": "Helmond",
+   "lat": 51.4793,
+   "lng": 5.657
+  },
+  {
+   "id": "hengelo",
+   "name": "Hengelo",
+   "lat": 52.2659,
+   "lng": 6.7931
+  },
+  {
+   "id": "harderwijk",
+   "name": "Harderwijk",
+   "lat": 52.342,
+   "lng": 5.6206
+  },
+  {
+   "id": "kampen",
+   "name": "Kampen",
+   "lat": 52.555,
+   "lng": 5.9114
+  },
+  {
+   "id": "sneek",
+   "name": "Sneek",
+   "lat": 53.033,
+   "lng": 5.6589
+  },
+  {
+   "id": "drachten",
+   "name": "Drachten",
+   "lat": 53.105,
+   "lng": 6.0989
+  },
+  {
+   "id": "den-helder",
+   "name": "Den Helder",
+   "lat": 52.9563,
+   "lng": 4.76
+  },
+  {
+   "id": "barneveld",
+   "name": "Barneveld",
+   "lat": 52.14,
+   "lng": 5.5847
+  },
+  {
+   "id": "zeist",
+   "name": "Zeist",
+   "lat": 52.0907,
+   "lng": 5.2333
+  },
+  {
+   "id": "baarn",
+   "name": "Baarn",
+   "lat": 52.2117,
+   "lng": 5.2878
+  },
+  {
+   "id": "naarden",
+   "name": "Naarden",
+   "lat": 52.2953,
+   "lng": 5.1625
+  },
+  {
+   "id": "lisse",
+   "name": "Lisse",
+   "lat": 52.2579,
+   "lng": 4.5577
+  },
+  {
+   "id": "katwijk",
+   "name": "Katwijk",
+   "lat": 52.2006,
+   "lng": 4.4157
+  },
+  {
+   "id": "waddinxveen",
+   "name": "Waddinxveen",
+   "lat": 52.0447,
+   "lng": 4.6522
+  },
+  {
+   "id": "capelle-aan-den-ijssel",
+   "name": "Capelle aan den IJssel",
+   "lat": 51.9292,
+   "lng": 4.5778
+  },
+  {
+   "id": "spijkenisse",
+   "name": "Spijkenisse",
+   "lat": 51.845,
+   "lng": 4.3297
+  },
+  {
+   "id": "zaltbommel",
+   "name": "Zaltbommel",
+   "lat": 51.81,
+   "lng": 5.2486
+  },
+  {
+   "id": "doetinchem",
+   "name": "Doetinchem",
+   "lat": 51.965,
+   "lng": 6.2886
+  },
+  {
+   "id": "wageningen",
+   "name": "Wageningen",
+   "lat": 51.9692,
+   "lng": 5.6654
+  }
+ ]
+}

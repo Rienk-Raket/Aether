@@ -18,6 +18,8 @@ export const t = {
     unknownGroup: 'Onbekende groep',
     noPlaceYet: 'Nog geen plek gekozen',
     status: { draft: 'Concept', confirmed: 'Bevestigd', cancelled: 'Geannuleerd' },
+    sort: { date: 'Datum', travel: 'Reistijd', group: 'Groep' },
+    avgTravel: 'Gemiddelde reistijd',
   },
 
   groups: {
@@ -86,7 +88,36 @@ export const t = {
   },
 
   placeTypes: { restaurant: 'Restaurant', cafe: 'Café', bar: 'Bar', meeting_room: 'Vergaderruimte' },
-  fairness: { efficient: 'Efficiënt', fair: 'Eerlijk' },
+  fairness: { efficient: 'Efficiënt', fair: 'Eerlijk', sliderLabel: 'Eerlijk of efficiënt' },
+
+  results: {
+    places: 'Locaties',
+    estimateNote: '≈ offline schatting',
+    empty: 'Geen locaties gevonden — probeer groter gebied',
+    missing: (names) => `Zonder startlocatie, niet meegerekend: ${names}`,
+    fairness: 'Eerlijkheid',
+    avg: 'Gem.',
+    longest: 'langste',
+    spreadTitle: 'Spreiding: hoeveel de reistijden van elkaar verschillen',
+    choose: 'Kies deze plek',
+    chosen: 'gekozen',
+    saved: (name) => `${name} gekozen`,
+    mapLabel: 'Kaart met deelnemers en mogelijke ontmoetingsplekken',
+    markerLabel: (rank, name) => `#${rank} ${name}`,
+  },
+
+  welcome: {
+    title: 'Welkom bij Aether',
+    subtitle: 'Vind de eerlijkste ontmoetingsplek in seconden',
+    badges: ['Geen account nodig', 'Werkt offline', 'Open source'],
+    swipe: 'Swipe om verder te gaan →',
+    demoTitle: 'Iedereen even lang onderweg',
+    demoHint: 'Schuif om te zien hoe het werkt',
+    demoResult: (place, times) => `Winnaar: <strong>${place}</strong> — ${times}`,
+    readyTitle: 'Klaar om te starten?',
+    readySub: 'Geen gedoe, gewoon eerlijk afspreken',
+    start: 'Start met je eerste afspraak',
+  },
   transport: { label: 'Vervoer', transit: 'OV', bike: 'Fiets', car: 'Auto', walk: 'Lopen' },
 
   address: {
@@ -141,7 +172,6 @@ export const t = {
     useDefaults: 'Gebruik standaard locaties',
     estimateNote: '≈ Geschatte reistijd naar het midden van de groep. De echte berekening volgt na “Bereken”.',
     calculate: 'Bereken',
-    savedDraft: 'Afspraak opgeslagen als concept',
     addLocationFor: (name) => `Voeg locatie toe voor ${name}`,
     estimate: (min) => `≈ ${min} min naar het midden`,
     otherAddress: 'Ander adres…',

@@ -12,6 +12,8 @@ import { renderProfile } from './screens/profile.js';
 import { renderStepGroup } from './screens/new/step-group.js';
 import { renderStepWhen } from './screens/new/step-when.js';
 import { renderStepWhere } from './screens/new/step-where.js';
+import { renderResults } from './screens/results.js';
+import { renderWelcome, ONBOARDED_KEY } from './screens/welcome.js';
 
 const main = document.querySelector('#main');
 const nav = document.querySelector('#bottom-nav');
@@ -28,9 +30,13 @@ const router = createRouter({
     '/nieuw': renderStepGroup,
     '/nieuw/wanneer': renderStepWhen,
     '/nieuw/waar': renderStepWhere,
+    '/afspraak/:id/resultaten': renderResults,
+    '/welkom': renderWelcome,
   },
   onChange(path, render, params, query) {
     setActiveTab(nav, path);
+    // The welcome carousel is full screen: no header or bottom navigation.
+    document.body.classList.toggle('fullscreen', path === '/welkom');
     // Every screen gets a fresh element. If the user navigates away while a screen is still
     // loading its data, that screen writes into a detached element and nothing breaks.
     const view = document.createElement('div');
@@ -46,6 +52,10 @@ const router = createRouter({
 registerServiceWorker();
 requestPersistentStorage();
 await ensureSelf();
+// First visit: show the welcome carousel once.
+if (!localStorage.getItem(ONBOARDED_KEY) && ['', '#', '#/afspraken'].includes(location.hash)) {
+  history.replaceState(null, '', '#/welkom'); // no hashchange event, so no double render
+}
 router.start();
 
 // The service worker caches all files so the app keeps working without internet.

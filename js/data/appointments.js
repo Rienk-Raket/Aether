@@ -38,7 +38,9 @@ export function newAppointment({ groupId, createdBy, datetime, durationMinutes, 
     status: 'draft',
     participants,
     selected_poi: null,
-    // Filled in by the results screen (M3).
+    // Filled in by the results screen when a place is chosen.
+    selected_area: null, // { id, name, lat, lng }
+    fairness_priority: null, // slider position used (0 = efficient, 1 = fair)
     fairness_score: null,
     average_travel_time: null,
     travel_time_stddev: null,

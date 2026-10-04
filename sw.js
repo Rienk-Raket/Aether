@@ -1,7 +1,7 @@
 // Service worker: stores the app files on the device so Aether works offline.
 // APP_SHELL and CACHE_VERSION are generated: run `npm run sw` after adding files or bumping the version.
 
-const CACHE_VERSION = 'aether-v0.3.0';
+const CACHE_VERSION = 'aether-v0.4.0';
 
 const APP_SHELL = [
   './',
@@ -11,13 +11,17 @@ const APP_SHELL = [
   './css/components.css',
   './css/fonts.css',
   './css/forms.css',
+  './css/results.css',
   './css/tokens.css',
   './css/widgets.css',
   './js/app.js',
+  './js/core/candidates.js',
   './js/core/dates.js',
   './js/core/fairness.js',
   './js/core/geo.js',
   './js/core/group-warnings.js',
+  './js/core/levels.js',
+  './js/core/projection.js',
   './js/core/travel-estimate.js',
   './js/data/appointments.js',
   './js/data/db.js',
@@ -36,6 +40,9 @@ const APP_SHELL = [
   './js/screens/profile-locations.js',
   './js/screens/profile-preferences.js',
   './js/screens/profile.js',
+  './js/screens/results-data.js',
+  './js/screens/results.js',
+  './js/screens/welcome.js',
   './js/services/geocode.js',
   './js/services/mock/geocode-mock.js',
   './js/services/mock/network.js',
@@ -43,9 +50,11 @@ const APP_SHELL = [
   './js/ui/datepicker.js',
   './js/ui/demo.js',
   './js/ui/dom.js',
+  './js/ui/fairness-slider.js',
   './js/ui/group-form.js',
   './js/ui/icons.js',
   './js/ui/location-form.js',
+  './js/ui/map2d.js',
   './js/ui/modal.js',
   './js/ui/nav.js',
   './js/ui/toast.js',
@@ -60,6 +69,7 @@ const APP_SHELL = [
   './assets/icons/icon-512.png',
   './assets/icons/icon-maskable-512.png',
   './data/addresses.json',
+  './data/nl-places.json',
   './vendor/idb.js',
 ];
 
