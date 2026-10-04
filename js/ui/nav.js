@@ -4,9 +4,9 @@ import { t } from '../i18n/nl.js';
 import { icon } from './icons.js';
 
 export const tabs = [
-  { path: '/afspraken', label: t.nav.appointments, icon: 'calendar' },
-  { path: '/groepen', label: t.nav.groups, icon: 'users' },
-  { path: '/profiel', label: t.nav.profile, icon: 'user' },
+  { path: '/afspraken', also: ['/nieuw'], label: t.nav.appointments, icon: 'calendar' },
+  { path: '/groepen', also: [], label: t.nav.groups, icon: 'users' },
+  { path: '/profiel', also: [], label: t.nav.profile, icon: 'user' },
 ];
 
 export function renderNav(container) {
@@ -16,11 +16,12 @@ export function renderNav(container) {
     .join('');
 }
 
-// Highlight the tab that matches the current route.
+// Highlight the tab that matches the current route (the new-appointment flow belongs to "Afspraken").
 export function setActiveTab(container, path) {
-  for (const link of container.querySelectorAll('.nav-item')) {
-    const isActive = path.startsWith(link.getAttribute('href').slice(1));
-    if (isActive) link.setAttribute('aria-current', 'page');
-    else link.removeAttribute('aria-current');
-  }
+  const links = container.querySelectorAll('.nav-item');
+  tabs.forEach((tab, i) => {
+    const active = [tab.path, ...tab.also].some((prefix) => path.startsWith(prefix));
+    if (active) links[i].setAttribute('aria-current', 'page');
+    else links[i].removeAttribute('aria-current');
+  });
 }

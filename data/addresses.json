@@ -1,0 +1,725 @@
+{
+ "source": "Fictief adresboek (demo). Stadscentra zijn echt, straten en huisnummers zijn verzonnen.",
+ "entries": [
+  {
+   "id": "amsterdam-centrum",
+   "kind": "city",
+   "city": "Amsterdam",
+   "address": "Centrum, Amsterdam",
+   "lat": 52.373,
+   "lng": 4.8924
+  },
+  {
+   "id": "amsterdam-1",
+   "kind": "address",
+   "city": "Amsterdam",
+   "address": "Lindelaan 8, Amsterdam",
+   "lat": 52.385,
+   "lng": 4.9104
+  },
+  {
+   "id": "amsterdam-2",
+   "kind": "address",
+   "city": "Amsterdam",
+   "address": "Vlinderhof 21, Amsterdam",
+   "lat": 52.358,
+   "lng": 4.9024
+  },
+  {
+   "id": "amsterdam-3",
+   "kind": "address",
+   "city": "Amsterdam",
+   "address": "Hazelaarlaan 34, Amsterdam",
+   "lat": 52.379,
+   "lng": 4.8704
+  },
+  {
+   "id": "amsterdam-4",
+   "kind": "address",
+   "city": "Amsterdam",
+   "address": "Orionplein 47, Amsterdam",
+   "lat": 52.363,
+   "lng": 4.8764
+  },
+  {
+   "id": "rotterdam-centrum",
+   "kind": "city",
+   "city": "Rotterdam",
+   "address": "Centrum, Rotterdam",
+   "lat": 51.9225,
+   "lng": 4.4792
+  },
+  {
+   "id": "rotterdam-1",
+   "kind": "address",
+   "city": "Rotterdam",
+   "address": "Havenkade 15, Rotterdam",
+   "lat": 51.9345,
+   "lng": 4.4972
+  },
+  {
+   "id": "rotterdam-2",
+   "kind": "address",
+   "city": "Rotterdam",
+   "address": "IJsvogelweg 28, Rotterdam",
+   "lat": 51.9075,
+   "lng": 4.4892
+  },
+  {
+   "id": "rotterdam-3",
+   "kind": "address",
+   "city": "Rotterdam",
+   "address": "Nevelstraat 41, Rotterdam",
+   "lat": 51.9285,
+   "lng": 4.4572
+  },
+  {
+   "id": "rotterdam-4",
+   "kind": "address",
+   "city": "Rotterdam",
+   "address": "Zonnebloemweg 54, Rotterdam",
+   "lat": 51.9125,
+   "lng": 4.4632
+  },
+  {
+   "id": "den-haag-centrum",
+   "kind": "city",
+   "city": "Den Haag",
+   "address": "Centrum, Den Haag",
+   "lat": 52.0799,
+   "lng": 4.3113
+  },
+  {
+   "id": "den-haag-1",
+   "kind": "address",
+   "city": "Den Haag",
+   "address": "Sterrenlaan 22, Den Haag",
+   "lat": 52.0919,
+   "lng": 4.3293
+  },
+  {
+   "id": "den-haag-2",
+   "kind": "address",
+   "city": "Den Haag",
+   "address": "Lichtbaken 35, Den Haag",
+   "lat": 52.0649,
+   "lng": 4.3213
+  },
+  {
+   "id": "den-haag-3",
+   "kind": "address",
+   "city": "Den Haag",
+   "address": "Lindelaan 48, Den Haag",
+   "lat": 52.0859,
+   "lng": 4.2893
+  },
+  {
+   "id": "den-haag-4",
+   "kind": "address",
+   "city": "Den Haag",
+   "address": "Vlinderhof 61, Den Haag",
+   "lat": 52.0699,
+   "lng": 4.2953
+  },
+  {
+   "id": "utrecht-centrum",
+   "kind": "city",
+   "city": "Utrecht",
+   "address": "Centrum, Utrecht",
+   "lat": 52.0907,
+   "lng": 5.1214
+  },
+  {
+   "id": "utrecht-1",
+   "kind": "address",
+   "city": "Utrecht",
+   "address": "Koperwiekstraat 29, Utrecht",
+   "lat": 52.1027,
+   "lng": 5.1394
+  },
+  {
+   "id": "utrecht-2",
+   "kind": "address",
+   "city": "Utrecht",
+   "address": "Kometenpad 42, Utrecht",
+   "lat": 52.0757,
+   "lng": 5.1314
+  },
+  {
+   "id": "utrecht-3",
+   "kind": "address",
+   "city": "Utrecht",
+   "address": "Havenkade 55, Utrecht",
+   "lat": 52.0967,
+   "lng": 5.0994
+  },
+  {
+   "id": "utrecht-4",
+   "kind": "address",
+   "city": "Utrecht",
+   "address": "IJsvogelweg 68, Utrecht",
+   "lat": 52.0807,
+   "lng": 5.1054
+  },
+  {
+   "id": "eindhoven-centrum",
+   "kind": "city",
+   "city": "Eindhoven",
+   "address": "Centrum, Eindhoven",
+   "lat": 51.4416,
+   "lng": 5.4697
+  },
+  {
+   "id": "eindhoven-1",
+   "kind": "address",
+   "city": "Eindhoven",
+   "address": "Morgenrood 36, Eindhoven",
+   "lat": 51.4536,
+   "lng": 5.4877
+  },
+  {
+   "id": "eindhoven-2",
+   "kind": "address",
+   "city": "Eindhoven",
+   "address": "Kastanjestraat 49, Eindhoven",
+   "lat": 51.4266,
+   "lng": 5.4797
+  },
+  {
+   "id": "eindhoven-3",
+   "kind": "address",
+   "city": "Eindhoven",
+   "address": "Sterrenlaan 62, Eindhoven",
+   "lat": 51.4476,
+   "lng": 5.4477
+  },
+  {
+   "id": "eindhoven-4",
+   "kind": "address",
+   "city": "Eindhoven",
+   "address": "Lichtbaken 75, Eindhoven",
+   "lat": 51.4316,
+   "lng": 5.4537
+  },
+  {
+   "id": "groningen-centrum",
+   "kind": "city",
+   "city": "Groningen",
+   "address": "Centrum, Groningen",
+   "lat": 53.2194,
+   "lng": 6.5665
+  },
+  {
+   "id": "groningen-1",
+   "kind": "address",
+   "city": "Groningen",
+   "address": "Orionplein 43, Groningen",
+   "lat": 53.2314,
+   "lng": 6.5845
+  },
+  {
+   "id": "groningen-2",
+   "kind": "address",
+   "city": "Groningen",
+   "address": "Molenpad 56, Groningen",
+   "lat": 53.2044,
+   "lng": 6.5765
+  },
+  {
+   "id": "groningen-3",
+   "kind": "address",
+   "city": "Groningen",
+   "address": "Koperwiekstraat 69, Groningen",
+   "lat": 53.2254,
+   "lng": 6.5445
+  },
+  {
+   "id": "groningen-4",
+   "kind": "address",
+   "city": "Groningen",
+   "address": "Kometenpad 82, Groningen",
+   "lat": 53.2094,
+   "lng": 6.5505
+  },
+  {
+   "id": "amersfoort-centrum",
+   "kind": "city",
+   "city": "Amersfoort",
+   "address": "Centrum, Amersfoort",
+   "lat": 52.1561,
+   "lng": 5.3878
+  },
+  {
+   "id": "amersfoort-1",
+   "kind": "address",
+   "city": "Amersfoort",
+   "address": "Zonnebloemweg 50, Amersfoort",
+   "lat": 52.1681,
+   "lng": 5.4058
+  },
+  {
+   "id": "amersfoort-2",
+   "kind": "address",
+   "city": "Amersfoort",
+   "address": "Duinroosstraat 63, Amersfoort",
+   "lat": 52.1411,
+   "lng": 5.3978
+  },
+  {
+   "id": "amersfoort-3",
+   "kind": "address",
+   "city": "Amersfoort",
+   "address": "Morgenrood 76, Amersfoort",
+   "lat": 52.1621,
+   "lng": 5.3658
+  },
+  {
+   "id": "amersfoort-4",
+   "kind": "address",
+   "city": "Amersfoort",
+   "address": "Kastanjestraat 89, Amersfoort",
+   "lat": 52.1461,
+   "lng": 5.3718
+  },
+  {
+   "id": "haarlem-centrum",
+   "kind": "city",
+   "city": "Haarlem",
+   "address": "Centrum, Haarlem",
+   "lat": 52.3874,
+   "lng": 4.6462
+  },
+  {
+   "id": "haarlem-1",
+   "kind": "address",
+   "city": "Haarlem",
+   "address": "Vlinderhof 57, Haarlem",
+   "lat": 52.3994,
+   "lng": 4.6642
+  },
+  {
+   "id": "haarlem-2",
+   "kind": "address",
+   "city": "Haarlem",
+   "address": "Hazelaarlaan 70, Haarlem",
+   "lat": 52.3724,
+   "lng": 4.6562
+  },
+  {
+   "id": "haarlem-3",
+   "kind": "address",
+   "city": "Haarlem",
+   "address": "Orionplein 83, Haarlem",
+   "lat": 52.3934,
+   "lng": 4.6242
+  },
+  {
+   "id": "haarlem-4",
+   "kind": "address",
+   "city": "Haarlem",
+   "address": "Molenpad 96, Haarlem",
+   "lat": 52.3774,
+   "lng": 4.6302
+  },
+  {
+   "id": "zwolle-centrum",
+   "kind": "city",
+   "city": "Zwolle",
+   "address": "Centrum, Zwolle",
+   "lat": 52.5168,
+   "lng": 6.083
+  },
+  {
+   "id": "zwolle-1",
+   "kind": "address",
+   "city": "Zwolle",
+   "address": "IJsvogelweg 64, Zwolle",
+   "lat": 52.5288,
+   "lng": 6.101
+  },
+  {
+   "id": "zwolle-2",
+   "kind": "address",
+   "city": "Zwolle",
+   "address": "Nevelstraat 77, Zwolle",
+   "lat": 52.5018,
+   "lng": 6.093
+  },
+  {
+   "id": "zwolle-3",
+   "kind": "address",
+   "city": "Zwolle",
+   "address": "Zonnebloemweg 90, Zwolle",
+   "lat": 52.5228,
+   "lng": 6.061
+  },
+  {
+   "id": "zwolle-4",
+   "kind": "address",
+   "city": "Zwolle",
+   "address": "Duinroosstraat 103, Zwolle",
+   "lat": 52.5068,
+   "lng": 6.067
+  },
+  {
+   "id": "leiden-centrum",
+   "kind": "city",
+   "city": "Leiden",
+   "address": "Centrum, Leiden",
+   "lat": 52.1601,
+   "lng": 4.497
+  },
+  {
+   "id": "leiden-1",
+   "kind": "address",
+   "city": "Leiden",
+   "address": "Lichtbaken 71, Leiden",
+   "lat": 52.1721,
+   "lng": 4.515
+  },
+  {
+   "id": "leiden-2",
+   "kind": "address",
+   "city": "Leiden",
+   "address": "Lindelaan 84, Leiden",
+   "lat": 52.1451,
+   "lng": 4.507
+  },
+  {
+   "id": "leiden-3",
+   "kind": "address",
+   "city": "Leiden",
+   "address": "Vlinderhof 97, Leiden",
+   "lat": 52.1661,
+   "lng": 4.475
+  },
+  {
+   "id": "leiden-4",
+   "kind": "address",
+   "city": "Leiden",
+   "address": "Hazelaarlaan 110, Leiden",
+   "lat": 52.1501,
+   "lng": 4.481
+  },
+  {
+   "id": "arnhem-centrum",
+   "kind": "city",
+   "city": "Arnhem",
+   "address": "Centrum, Arnhem",
+   "lat": 51.9851,
+   "lng": 5.8987
+  },
+  {
+   "id": "arnhem-1",
+   "kind": "address",
+   "city": "Arnhem",
+   "address": "Kometenpad 78, Arnhem",
+   "lat": 51.9971,
+   "lng": 5.9167
+  },
+  {
+   "id": "arnhem-2",
+   "kind": "address",
+   "city": "Arnhem",
+   "address": "Havenkade 91, Arnhem",
+   "lat": 51.9701,
+   "lng": 5.9087
+  },
+  {
+   "id": "arnhem-3",
+   "kind": "address",
+   "city": "Arnhem",
+   "address": "IJsvogelweg 104, Arnhem",
+   "lat": 51.9911,
+   "lng": 5.8767
+  },
+  {
+   "id": "arnhem-4",
+   "kind": "address",
+   "city": "Arnhem",
+   "address": "Nevelstraat 117, Arnhem",
+   "lat": 51.9751,
+   "lng": 5.8827
+  },
+  {
+   "id": "nijmegen-centrum",
+   "kind": "city",
+   "city": "Nijmegen",
+   "address": "Centrum, Nijmegen",
+   "lat": 51.8126,
+   "lng": 5.8372
+  },
+  {
+   "id": "nijmegen-1",
+   "kind": "address",
+   "city": "Nijmegen",
+   "address": "Kastanjestraat 85, Nijmegen",
+   "lat": 51.8246,
+   "lng": 5.8552
+  },
+  {
+   "id": "nijmegen-2",
+   "kind": "address",
+   "city": "Nijmegen",
+   "address": "Sterrenlaan 98, Nijmegen",
+   "lat": 51.7976,
+   "lng": 5.8472
+  },
+  {
+   "id": "nijmegen-3",
+   "kind": "address",
+   "city": "Nijmegen",
+   "address": "Lichtbaken 111, Nijmegen",
+   "lat": 51.8186,
+   "lng": 5.8152
+  },
+  {
+   "id": "nijmegen-4",
+   "kind": "address",
+   "city": "Nijmegen",
+   "address": "Lindelaan 4, Nijmegen",
+   "lat": 51.8026,
+   "lng": 5.8212
+  },
+  {
+   "id": "leeuwarden-centrum",
+   "kind": "city",
+   "city": "Leeuwarden",
+   "address": "Centrum, Leeuwarden",
+   "lat": 53.2012,
+   "lng": 5.7999
+  },
+  {
+   "id": "leeuwarden-1",
+   "kind": "address",
+   "city": "Leeuwarden",
+   "address": "Molenpad 92, Leeuwarden",
+   "lat": 53.2132,
+   "lng": 5.8179
+  },
+  {
+   "id": "leeuwarden-2",
+   "kind": "address",
+   "city": "Leeuwarden",
+   "address": "Koperwiekstraat 105, Leeuwarden",
+   "lat": 53.1862,
+   "lng": 5.8099
+  },
+  {
+   "id": "leeuwarden-3",
+   "kind": "address",
+   "city": "Leeuwarden",
+   "address": "Kometenpad 118, Leeuwarden",
+   "lat": 53.2072,
+   "lng": 5.7779
+  },
+  {
+   "id": "leeuwarden-4",
+   "kind": "address",
+   "city": "Leeuwarden",
+   "address": "Havenkade 11, Leeuwarden",
+   "lat": 53.1912,
+   "lng": 5.7839
+  },
+  {
+   "id": "breda-centrum",
+   "kind": "city",
+   "city": "Breda",
+   "address": "Centrum, Breda",
+   "lat": 51.5719,
+   "lng": 4.7683
+  },
+  {
+   "id": "breda-1",
+   "kind": "address",
+   "city": "Breda",
+   "address": "Duinroosstraat 99, Breda",
+   "lat": 51.5839,
+   "lng": 4.7863
+  },
+  {
+   "id": "breda-2",
+   "kind": "address",
+   "city": "Breda",
+   "address": "Morgenrood 112, Breda",
+   "lat": 51.5569,
+   "lng": 4.7783
+  },
+  {
+   "id": "breda-3",
+   "kind": "address",
+   "city": "Breda",
+   "address": "Kastanjestraat 5, Breda",
+   "lat": 51.5779,
+   "lng": 4.7463
+  },
+  {
+   "id": "breda-4",
+   "kind": "address",
+   "city": "Breda",
+   "address": "Sterrenlaan 18, Breda",
+   "lat": 51.5619,
+   "lng": 4.7523
+  },
+  {
+   "id": "den-bosch-centrum",
+   "kind": "city",
+   "city": "’s-Hertogenbosch",
+   "address": "Centrum, ’s-Hertogenbosch",
+   "lat": 51.6978,
+   "lng": 5.3037
+  },
+  {
+   "id": "den-bosch-1",
+   "kind": "address",
+   "city": "’s-Hertogenbosch",
+   "address": "Hazelaarlaan 106, ’s-Hertogenbosch",
+   "lat": 51.7098,
+   "lng": 5.3217
+  },
+  {
+   "id": "den-bosch-2",
+   "kind": "address",
+   "city": "’s-Hertogenbosch",
+   "address": "Orionplein 119, ’s-Hertogenbosch",
+   "lat": 51.6828,
+   "lng": 5.3137
+  },
+  {
+   "id": "den-bosch-3",
+   "kind": "address",
+   "city": "’s-Hertogenbosch",
+   "address": "Molenpad 12, ’s-Hertogenbosch",
+   "lat": 51.7038,
+   "lng": 5.2817
+  },
+  {
+   "id": "den-bosch-4",
+   "kind": "address",
+   "city": "’s-Hertogenbosch",
+   "address": "Koperwiekstraat 25, ’s-Hertogenbosch",
+   "lat": 51.6878,
+   "lng": 5.2877
+  },
+  {
+   "id": "delft-centrum",
+   "kind": "city",
+   "city": "Delft",
+   "address": "Centrum, Delft",
+   "lat": 52.0116,
+   "lng": 4.3571
+  },
+  {
+   "id": "delft-1",
+   "kind": "address",
+   "city": "Delft",
+   "address": "Nevelstraat 113, Delft",
+   "lat": 52.0236,
+   "lng": 4.3751
+  },
+  {
+   "id": "delft-2",
+   "kind": "address",
+   "city": "Delft",
+   "address": "Zonnebloemweg 6, Delft",
+   "lat": 51.9966,
+   "lng": 4.3671
+  },
+  {
+   "id": "delft-3",
+   "kind": "address",
+   "city": "Delft",
+   "address": "Duinroosstraat 19, Delft",
+   "lat": 52.0176,
+   "lng": 4.3351
+  },
+  {
+   "id": "delft-4",
+   "kind": "address",
+   "city": "Delft",
+   "address": "Morgenrood 32, Delft",
+   "lat": 52.0016,
+   "lng": 4.3411
+  },
+  {
+   "id": "hilversum-centrum",
+   "kind": "city",
+   "city": "Hilversum",
+   "address": "Centrum, Hilversum",
+   "lat": 52.2292,
+   "lng": 5.1669
+  },
+  {
+   "id": "hilversum-1",
+   "kind": "address",
+   "city": "Hilversum",
+   "address": "Lindelaan 120, Hilversum",
+   "lat": 52.2412,
+   "lng": 5.1849
+  },
+  {
+   "id": "hilversum-2",
+   "kind": "address",
+   "city": "Hilversum",
+   "address": "Vlinderhof 13, Hilversum",
+   "lat": 52.2142,
+   "lng": 5.1769
+  },
+  {
+   "id": "hilversum-3",
+   "kind": "address",
+   "city": "Hilversum",
+   "address": "Hazelaarlaan 26, Hilversum",
+   "lat": 52.2352,
+   "lng": 5.1449
+  },
+  {
+   "id": "hilversum-4",
+   "kind": "address",
+   "city": "Hilversum",
+   "address": "Orionplein 39, Hilversum",
+   "lat": 52.2192,
+   "lng": 5.1509
+  },
+  {
+   "id": "almere-centrum",
+   "kind": "city",
+   "city": "Almere",
+   "address": "Centrum, Almere",
+   "lat": 52.3508,
+   "lng": 5.2647
+  },
+  {
+   "id": "almere-1",
+   "kind": "address",
+   "city": "Almere",
+   "address": "Havenkade 7, Almere",
+   "lat": 52.3628,
+   "lng": 5.2827
+  },
+  {
+   "id": "almere-2",
+   "kind": "address",
+   "city": "Almere",
+   "address": "IJsvogelweg 20, Almere",
+   "lat": 52.3358,
+   "lng": 5.2747
+  },
+  {
+   "id": "almere-3",
+   "kind": "address",
+   "city": "Almere",
+   "address": "Nevelstraat 33, Almere",
+   "lat": 52.3568,
+   "lng": 5.2427
+  },
+  {
+   "id": "almere-4",
+   "kind": "address",
+   "city": "Almere",
+   "address": "Zonnebloemweg 46, Almere",
+   "lat": 52.3408,
+   "lng": 5.2487
+  }
+ ]
+}

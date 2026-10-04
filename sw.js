@@ -1,38 +1,66 @@
 // Service worker: stores the app files on the device so Aether works offline.
-// Bump CACHE_VERSION (and APP_VERSION in js/version.js) on every release.
+// APP_SHELL and CACHE_VERSION are generated: run `npm run sw` after adding files or bumping the version.
 
-const CACHE_VERSION = 'aether-v0.2.0';
+const CACHE_VERSION = 'aether-v0.3.0';
 
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './css/tokens.css',
-  './css/fonts.css',
   './css/base.css',
   './css/components.css',
+  './css/fonts.css',
+  './css/forms.css',
+  './css/tokens.css',
+  './css/widgets.css',
   './js/app.js',
-  './js/router.js',
-  './js/version.js',
-  './js/i18n/nl.js',
-  './js/core/geo.js',
-  './js/core/travel-estimate.js',
+  './js/core/dates.js',
   './js/core/fairness.js',
+  './js/core/geo.js',
   './js/core/group-warnings.js',
+  './js/core/travel-estimate.js',
+  './js/data/appointments.js',
+  './js/data/db.js',
+  './js/data/demo-seed.js',
+  './js/data/groups.js',
+  './js/data/people.js',
+  './js/i18n/nl.js',
+  './js/router.js',
+  './js/screens/appointments.js',
+  './js/screens/group-detail.js',
+  './js/screens/groups.js',
+  './js/screens/new/flow.js',
+  './js/screens/new/step-group.js',
+  './js/screens/new/step-when.js',
+  './js/screens/new/step-where.js',
+  './js/screens/profile-locations.js',
+  './js/screens/profile-preferences.js',
+  './js/screens/profile.js',
+  './js/services/geocode.js',
+  './js/services/mock/geocode-mock.js',
+  './js/services/mock/network.js',
+  './js/ui/address-picker.js',
+  './js/ui/datepicker.js',
+  './js/ui/demo.js',
+  './js/ui/dom.js',
+  './js/ui/group-form.js',
   './js/ui/icons.js',
+  './js/ui/location-form.js',
+  './js/ui/modal.js',
   './js/ui/nav.js',
   './js/ui/toast.js',
-  './js/screens/appointments.js',
-  './js/screens/groups.js',
-  './js/screens/profile.js',
+  './js/ui/transport.js',
+  './js/version.js',
   './assets/fonts/inter-latin.woff2',
   './assets/fonts/rajdhani-600-latin.woff2',
   './assets/fonts/rajdhani-700-latin.woff2',
   './assets/fonts/spacemono-400-latin.woff2',
+  './assets/icons/apple-touch-icon.png',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/icons/icon-maskable-512.png',
-  './assets/icons/apple-touch-icon.png',
+  './data/addresses.json',
+  './vendor/idb.js',
 ];
 
 self.addEventListener('install', (event) => {
@@ -61,6 +89,12 @@ self.addEventListener('fetch', (event) => {
   // Pages: try the network first (fresh version), fall back to the cached copy offline.
   if (request.mode === 'navigate') {
     event.respondWith(fetch(request).catch(() => caches.match('./index.html')));
+    return;
+  }
+
+  // While developing on localhost: always fresh files, cache only when the server is down.
+  if (self.location.hostname === 'localhost') {
+    event.respondWith(fetch(request).catch(() => caches.match(request)));
     return;
   }
 

@@ -1,0 +1,187 @@
+/* Lists, avatars, calendar, extra button styles and small layout helpers. */
+
+.grow { flex: 1; min-width: 0; }
+.small { font-size: var(--text-label); }
+.center { text-align: center; }
+.section-gap { margin-top: var(--space-4); }
+.text-error { color: var(--color-error); }
+.empty-inline { padding: var(--space-4) 0; }
+
+.section-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-3); }
+.section-head .section-title { margin: 0; }
+
+.toolbar { display: flex; gap: var(--space-2); margin-bottom: var(--space-4); }
+
+/* Extra buttons */
+.btn-small { min-height: 36px; padding: 0 var(--space-3); font-size: 13px; }
+.btn-large { min-height: 52px; padding: 0 var(--space-6); font-size: 16px; }
+.btn-block { width: 100%; }
+.btn svg { width: 18px; height: 18px; }
+.btn:disabled,
+.fab:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; animation: none; }
+.btn-danger { border-color: var(--color-error); color: var(--color-error); }
+.btn-danger:hover { box-shadow: 0 0 20px rgba(255, 51, 102, 0.5); }
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color var(--dur-fast), background var(--dur-fast);
+}
+
+.icon-btn svg { width: 22px; height: 22px; }
+.icon-btn:hover { color: var(--color-primary); background: rgba(0, 240, 255, 0.08); }
+.icon-btn:disabled { opacity: 0.3; cursor: default; }
+
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.link-btn svg { width: 16px; height: 16px; }
+.link-btn.text-error { color: var(--color-error); }
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: var(--text-label);
+}
+
+.back-link svg { width: 16px; height: 16px; }
+a.fab { color: var(--color-text); text-decoration: none; }
+
+/* Cards */
+.card-link { display: block; color: inherit; text-decoration: none; }
+.card-link:hover { border-color: var(--color-primary); box-shadow: var(--glow-primary); }
+.card-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.card-side { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2); }
+
+.appointment-date { font-family: var(--font-heading); font-weight: 700; font-size: 20px; }
+.appointment-time { color: var(--color-primary); margin-bottom: var(--space-1); }
+
+/* Lists inside a card */
+.list-card { padding-top: var(--space-1); padding-bottom: var(--space-1); }
+.list-row { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; }
+.list-row + .list-row { border-top: 1px solid rgba(176, 184, 216, 0.1); }
+
+.transport-icon,
+.pin-icon { color: var(--color-primary); display: inline-flex; }
+.transport-icon svg,
+.pin-icon svg { width: 22px; height: 22px; }
+.transport-btn { color: var(--color-primary); border: 1px solid var(--color-glass-border); }
+
+.address-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  text-align: left;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  font-size: var(--text-label);
+  cursor: pointer;
+}
+
+.address-link:hover { color: var(--color-primary); }
+
+/* Avatars with a hologram ring */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size);
+  height: var(--size);
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid hsl(var(--hue) 100% 60%);
+  background: hsl(var(--hue) 80% 50% / 0.15);
+  box-shadow: 0 0 10px hsl(var(--hue) 100% 60% / 0.5);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: calc(var(--size) * 0.38);
+  color: var(--color-text);
+}
+
+.avatar-stack { display: flex; }
+.avatar-stack .avatar + .avatar { margin-left: -10px; }
+
+/* Step header in the new-appointment flow */
+.step-header { flex-wrap: wrap; }
+.step-label { color: var(--color-text-muted); }
+
+.flow-actions { display: flex; justify-content: flex-end; margin-top: var(--space-5); }
+
+.notice {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-left: 3px solid var(--color-warning);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 184, 0, 0.08);
+  font-size: var(--text-label);
+}
+
+/* Accordion */
+.accordion summary {
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.accordion[open] summary { margin-bottom: var(--space-3); }
+
+/* Calendar */
+.datepicker { max-width: 380px; margin: 0 auto; }
+.datepicker-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3); font-family: var(--font-heading); font-size: 18px; text-transform: capitalize; }
+.datepicker-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.datepicker-dow { text-align: center; font-size: 12px; color: var(--color-text-muted); text-transform: uppercase; padding-bottom: var(--space-1); }
+
+.day {
+  aspect-ratio: 1;
+  border: 1px solid rgba(0, 240, 255, 0.12);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--text-data);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease);
+}
+
+.day:hover:not(:disabled) { border-color: var(--color-primary); }
+.day.other-month { opacity: 0.4; }
+.day:disabled { opacity: 0.15; cursor: not-allowed; }
+.day.today { border-color: var(--color-secondary); }
+
+.day.selected {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  font-weight: 700;
+  animation: day-pulse 2s var(--ease) infinite;
+}
+
+@keyframes day-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 240, 255, 0.4); }
+  50% { box-shadow: 0 0 22px rgba(0, 240, 255, 0.9); }
+}
