@@ -36,6 +36,7 @@ const APP_SHELL = [
   './js/core/projection.js',
   './js/core/requirements.js',
   './js/core/selection.js',
+  './js/core/slots.js',
   './js/core/traffic.js',
   './js/core/travel-estimate.js',
   './js/core/venues.js',
