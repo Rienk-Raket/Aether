@@ -6,7 +6,7 @@ import { esc, initials, hueFor } from './dom.js';
 import { t } from '../i18n/nl.js';
 
 const WIDTH = 400;
-const HEIGHT = 260;
+const HEIGHT = 280;
 
 // participants: [{ id, name, location }]
 // candidates: ranked best-first, each { id, name, lat, lng, fairness }
@@ -62,12 +62,15 @@ export function renderMap2d(container, { participants, candidates, selectedId, o
     .join('');
 
   container.innerHTML = `
-    <svg class="map2d" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="${t.results.mapLabel}">
-      <g class="grid">${grid.join('')}</g>
-      <g>${lines}</g>
-      <g>${markers}</g>
-      <g>${people}</g>
-    </svg>`;
+    <div class="map-wrap">
+      <svg class="map2d" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="${t.results.mapLabel}">
+        <g class="grid">${grid.join('')}</g>
+        <g>${lines}</g>
+        <g>${markers}</g>
+        <g>${people}</g>
+      </svg>
+    </div>
+    <p class="map-legend"><span class="legend-dot"></span>${selected ? esc(t.results.legend(selected.name, participants.length)) : ''}</p>`;
 
   container.querySelectorAll('[data-candidate]').forEach((el) => {
     const select = () => onSelect?.(el.dataset.candidate);

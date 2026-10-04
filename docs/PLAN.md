@@ -112,3 +112,22 @@ Na elke milestone: stoppen, laten zien wat werkt en hoe het gecontroleerd is, wa
 3. **Oude versie blijft hangen** (service worker) → versienummer in cache, HTML network-first, banner "Nieuwe versie".
 4. **Demo wordt verward met echt** → fictieve merknamen, label "Demo", geen echte bedrijven.
 5. **Te groot/te zwaar** → verticale stukjes, Three.js pas laden op resultaten, `prefers-reduced-motion`.
+
+
+---
+
+## 8. Overhaul volgens het layoutconcept (goedgekeurd 4 oktober 2026)
+
+Keuzes: concept-stijl overnemen (mint, DM Sans + Space Grotesk), demo-groep voor samenwerken (geen backend),
+Plus/Teams alleen als demo-label, bouwen in stappen met akkoord.
+
+| Stap | Inhoud | Status |
+|---|---|---|
+| **O1** | Nieuwe schil (zijbalk/onderbalk/bovenbalk), ontwerpsysteem, modules Overzicht, Ontdek plekken, Mijn groepen, Agenda, Activiteit, Instellingen, activiteitenlog, CO₂-vergelijking, toegankelijkheid | **klaar** |
+| **O2** | Fictieve diensten Routara + Plekwijzer: echte zaken, filters (toegankelijk, rustig, vegetarisch), cache en "Simuleer offline" | open |
+| **O3** | Demo-groepsleden die stemmen en vertrekpunten toevoegen; stemvenster; uitnodigen via link/QR | open |
+| **O4** | Agenda met "wanneer kan iedereen" en spitsdrukte-model | open |
+| **O5** | Reserveren via Tafelaar/Overnachter, `.ics`, delen, Plus-label | open |
+| **O6** | 3D-orb met 2D-terugval (optioneel) | open |
+
+CO₂-factoren (g per reizigerskilometer): auto 146, OV 28, fiets/lopen 0. Bron: CO2emissiefactoren.nl en CE Delft (STREAM Personenvervoer).

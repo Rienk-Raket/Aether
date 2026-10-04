@@ -12,7 +12,8 @@ import { navigate } from '../router.js';
 import { getGroup, saveGroup, deleteGroup, addMember, removeMember } from '../data/groups.js';
 import { getPerson, savePerson, newPerson, addLocation, defaultLocation } from '../data/people.js';
 import { listAppointmentsForGroup } from '../data/appointments.js';
-import { appointmentCard } from './appointments.js';
+import { appointmentCard } from '../ui/appointment-card.js';
+import { logActivity } from '../data/activity.js';
 
 export async function renderGroupDetail(container, { id }) {
   const group = await getGroup(id);
@@ -27,13 +28,16 @@ export async function renderGroupDetail(container, { id }) {
   container.innerHTML = `
     <section class="screen">
       <a class="back-link" href="#/groepen">${icon('back')} ${t.groups.title}</a>
-      <header class="screen-header">
+      <div class="screen-header">
         <div>
-          <h1 class="gradient-text">${esc(group.name)}</h1>
-          ${group.description ? `<p class="muted">${esc(group.description)}</p>` : ''}
+          <h1>${esc(group.name)}</h1>
+          ${group.description ? `<p class="sub">${esc(group.description)}</p>` : ''}
         </div>
-        <button type="button" class="icon-btn" data-menu aria-label="${t.common.more}">${icon('more')}</button>
-      </header>
+        <div class="top-actions">
+          <button class="btn btn-primary" type="button" data-plan ${members.length < 2 ? 'disabled' : ''}>${icon('calendar')} ${t.groupDetail.plan}</button>
+          <button type="button" class="icon-btn" data-menu aria-label="${t.common.more}">${icon('more')}</button>
+        </div>
+      </div>
 
       <div class="section">
         <div class="section-head">
@@ -57,8 +61,6 @@ export async function renderGroupDetail(container, { id }) {
         <h2 class="section-title">${t.groupDetail.recent}</h2>
         ${recent.length ? recent.map((a) => appointmentCard(a, group)).join('') : `<p class="muted">${t.groupDetail.noAppointments}</p>`}
       </div>
-
-      <button class="fab" type="button" data-plan ${members.length < 2 ? 'disabled' : ''}>${icon('calendar')}<span>${t.groupDetail.plan}</span></button>
     </section>`;
 
   container.querySelector('[data-add]').addEventListener('click', async () => {
@@ -69,6 +71,7 @@ export async function renderGroupDetail(container, { id }) {
     await savePerson(person);
     addMember(group, person.id);
     await saveGroup(group);
+    await logActivity('member', t.activity.memberAdded(values.name), group.name, `#/groepen/${group.id}`);
     showToast(t.groupDetail.added(values.name));
     rerender();
   });
@@ -96,18 +99,18 @@ function memberRow(person) {
         <div class="muted small">${location ? esc(location.address) : `<span class="text-error">${t.groupDetail.noLocation}</span>`}</div>
       </div>
       ${location ? `<span class="transport-icon" title="${transportLabel(location.transport_mode)}">${transportIcon(location.transport_mode)}</span>` : ''}
-      <button type="button" class="icon-btn" data-member="${person.id}" aria-label="${t.common.more}">${icon('more')}</button>
+      <button type="button" class="icon-btn ghost" data-member="${person.id}" aria-label="${t.common.more}">${icon('more')}</button>
     </div>`;
 }
 
 async function memberMenu(group, person, rerender) {
   if (person.is_self) {
-    navigate('/profiel');
+    navigate('/instellingen');
     return;
   }
   const choice = await actionSheet(person.name, [
     { label: t.common.edit, value: 'edit' },
-    { label: t.groupDetail.removeMember, value: 'remove', danger: true },
+    { label: t.groupDetail.removeMember, value: 'remove', danger: true, icon: 'trash' },
   ]);
 
   if (choice === 'edit') {
@@ -136,7 +139,7 @@ async function memberMenu(group, person, rerender) {
 async function groupMenu(group, rerender) {
   const choice = await actionSheet(group.name, [
     { label: t.common.edit, value: 'edit' },
-    { label: t.groupDetail.deleteGroup, value: 'delete', danger: true },
+    { label: t.groupDetail.deleteGroup, value: 'delete', danger: true, icon: 'trash' },
   ]);
 
   if (choice === 'edit') {

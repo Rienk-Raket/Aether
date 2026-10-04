@@ -6,13 +6,86 @@ const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 export const t = {
   appName: 'Aether',
-  nav: { appointments: 'Afspraken', groups: 'Groepen', profile: 'Profiel', label: 'Hoofdnavigatie' },
+
+  nav: {
+    overview: 'Overzicht',
+    discover: 'Ontdek plekken',
+    groups: 'Mijn groepen',
+    agenda: 'Agenda',
+    activity: 'Activiteit',
+    settings: 'Instellingen',
+  },
+
+  shell: {
+    newTitle: 'Nieuw',
+    newAppointment: 'Nieuwe afspraak',
+    newGroup: 'Nieuwe groep',
+    moreTitle: 'Meer',
+  },
+
+  home: {
+    next: 'Volgende afspraak',
+    start: 'Aan de slag',
+    headline: 'De eerlijkste plek voor jullie volgende avond.',
+    sub: 'Aether weegt totale reistijd én het verschil tussen jullie. Zo wordt “het midden” ook echt eerlijk.',
+    brokenAppointment: 'Van deze afspraak ontbreken startlocaties. Maak een nieuwe afspraak of vul de locaties aan.',
+    participants: (n) => plural(n, 'deelnemer', 'deelnemers'),
+    viewPlaces: 'Bekijk plekken',
+    openGroup: 'Open groep',
+    groupStatus: 'Groepstatus',
+    locationsOf: (a, b) => `${a} van ${b} hebben een startlocatie`,
+    complete: 'compleet',
+    allReady: 'Iedereen heeft een startlocatie: de berekening is volledig.',
+    addMissing: 'Voeg de ontbrekende startlocaties toe voor een eerlijke berekening.',
+    mapTitle: 'Eerlijkheidskaart',
+    mapSuffix: ' · schatting op basis van afstand',
+    fullScreen: 'Volledig scherm',
+    topPlaces: 'Toplocaties',
+    rankedBy: 'Gerangschikt op jullie balans',
+    allPlaces: 'Alle plekken bekijken',
+    howItWorks: 'Zo werkt het',
+    steps: [
+      'Maak een groep en voeg je vrienden toe met hun startadres.',
+      'Kies wanneer jullie afspreken.',
+      'Beweeg de schuifregelaar en zie welke plek voor iedereen eerlijk is.',
+    ],
+  },
+
+  discover: {
+    eyebrow: 'Ontdekken',
+    title: 'Plekken die voor iedereen werken.',
+    sub: 'Vergelijk gebieden op reistijd en eerlijkheid, en kies waar jullie afspreken.',
+    noAppointment: 'Nog geen afspraak om plekken voor te zoeken',
+    noAppointmentHint: 'Maak een afspraak met een groep, dan rekent Aether de eerlijkste gebieden uit.',
+    pickAppointment: 'Kies een afspraak',
+    areaTitle: 'Zoekgebied',
+    listTitle: 'Voor jullie groep',
+  },
+
+  agenda: {
+    title: 'Al jullie afspraken.',
+    sub: 'Kies een afspraak om de plekken te bekijken of aan te passen.',
+    earlier: (n) => `Eerdere afspraken (${n})`,
+  },
+
+  activity: {
+    title: 'Alles wat er verandert, op één plek.',
+    sub: 'Wat je in Aether doet, zie je hier terug. Alles blijft op dit toestel.',
+    empty: 'Nog geen activiteit',
+    emptyHint: 'Maak een groep of een afspraak en je ziet het hier verschijnen.',
+    new: 'Nieuw',
+    groupCreated: (name) => `Groep “${name}” aangemaakt`,
+    memberAdded: (name) => `${name} toegevoegd aan de groep`,
+    appointmentCreated: (group) => `Afspraak gepland met ${group}`,
+    appointmentDeleted: 'Afspraak verwijderd',
+    placeChosen: (name) => `${name} gekozen als ontmoetingsplek`,
+    wiped: 'Alle gegevens zijn gewist',
+  },
 
   appointments: {
     title: 'Aankomende afspraken',
     empty: 'Geen afspraken — maak er een!',
     emptyHint: 'Kies een groep en Aether zoekt de eerlijkste plek om af te spreken.',
-    fab: 'Nieuw',
     menuTitle: 'Afspraak',
     confirmDelete: 'Deze afspraak verwijderen?',
     unknownGroup: 'Onbekende groep',
@@ -23,7 +96,8 @@ export const t = {
   },
 
   groups: {
-    title: 'Groepen',
+    heading: 'Iedere afspraak begint met een gedeeld vertrekpunt.',
+    sub: 'Beheer deelnemers en hun startadressen op één plek.',
     empty: 'Geen groepen — maak je eerste!',
     emptyHint: 'Voeg vrienden of collega’s toe met hun startadres.',
     fab: 'Nieuwe groep',
@@ -60,8 +134,9 @@ export const t = {
     nameRequired: 'Geef de groep een naam.',
   },
 
-  profile: {
-    title: 'Profiel',
+  settings: {
+    title: 'Aether werkt zoals jullie willen.',
+    localProfile: 'Lokaal profiel · alleen op dit toestel',
     editName: 'Naam wijzigen',
     sectionLocations: 'Standaard locaties',
     emptyLocations: 'Voeg je eerste locatie toe',
@@ -72,7 +147,10 @@ export const t = {
     sectionPreferences: 'Voorkeuren',
     budget: 'Budget',
     types: 'Soort plek',
-    fairness: 'Standaard eerlijkheid',
+    fairness: 'Standaard balans',
+    display: 'Weergave',
+    showCo2: 'CO₂-vergelijking tonen in resultaten',
+    reduceMotion: 'Animaties verminderen',
     sectionData: 'Privacy & data',
     offlineReady: 'Offline beschikbaar',
     notYet: 'Nog niet',
@@ -88,7 +166,12 @@ export const t = {
   },
 
   placeTypes: { restaurant: 'Restaurant', cafe: 'Café', bar: 'Bar', meeting_room: 'Vergaderruimte' },
-  fairness: { efficient: 'Efficiënt', fair: 'Eerlijk', sliderLabel: 'Eerlijk of efficiënt' },
+  fairness: {
+    efficient: 'Kortste totale reistijd',
+    fair: 'Niemand te zwaar',
+    balance: (n) => `Balans ${n}%`,
+    sliderLabel: 'Balans tussen kortste totale reistijd en niemand te zwaar',
+  },
 
   results: {
     places: 'Locaties',
@@ -96,28 +179,22 @@ export const t = {
     empty: 'Geen locaties gevonden — probeer groter gebied',
     missing: (names) => `Zonder startlocatie, niet meegerekend: ${names}`,
     fairness: 'Eerlijkheid',
+    fairnessWord: 'eerlijkheid',
     avg: 'Gem.',
     longest: 'langste',
     spreadTitle: 'Spreiding: hoeveel de reistijden van elkaar verschillen',
+    statAvg: 'gemiddeld',
+    statSpread: 'verschil',
+    statCo2: 'CO₂ versus auto',
+    everyoneWithin: (n) => `Iedereen binnen ${n} min`,
     choose: 'Kies deze plek',
     chosen: 'gekozen',
     saved: (name) => `${name} gekozen`,
     mapLabel: 'Kaart met deelnemers en mogelijke ontmoetingsplekken',
     markerLabel: (rank, name) => `#${rank} ${name}`,
+    legend: (name, n) => `Geselecteerd: ${name} · ${plural(n, 'deelnemer', 'deelnemers')}`,
   },
 
-  welcome: {
-    title: 'Welkom bij Aether',
-    subtitle: 'Vind de eerlijkste ontmoetingsplek in seconden',
-    badges: ['Geen account nodig', 'Werkt offline', 'Open source'],
-    swipe: 'Swipe om verder te gaan →',
-    demoTitle: 'Iedereen even lang onderweg',
-    demoHint: 'Schuif om te zien hoe het werkt',
-    demoResult: (place, times) => `Winnaar: <strong>${place}</strong> — ${times}`,
-    readyTitle: 'Klaar om te starten?',
-    readySub: 'Geen gedoe, gewoon eerlijk afspreken',
-    start: 'Start met je eerste afspraak',
-  },
   transport: { label: 'Vervoer', transit: 'OV', bike: 'Fiets', car: 'Auto', walk: 'Lopen' },
 
   address: {
@@ -190,6 +267,19 @@ export const t = {
   },
 
   search: { noResults: (q) => `Geen resultaten voor “${q}”` },
+
+  welcome: {
+    title: 'Welkom bij Aether',
+    subtitle: 'Vind de eerlijkste ontmoetingsplek in seconden',
+    badges: ['Geen account nodig', 'Werkt offline', 'Open source'],
+    swipe: 'Swipe om verder te gaan →',
+    demoTitle: 'Iedereen even lang onderweg',
+    demoHint: 'Schuif om te zien hoe het werkt',
+    demoResult: (place, times) => `Winnaar: <strong>${place}</strong> — ${times}`,
+    readyTitle: 'Klaar om te starten?',
+    readySub: 'Geen gedoe, gewoon eerlijk afspreken',
+    start: 'Start met je eerste afspraak',
+  },
 
   common: {
     newVersion: 'Nieuwe versie beschikbaar',

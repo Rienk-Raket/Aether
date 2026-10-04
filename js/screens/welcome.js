@@ -27,7 +27,7 @@ export function renderWelcome(container) {
       <span class="welcome-progress mono" data-progress>1/3</span>
       <div class="slides" data-slides>
         <div class="slide">
-          <h1 class="welcome-title gradient-text">${t.welcome.title}</h1>
+          <h1 class="welcome-title">${t.welcome.title}</h1>
           <p class="welcome-sub">${t.welcome.subtitle}</p>
           <div class="chips welcome-badges">${t.welcome.badges.map((b) => `<span class="badge">${b}</span>`).join('')}</div>
           <p class="muted small">${t.welcome.swipe}</p>
@@ -40,7 +40,7 @@ export function renderWelcome(container) {
           <p class="muted small">${t.welcome.demoHint}</p>
         </div>
         <div class="slide">
-          <h2 class="welcome-title gradient-text">${t.welcome.readyTitle}</h2>
+          <h2 class="welcome-title">${t.welcome.readyTitle}</h2>
           <p class="welcome-sub">${t.welcome.readySub}</p>
           <button type="button" class="btn btn-primary btn-large" data-start>${t.welcome.start}</button>
         </div>

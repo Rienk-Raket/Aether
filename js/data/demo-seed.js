@@ -3,6 +3,7 @@
 import { loadBundledJson } from '../services/mock/network.js';
 import { ensureSelf, newPerson, addLocation, savePerson } from './people.js';
 import { newGroup, addMember, saveGroup, listGroups } from './groups.js';
+import { logActivity } from './activity.js';
 
 const SELF_LOCATIONS = [
   { label: 'Thuis', address: 'utrecht-2', transport: 'bike' },
@@ -58,6 +59,7 @@ export async function loadDemoData() {
       addMember(group, person.id, 'qr');
     }
     await saveGroup(group);
+    await logActivity('demo', `${spec.name}: ${spec.people.length + 1} deelnemers (demo)`, '', `#/groepen/${group.id}`);
   }
   return true;
 }

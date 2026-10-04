@@ -22,7 +22,7 @@ export async function renderStepGroup(container, _params, query) {
   const peopleById = new Map(people.map((p) => [p.id, p]));
 
   container.innerHTML = `
-    <section class="screen">
+    <section class="screen wizard">
       ${stepHeader(1, t.newAppointment.stepGroup)}
       <div class="section-head">
         <h2 class="section-title">${t.newAppointment.chooseGroup}</h2>

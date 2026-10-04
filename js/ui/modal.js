@@ -18,15 +18,22 @@ export function openSheet({ title, body, setup }) {
       <div class="sheet-body">${body}</div>`;
 
     let result = null;
-    const close = (value = null) => {
-      result = value;
-      dialog.close();
-    };
-
-    dialog.addEventListener('close', () => {
+    let finished = false;
+    // Finishing does not wait for the browser's own "close" event, so it also works when that
+    // event is late or missing. Escape still goes through the "close" event below.
+    const finish = () => {
+      if (finished) return;
+      finished = true;
       dialog.remove();
       resolve(result);
-    });
+    };
+    const close = (value = null) => {
+      result = value;
+      if (dialog.open) dialog.close();
+      finish();
+    };
+
+    dialog.addEventListener('close', finish);
     // Clicking the dark backdrop (outside the sheet) closes it.
     dialog.addEventListener('click', (event) => {
       if (event.target === dialog) close();
@@ -60,7 +67,7 @@ export function actionSheet(title, actions) {
   return openSheet({
     title,
     body: `<div class="menu-list">${actions
-      .map((a, i) => `<button type="button" class="menu-item ${a.danger ? 'danger' : ''}" data-index="${i}">${esc(a.label)}</button>`)
+      .map((a, i) => `<button type="button" class="menu-item ${a.danger ? 'danger' : ''}" data-index="${i}">${a.icon ? icon(a.icon) : ''}${esc(a.label)}</button>`)
       .join('')}</div>`,
     setup(el, close) {
       el.querySelectorAll('[data-index]').forEach((btn) =>

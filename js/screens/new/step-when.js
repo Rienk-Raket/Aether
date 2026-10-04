@@ -21,7 +21,7 @@ export function renderStepWhen(container) {
   const chips = suggestions();
 
   container.innerHTML = `
-    <section class="screen">
+    <section class="screen wizard">
       ${stepHeader(2, t.newAppointment.stepWhen)}
 
       <div class="chips section-gap" aria-label="${t.newAppointment.suggestions}">

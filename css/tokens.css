@@ -1,66 +1,66 @@
-/* Design tokens: every color, font and timing used in the app lives here. */
+/* Design tokens: every color, font, size and timing used in the app lives here. */
 
 :root {
-  /* Brand */
-  --color-primary: #00f0ff;
-  --color-secondary: #ff00e6;
-  --color-accent: #8b00ff;
-
-  /* Surfaces (dark theme, default) */
-  --color-bg: #0a0e27;
-  --color-surface: #12163a;
-  --color-glass: rgba(18, 22, 58, 0.7);
-  --color-glass-border: rgba(0, 240, 255, 0.2);
-  --color-overlay: rgba(10, 14, 39, 0.85);
+  /* Surfaces */
+  --bg: #071321;
+  --bg-deep: #050d17;
+  --panel: #0d1d2c;
+  --panel-2: #102638;
+  --line: #244156;
+  --border: rgba(255, 255, 255, 0.09);
+  --hover: rgba(255, 255, 255, 0.06);
+  --overlay: rgba(0, 0, 0, 0.6);
+  --glass: rgba(6, 17, 28, 0.67);
 
   /* Text */
-  --color-text: #ffffff;
-  --color-text-muted: #b0b8d8;
-  --color-text-on-primary: #0a0e27;
+  --text: #f4f8f7;
+  --muted: #94abb6;
+  --on-mint: #08221d;
 
-  /* Status */
-  --color-success: #00ff88;
-  --color-warning: #ffb800;
-  --color-error: #ff3366;
+  /* Brand and status colors */
+  --mint: #9df0cf;
+  --mint-2: #5bd9b0;
+  --blue: #88b9ff;
+  --orange: #ffbd72;
+  --red: #ff7f8f;
 
-  /* Glow */
-  --glow-primary: 0 0 20px rgba(0, 240, 255, 0.5);
-  --glow-primary-strong: 0 0 30px rgba(0, 240, 255, 0.6);
-  --glow-secondary: 0 0 20px rgba(255, 0, 230, 0.45);
+  /* Tints of the brand colors (backgrounds, glows) */
+  --mint-tint: rgba(157, 240, 207, 0.1);
+  --mint-line: rgba(157, 240, 207, 0.4);
+  --mint-glow: 0 0 38px rgba(157, 240, 207, 0.13);
+  --red-tint: rgba(255, 127, 143, 0.12);
+  --orange-tint: rgba(255, 189, 114, 0.12);
 
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-  --gradient-text: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  --gradient-brand: linear-gradient(135deg, var(--mint), #73a8ff);
+  --gradient-bar: linear-gradient(90deg, var(--mint-2), var(--blue));
+  --gradient-page: radial-gradient(circle at 80% -10%, #17455b 0, var(--bg) 36rem);
+  --card-bg: linear-gradient(145deg, rgba(16, 37, 54, 0.87), rgba(11, 27, 41, 0.87));
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
 
   /* Typography */
-  --font-heading: 'Rajdhani', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'Space Mono', ui-monospace, monospace;
-  --text-h1: 28px;
-  --text-h2: 22px;
-  --text-body: 16px;
-  --text-label: 14px;
-  --text-data: 13px;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'DM Sans', system-ui, sans-serif;
 
-  /* Spacing & shape */
+  /* Spacing and shape */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-5: 24px;
   --space-6: 32px;
-  --radius-sm: 8px;
+  --radius: 22px;
   --radius-md: 16px;
+  --radius-sm: 12px;
   --radius-pill: 999px;
+  --tap: 44px; /* minimum touch target */
 
   /* Layout */
-  --nav-height: 64px;
-  --header-height: 60px;
-  --content-max: 640px;
+  --sidebar-width: 245px;
+  --bottom-nav-height: 64px;
+  --content-max: 1480px;
 
   /* Motion */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-fast: 200ms;
-  --dur-med: 400ms;
-  --dur-slow: 700ms;
+  --dur-med: 350ms;
 }

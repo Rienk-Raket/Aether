@@ -8,6 +8,7 @@ import { demoButtonHtml, wireDemoButtons } from '../ui/demo.js';
 import { navigate } from '../router.js';
 import { listGroups, newGroup, saveGroup } from '../data/groups.js';
 import { listPeople, ensureSelf } from '../data/people.js';
+import { logActivity } from '../data/activity.js';
 
 const SORTS = {
   recent: () => 0, // listGroups() already returns most recent first
@@ -21,18 +22,23 @@ export async function renderGroups(container) {
 
   container.innerHTML = `
     <section class="screen">
-      <header class="screen-header">
-        <h1 class="gradient-text">${t.groups.title}</h1>
-      </header>
+      <div class="screen-header">
+        <div>
+          <div class="eyebrow">${t.nav.groups}</div>
+          <h1 class="section-gap">${t.groups.heading}</h1>
+          <p class="sub">${t.groups.sub}</p>
+        </div>
+        <button class="btn btn-primary" type="button" data-new>${icon('plus')} ${t.groups.fab}</button>
+      </div>
       ${groups.length ? toolbar() : ''}
-      <div data-list></div>
-      <button class="fab" type="button" data-new>${icon('plus')}<span>${t.groups.fab}</span></button>
+      <div class="tiles" data-list></div>
     </section>`;
 
   const list = container.querySelector('[data-list]');
 
   const renderList = () => {
     if (!groups.length) {
+      list.classList.remove('tiles');
       list.innerHTML = emptyState();
       wireDemoButtons(list, () => renderGroups(container));
       return;
@@ -41,6 +47,7 @@ export async function renderGroups(container) {
     const sort = SORTS[container.querySelector('[data-sort]').value];
     const visible = groups.filter((g) => g.name.toLowerCase().includes(query)).sort(sort);
 
+    list.classList.toggle('tiles', visible.length > 0);
     list.innerHTML = visible.length
       ? visible.map((g) => groupCard(g, peopleById)).join('')
       : `<p class="muted empty-inline">${t.search.noResults(esc(query))}</p>`;
@@ -60,6 +67,7 @@ export async function createGroupFlow({ openAfter = true } = {}) {
   const values = await openGroupForm({ title: t.groups.fab });
   if (!values) return null;
   const group = await saveGroup(newGroup({ ...values, owner: await ensureSelf() }));
+  await logActivity('group', t.activity.groupCreated(group.name), '', `#/groepen/${group.id}`);
   if (openAfter) navigate(`/groepen/${group.id}`);
   return group;
 }

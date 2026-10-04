@@ -16,6 +16,7 @@ import { getGroup, saveGroup } from '../../data/groups.js';
 import { getPerson, savePerson, addLocation, defaultLocation } from '../../data/people.js';
 import { newAppointment, saveAppointment } from '../../data/appointments.js';
 import { now } from '../../data/db.js';
+import { logActivity } from '../../data/activity.js';
 import { getDraft, updateDraft, clearDraft, stepHeader } from './flow.js';
 
 export async function renderStepWhere(container) {
@@ -42,7 +43,7 @@ export async function renderStepWhere(container) {
   const middle = located.length ? centroid(located.map((r) => r.loc)) : null;
 
   container.innerHTML = `
-    <section class="screen">
+    <section class="screen wizard">
       ${stepHeader(3, t.newAppointment.stepWhere)}
       <button type="button" class="btn btn-block" data-defaults>${t.newAppointment.useDefaults}</button>
 
@@ -97,7 +98,8 @@ export async function renderStepWhere(container) {
     group.last_used_at = now();
     await saveGroup(group);
     clearDraft();
-    navigate(`/afspraak/${appointment.id}/resultaten`);
+    await logActivity('appointment', t.activity.appointmentCreated(group.name), `${new Date(appointment.datetime).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' })}`, `#/ontdek?afspraak=${appointment.id}`);
+    navigate(`/ontdek?afspraak=${appointment.id}`);
   });
 }
 

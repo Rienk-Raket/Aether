@@ -1,54 +1,76 @@
-/* Results screen, 2D map, fairness slider and the welcome carousel. */
+/* Fairness: 2D map, balance slider, ranked places, level colors, and the welcome carousel. */
 
-/* Color levels: green / orange / red */
-.level-good { color: var(--color-success); }
-.level-medium { color: var(--color-warning); }
-.level-bad { color: var(--color-error); }
+.level-good { color: var(--mint-2); }
+.level-medium { color: var(--orange); }
+.level-bad { color: var(--red); }
 
-/* 2D map */
-.map-card { padding: var(--space-2); }
-.map2d { display: block; width: 100%; height: auto; max-height: 50vh; }
-.map2d .grid line { stroke: rgba(0, 240, 255, 0.07); stroke-width: 1; }
-
-.map2d .trip {
-  stroke: hsl(var(--hue) 100% 60% / 0.7);
-  stroke-width: 1.5;
-  stroke-dasharray: 4 4;
-  animation: trip-flow 1.5s linear infinite;
-}
-
+/* ---------- 2D map ---------- */
+.map-wrap { padding: var(--space-2); border-radius: var(--radius-md); background: #132c39; overflow: hidden; }
+.map2d { display: block; width: 100%; height: auto; max-height: 52vh; }
+.map2d .grid line { stroke: rgba(255, 255, 255, 0.045); }
+.map2d .trip { stroke: hsl(var(--hue) 75% 70% / 0.75); stroke-width: 1.5; stroke-dasharray: 4 4; animation: trip-flow 1.6s linear infinite; }
 @keyframes trip-flow { to { stroke-dashoffset: -16; } }
 
 .map2d .marker { cursor: pointer; outline: none; }
-.map2d .marker .dot { fill: var(--color-accent); stroke: var(--color-primary); stroke-width: 1; opacity: 0.75; transition: all var(--dur-fast); }
+.map2d .marker .dot { fill: var(--panel-2); stroke: var(--blue); stroke-width: 1.5; transition: all var(--dur-fast); }
 .map2d .marker .halo { fill: transparent; }
-.map2d .marker text { fill: var(--color-text-muted); font-family: var(--font-heading); font-size: 11px; font-weight: 600; text-anchor: middle; pointer-events: none; }
-.map2d .marker:hover .dot,
-.map2d .marker:focus-visible .dot { opacity: 1; filter: drop-shadow(0 0 6px var(--color-primary)); }
-.map2d .marker.best .dot { fill: var(--color-primary); opacity: 1; }
-.map2d .marker.selected .halo { fill: rgba(0, 240, 255, 0.15); stroke: var(--color-primary); stroke-width: 1; animation: halo 2s var(--ease) infinite; transform-box: fill-box; transform-origin: center; }
-.map2d .marker.selected text { fill: var(--color-text); }
+.map2d .marker text { fill: #c7dcdb; font: 600 10px var(--font-body); text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: #071a28; stroke-width: 3px; }
+.map2d .marker:hover .dot, .map2d .marker:focus-visible .dot { stroke: var(--mint); }
+.map2d .marker.best .dot { fill: var(--mint); stroke: var(--mint); }
+.map2d .marker.selected .halo { fill: rgba(157, 240, 207, 0.14); stroke: var(--mint); stroke-dasharray: 3 3; }
+.map2d .marker.selected .dot { stroke: var(--mint); }
+.map2d .person circle { fill: hsl(var(--hue) 55% 60%); stroke: #071a28; stroke-width: 2; }
+.map2d .person text { fill: #17202a; font: 700 10px var(--font-display); text-anchor: middle; }
 
-@keyframes halo {
-  0%, 100% { opacity: 0.5; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.15); }
+.map-legend { margin-top: var(--space-2); padding: 0 var(--space-2) var(--space-1); color: #b4c9cd; font-size: 11px; }
+.legend-dot { display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: var(--mint); }
+
+/* ---------- Balance slider ---------- */
+.slider-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); margin: 17px 0 8px; color: var(--muted); font-size: 11px; }
+.slider-row b { color: var(--text); font-size: 12px; white-space: nowrap; }
+.slider-row span { max-width: 32%; }
+.slider-row span:last-child { text-align: right; }
+
+/* ---------- Ranked places ---------- */
+.place-list { display: grid; gap: 10px; }
+
+.place {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  gap: 11px;
+  align-items: center;
+  padding: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+  transition: all var(--dur-fast);
 }
 
-.map2d .person circle { fill: hsl(var(--hue) 80% 50% / 0.25); stroke: hsl(var(--hue) 100% 60%); stroke-width: 2; filter: drop-shadow(0 0 4px hsl(var(--hue) 100% 60%)); }
-.map2d .person text { fill: var(--color-text); font-family: var(--font-heading); font-size: 11px; font-weight: 700; text-anchor: middle; }
+.place:hover { border-color: var(--mint-line); }
+.place.selected { background: var(--mint-tint); border-color: var(--mint-line); }
+.place p { margin-top: 3px; font-size: 12px; color: var(--muted); }
 
-/* Metrics line: "Eerlijkheid 0.87 | Gem. 18 min | Δ 3 min" */
-.metrics { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; margin: 0 0 var(--space-3); }
-.results .map-card { margin-bottom: var(--space-5); }
-.metrics .sep { color: var(--color-text-muted); opacity: 0.5; }
+.thumb {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #dd9f72, #693b30);
+  font: 700 17px var(--font-display);
+  color: #fff;
+}
 
-/* Result cards */
-.result-card { cursor: pointer; display: flex; flex-direction: column; gap: var(--space-2); }
-.result-card.selected { border-color: var(--color-primary); box-shadow: var(--glow-primary); }
-.result-card .btn { align-self: flex-end; }
-.rank { color: var(--color-text-muted); margin-right: var(--space-2); }
-.card-title.inline { display: inline; margin: 0; }
-.score { font-size: 18px; font-weight: 700; }
+.place:nth-child(2) .thumb { background: linear-gradient(135deg, #79a8c5, #2d4965); }
+.place:nth-child(3) .thumb { background: linear-gradient(135deg, #b8a46c, #4e4d35); }
+.place:nth-child(n + 4) .thumb { background: linear-gradient(135deg, #5d7384, #2a3a49); }
+
+.score { text-align: right; }
+.score strong { font: 600 20px var(--font-display); }
+.score small { display: block; color: var(--muted); font-size: 10px; }
+.place-extra { grid-column: 1 / -1; display: flex; flex-direction: column; gap: var(--space-2); }
+.place-extra .btn { align-self: flex-end; }
 
 .time-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 
@@ -56,11 +78,10 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  padding: 2px var(--space-2) 2px 2px;
+  padding: 2px 10px 2px 2px;
   border: 1px solid currentColor;
   border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font: 500 12px var(--font-display);
 }
 
 .mini-avatar {
@@ -70,76 +91,14 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: hsl(var(--hue) 80% 50% / 0.3);
-  border: 1px solid hsl(var(--hue) 100% 60%);
-  color: var(--color-text);
-  font-family: var(--font-heading);
-  font-size: 10px;
-  font-weight: 700;
+  background: hsl(var(--hue) 55% 62%);
+  color: #17202a;
+  font: 700 10px var(--font-display);
 }
 
-/* Floating slider bar above the bottom navigation */
-.slider-dock {
-  position: sticky;
-  bottom: calc(var(--nav-height) + var(--space-3) + env(safe-area-inset-bottom));
-  z-index: 15;
-  margin-top: var(--space-5);
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--color-glass-border);
-  border-radius: var(--radius-md);
-  background: var(--color-overlay);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-}
-
-/* Fairness slider: magenta (efficient) → cyan (fair) */
-.fairness-labels { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-label); text-transform: uppercase; letter-spacing: 0.06em; }
-.fairness-labels output { color: var(--color-text); text-transform: none; letter-spacing: 0; }
-.label-efficient { color: var(--color-secondary); }
-.label-fair { color: var(--color-primary); }
-
-.fairness-slider input[type='range'] {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 8px;
-  margin: var(--space-3) 0 var(--space-1);
-  border-radius: var(--radius-pill);
-  background: linear-gradient(90deg, var(--color-secondary), var(--color-accent) 50%, var(--color-primary));
-  cursor: pointer;
-}
-
-.fairness-slider input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--color-text);
-  border: 3px solid var(--color-primary);
-  box-shadow: var(--glow-primary-strong);
-}
-
-.fairness-slider input[type='range']::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--color-text);
-  border: 3px solid var(--color-primary);
-  box-shadow: var(--glow-primary-strong);
-}
-
-/* Appointment card: chosen place */
-.appointment-place { display: flex; align-items: center; gap: var(--space-1); margin: var(--space-1) 0; }
-.appointment-place svg { width: 16px; height: 16px; color: var(--color-primary); }
-
-/* Welcome carousel (full screen) */
-body.fullscreen .app-header,
-body.fullscreen .bottom-nav { display: none; }
-body.fullscreen .app-main { padding: 0; max-width: none; }
-
+/* ---------- Welcome carousel (full screen) ---------- */
 .welcome { position: relative; height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
-.welcome-progress { position: absolute; top: calc(var(--space-4) + env(safe-area-inset-top)); right: var(--space-4); z-index: 2; color: var(--color-text-muted); }
-
+.welcome-progress { position: absolute; top: calc(var(--space-4) + env(safe-area-inset-top)); right: var(--space-4); z-index: 2; color: var(--muted); }
 .slides { flex: 1; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .slides::-webkit-scrollbar { display: none; }
 
@@ -157,12 +116,16 @@ body.fullscreen .app-main { padding: 0; max-width: none; }
 }
 
 .slide > * { width: 100%; max-width: 480px; }
+.slide h1, .slide h2 { margin-inline: auto; }
 .slide .btn { width: auto; }
 .welcome-title { font-size: 40px; }
-.welcome-sub { font-size: 18px; color: var(--color-text-muted); }
+.welcome-sub { font-size: 18px; color: var(--muted); }
 .welcome-badges { justify-content: center; }
-
 .dots { display: flex; justify-content: center; padding: var(--space-2) 0 calc(var(--space-4) + env(safe-area-inset-bottom)); }
-/* Padding + content-box clip: 8px visible dot, 24px area to tap. */
-.dots span { box-sizing: content-box; width: 8px; height: 8px; padding: 8px; border-radius: var(--radius-pill); background: rgba(176, 184, 216, 0.3); background-clip: content-box; cursor: pointer; transition: all var(--dur-fast); }
-.dots span.active { width: 24px; background-color: var(--color-primary); }
+.dots span { box-sizing: content-box; width: 8px; height: 8px; padding: 8px; border-radius: var(--radius-pill); background: rgba(148, 171, 182, 0.35); background-clip: content-box; cursor: pointer; transition: all var(--dur-fast); }
+.dots span.active { width: 24px; background-color: var(--mint); }
+
+/* Metrics line: "Eerlijkheid 0.87 | Gem. 18 min | Δ 3 min" */
+.metrics { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0 0 var(--space-3); font-size: 13px; }
+.metrics:empty { display: none; }
+.metrics .sep { color: var(--muted); opacity: 0.5; }

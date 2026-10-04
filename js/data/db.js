@@ -3,20 +3,26 @@
 import { openDB, deleteDB } from '../../vendor/idb.js';
 
 const DB_NAME = 'aether';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbPromise = null;
 
 export function getDB() {
   dbPromise ??= openDB(DB_NAME, DB_VERSION, {
-    upgrade(db) {
-      // "people" holds you and your contacts (each with their own locations).
-      db.createObjectStore('people', { keyPath: 'id' });
-      db.createObjectStore('groups', { keyPath: 'id' });
-      const appointments = db.createObjectStore('appointments', { keyPath: 'id' });
-      appointments.createIndex('group_id', 'group_id');
-      // Cached responses from the (simulated) online services, used from M4.
-      db.createObjectStore('cache', { keyPath: 'key' });
+    upgrade(db, oldVersion) {
+      if (oldVersion < 1) {
+        // "people" holds you and your contacts (each with their own locations).
+        db.createObjectStore('people', { keyPath: 'id' });
+        db.createObjectStore('groups', { keyPath: 'id' });
+        const appointments = db.createObjectStore('appointments', { keyPath: 'id' });
+        appointments.createIndex('group_id', 'group_id');
+        // Cached responses from the (simulated) online services.
+        db.createObjectStore('cache', { keyPath: 'key' });
+      }
+      if (oldVersion < 2) {
+        // Feed of things that happened (shown in "Activiteit").
+        db.createObjectStore('activity', { keyPath: 'id' });
+      }
     },
   });
   return dbPromise;

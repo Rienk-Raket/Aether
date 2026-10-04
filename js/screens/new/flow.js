@@ -39,8 +39,10 @@ export function clearDraft() {
 
 export function stepHeader(step, title) {
   return `
-    <header class="screen-header step-header">
-      <h1 class="gradient-text">${t.newAppointment.title}</h1>
-      <span class="step-label mono">${t.newAppointment.step(step, title)}</span>
-    </header>`;
+    <div class="screen-header step-header">
+      <div>
+        <div class="eyebrow">${t.newAppointment.step(step, title)}</div>
+        <h1 class="section-gap">${t.newAppointment.title}</h1>
+      </div>
+    </div>`;
 }

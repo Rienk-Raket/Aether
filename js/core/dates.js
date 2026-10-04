@@ -69,3 +69,24 @@ export function formatDuration(minutes) {
   if (h === 0) return `${m} min`;
   return m ? `${h} u ${m} min` : `${h} uur`;
 }
+
+// "Zondag · 4 oktober 2026" (top bar)
+export function todayLabel(date = new Date()) {
+  const weekday = date.toLocaleDateString('nl-NL', { weekday: 'long' });
+  const rest = date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+  return `${weekday[0].toUpperCase()}${weekday.slice(1)} · ${rest}`;
+}
+
+// "zojuist", "12 minuten geleden", "3 uur geleden", "gisteren", "5 dagen geleden"
+export function timeAgo(iso, now = new Date()) {
+  const seconds = Math.round((now - new Date(iso)) / 1000);
+  if (seconds < 45) return 'zojuist';
+  const rtf = new Intl.RelativeTimeFormat('nl-NL', { numeric: 'auto' });
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return rtf.format(-minutes, 'minute');
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return rtf.format(-hours, 'hour');
+  const days = Math.round(hours / 24);
+  if (days < 30) return rtf.format(-days, 'day');
+  return new Date(iso).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+}

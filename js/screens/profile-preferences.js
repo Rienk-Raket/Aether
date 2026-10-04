@@ -9,22 +9,22 @@ const PLACE_TYPES = ['restaurant', 'cafe', 'bar', 'meeting_room'];
 export function preferencesSection(prefs) {
   return `
     <div class="section">
-      <h2 class="section-title">${t.profile.sectionPreferences}</h2>
+      <h2 class="section-title">${t.settings.sectionPreferences}</h2>
       <form class="card form" data-prefs>
         <div class="field">
           <span class="field-label">${t.transport.label}</span>
           ${transportPicker('transport', prefs.default_transport)}
         </div>
         <label class="field">
-          <span class="field-label">${t.profile.budget} <output class="mono" data-budget-out>${'€'.repeat(prefs.budget_level)}</output></span>
+          <span class="field-label">${t.settings.budget} <output class="mono" data-budget-out>${'€'.repeat(prefs.budget_level)}</output></span>
           <input type="range" name="budget" min="1" max="4" step="1" value="${prefs.budget_level}" />
         </label>
         <fieldset class="field">
-          <legend class="field-label">${t.profile.types}</legend>
+          <legend class="field-label">${t.settings.types}</legend>
           <div class="chips">
             ${PLACE_TYPES.map(
               (type) => `
-              <label class="chip">
+              <label class="chip-label">
                 <input type="checkbox" name="types" value="${type}" ${prefs.preferred_types.includes(type) ? 'checked' : ''} />
                 <span>${t.placeTypes[type]}</span>
               </label>`,
@@ -32,7 +32,7 @@ export function preferencesSection(prefs) {
           </div>
         </fieldset>
         <label class="field">
-          <span class="field-label">${t.profile.fairness} <output class="mono" data-fair-out>${Math.round(prefs.fairness_priority * 100)}%</output></span>
+          <span class="field-label">${t.settings.fairness} <output class="mono" data-fair-out>${Math.round(prefs.fairness_priority * 100)}%</output></span>
           <input type="range" name="fairness" min="0" max="100" step="5" value="${Math.round(prefs.fairness_priority * 100)}" />
           <span class="range-labels muted small"><span>${t.fairness.efficient}</span><span>${t.fairness.fair}</span></span>
         </label>

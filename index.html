@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Aether</title>
+    <title>Aether — eerlijk afspreken</title>
     <meta name="description" content="Vind de eerlijkste ontmoetingsplek voor je groep, op basis van reistijd." />
-    <meta name="theme-color" content="#0A0E27" />
+    <meta name="theme-color" content="#071321" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
@@ -13,8 +13,8 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
 
-    <link rel="preload" href="assets/fonts/rajdhani-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/dmsans-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <link rel="stylesheet" href="css/tokens.css" />
     <link rel="stylesheet" href="css/fonts.css" />
@@ -27,13 +27,61 @@
     <script type="module" src="js/app.js"></script>
   </head>
   <body>
-    <header class="app-header">
-      <span class="app-logo gradient-text">Aether</span>
-    </header>
+    <a class="skip-link" href="#main">Naar de inhoud</a>
 
-    <main id="main" class="app-main"></main>
+    <div class="app">
+      <!-- Desktop: sidebar. The links are plain anchors; js/ui/shell.js marks the active one. -->
+      <aside class="sidebar" aria-label="Zijbalk">
+        <a class="brand" href="#/overzicht" aria-label="Aether, naar overzicht">
+          <span class="brand-mark" aria-hidden="true">A</span><strong>Aether</strong>
+        </a>
 
-    <nav id="bottom-nav" class="bottom-nav"></nav>
+        <nav class="nav-group" aria-label="Hoofdnavigatie">
+          <p class="nav-title">Workspace</p>
+          <a class="nav-link" href="#/overzicht" data-route="/overzicht"><span data-icon="home"></span>Overzicht</a>
+          <a class="nav-link" href="#/ontdek" data-route="/ontdek"><span data-icon="compass"></span>Ontdek plekken</a>
+          <a class="nav-link" href="#/groepen" data-route="/groepen"><span data-icon="users"></span>Mijn groepen</a>
+          <a class="nav-link" href="#/agenda" data-route="/agenda"><span data-icon="calendar"></span>Agenda</a>
+        </nav>
+
+        <nav class="nav-group" aria-label="Beheer">
+          <p class="nav-title">Beheer</p>
+          <a class="nav-link" href="#/activiteit" data-route="/activiteit"><span data-icon="activity"></span>Activiteit</a>
+          <a class="nav-link" href="#/instellingen" data-route="/instellingen"><span data-icon="settings"></span>Instellingen</a>
+        </nav>
+
+        <div class="side-bottom">
+          <a class="profile-link" href="#/instellingen" data-profile>
+            <span class="avatar" data-profile-avatar>?</span>
+            <span><strong data-profile-name>Jij</strong><small>Lokaal profiel · demo</small></span>
+          </a>
+        </div>
+      </aside>
+
+      <div class="content">
+        <header class="topbar">
+          <div class="eyebrow" data-today></div>
+          <div class="top-actions">
+            <span class="status-chip">Demo<span class="status-long"> · lokaal opgeslagen</span></span>
+            <a class="icon-btn" href="#/activiteit" aria-label="Activiteit" data-bell>
+              <span data-icon="bell"></span><span class="dot-badge" data-bell-dot hidden></span>
+            </a>
+            <button class="icon-btn" type="button" aria-label="Nieuw" data-new><span data-icon="plus"></span></button>
+          </div>
+        </header>
+
+        <main id="main" class="main" tabindex="-1"></main>
+      </div>
+
+      <!-- Phone: bottom navigation -->
+      <nav class="bottom" aria-label="Hoofdnavigatie">
+        <a class="nav-link" href="#/overzicht" data-route="/overzicht"><span data-icon="home"></span>Overzicht</a>
+        <a class="nav-link" href="#/ontdek" data-route="/ontdek"><span data-icon="compass"></span>Ontdek</a>
+        <a class="nav-link" href="#/groepen" data-route="/groepen"><span data-icon="users"></span>Groepen</a>
+        <a class="nav-link" href="#/agenda" data-route="/agenda"><span data-icon="calendar"></span>Agenda</a>
+        <button class="nav-link" type="button" data-more data-route-group="/activiteit /instellingen"><span data-icon="more-h"></span>Meer</button>
+      </nav>
+    </div>
 
     <noscript>Aether heeft JavaScript nodig.</noscript>
   </body>

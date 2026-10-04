@@ -1,51 +1,80 @@
-// App entry point: builds the shell, starts the router and the service worker.
+// App entry point: starts the shell, the router and the service worker.
 
 import { createRouter } from './router.js';
-import { renderNav, setActiveTab } from './ui/nav.js';
+import { initShell, setActiveRoute } from './ui/shell.js';
 import { showToast } from './ui/toast.js';
 import { t } from './i18n/nl.js';
 import { ensureSelf } from './data/people.js';
-import { renderAppointments } from './screens/appointments.js';
-import { renderGroups } from './screens/groups.js';
+import { applySettings } from './data/settings.js';
+import { renderHome } from './screens/home.js';
+import { renderDiscover } from './screens/discover.js';
+import { renderGroups, createGroupFlow } from './screens/groups.js';
 import { renderGroupDetail } from './screens/group-detail.js';
-import { renderProfile } from './screens/profile.js';
+import { renderAgenda } from './screens/agenda.js';
+import { renderActivity } from './screens/activity.js';
+import { renderSettings } from './screens/settings.js';
 import { renderStepGroup } from './screens/new/step-group.js';
 import { renderStepWhen } from './screens/new/step-when.js';
 import { renderStepWhere } from './screens/new/step-where.js';
-import { renderResults } from './screens/results.js';
 import { renderWelcome, ONBOARDED_KEY } from './screens/welcome.js';
 
 const main = document.querySelector('#main');
-const nav = document.querySelector('#bottom-nav');
 
-renderNav(nav);
+// Page title per first part of the route, e.g. "#/groepen/abc" → "Mijn groepen".
+const TITLES = {
+  overzicht: t.nav.overview,
+  ontdek: t.nav.discover,
+  groepen: t.nav.groups,
+  agenda: t.nav.agenda,
+  activiteit: t.nav.activity,
+  instellingen: t.nav.settings,
+  nieuw: t.newAppointment.title,
+  welkom: t.welcome.title,
+};
+
+applySettings();
+initShell({ newGroup: () => createGroupFlow() });
 
 const router = createRouter({
-  fallback: '/afspraken',
+  fallback: '/overzicht',
   routes: {
-    '/afspraken': renderAppointments,
+    '/overzicht': renderHome,
+    '/ontdek': renderDiscover,
     '/groepen': renderGroups,
     '/groepen/:id': renderGroupDetail,
-    '/profiel': renderProfile,
+    '/agenda': renderAgenda,
+    '/activiteit': renderActivity,
+    '/instellingen': renderSettings,
     '/nieuw': renderStepGroup,
     '/nieuw/wanneer': renderStepWhen,
     '/nieuw/waar': renderStepWhere,
-    '/afspraak/:id/resultaten': renderResults,
     '/welkom': renderWelcome,
   },
   onChange(path, render, params, query) {
-    setActiveTab(nav, path);
-    // The welcome carousel is full screen: no header or bottom navigation.
+    setActiveRoute(path);
+    // The welcome carousel is full screen: no sidebar, top bar or bottom navigation.
     document.body.classList.toggle('fullscreen', path === '/welkom');
+    document.title = `${TITLES[path.split('/')[1]] ?? t.appName} — ${t.appName}`;
+
     // Every screen gets a fresh element. If the user navigates away while a screen is still
     // loading its data, that screen writes into a detached element and nothing breaks.
     const view = document.createElement('div');
     main.replaceChildren(view);
     window.scrollTo(0, 0);
-    Promise.resolve(render(view, params, query)).catch((error) => {
-      console.error(error);
-      showToast(t.common.error);
-    });
+
+    Promise.resolve(render(view, params, query))
+      .catch((error) => {
+        console.error(error);
+        showToast(t.common.error);
+      })
+      .finally(() => {
+        // Move keyboard and screen-reader focus to the new screen's heading.
+        const heading = view.querySelector('h1');
+        if (heading && main.contains(view)) {
+          heading.setAttribute('tabindex', '-1');
+          heading.focus({ preventScroll: true });
+        }
+      });
   },
 });
 
@@ -53,7 +82,7 @@ registerServiceWorker();
 requestPersistentStorage();
 await ensureSelf();
 // First visit: show the welcome carousel once.
-if (!localStorage.getItem(ONBOARDED_KEY) && ['', '#', '#/afspraken'].includes(location.hash)) {
+if (!localStorage.getItem(ONBOARDED_KEY) && ['', '#', '#/overzicht'].includes(location.hash)) {
   history.replaceState(null, '', '#/welkom'); // no hashchange event, so no double render
 }
 router.start();

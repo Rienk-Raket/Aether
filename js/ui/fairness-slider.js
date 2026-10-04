@@ -6,10 +6,10 @@ import { t } from '../i18n/nl.js';
 export function createFairnessSlider(container, { value, onInput, onChange }) {
   container.innerHTML = `
     <div class="fairness-slider">
-      <div class="fairness-labels">
-        <span class="label-efficient">${t.fairness.efficient}</span>
-        <output class="mono" data-out></output>
-        <span class="label-fair">${t.fairness.fair}</span>
+      <div class="slider-row">
+        <span>${t.fairness.efficient}</span>
+        <b data-out></b>
+        <span>${t.fairness.fair}</span>
       </div>
       <input type="range" min="0" max="100" step="1" aria-label="${t.fairness.sliderLabel}" data-range />
     </div>`;
@@ -18,9 +18,7 @@ export function createFairnessSlider(container, { value, onInput, onChange }) {
   const out = container.querySelector('[data-out]');
 
   const show = () => {
-    out.textContent = `${range.value}% ${t.fairness.fair.toLowerCase()}`;
-    // Fill the track up to the thumb (used by the CSS gradient).
-    range.style.setProperty('--fill', `${range.value}%`);
+    out.textContent = t.fairness.balance(range.value);
   };
 
   range.value = Math.round(value * 100);

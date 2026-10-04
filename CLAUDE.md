@@ -31,7 +31,9 @@ Volledige specificatie: @docs/SPEC.md (lees alleen de sectie die je nodig hebt, 
 - Ga niet door naar de volgende milestone zonder mijn akkoord.
 
 ## Buiten scope (nog niet bouwen)
-TensorFlow.js, WebXR, Web Audio, Stripe/paywall, Plausible, Quantum Entanglement, Chrono-Conflict, Dimensional Portal, Emotive Avatars, Social Reputation Aura, Atmospheric Mood, Temporal Echo.
+TensorFlow.js, WebXR, Web Audio, Stripe/paywall (alleen een Plus-label als demo is toegestaan), Plausible, Quantum Entanglement, Chrono-Conflict, Dimensional Portal, Emotive Avatars, Social Reputation Aura, Atmospheric Mood, Temporal Echo.
 
 ## Ontwerp
-Donker futuristisch thema, glas-morphism, neon cyaan (#00F0FF) / magenta (#FF00E6) / paars (#8B00FF), achtergrond #0A0E27. Fonts: Rajdhani (koppen), Inter (tekst), Space Mono (data). Alle kleuren als CSS-variabelen in één bestand.
+Donker thema met glas-achtige kaarten (concept in `.1layoutconceptindex/`, goedgekeurd op 4 oktober 2026). Kleuren: mint (#9DF0CF) en blauw (#88B9FF) als hoofdkleuren, oranje (#FFBD72) voor waarschuwingen/demo, rood (#FF7F8F) voor fouten, achtergrond #071321. Fonts: Space Grotesk (koppen en cijfers), DM Sans (tekst), zelf gehost in `assets/fonts/`. Alle kleuren als CSS-variabelen in één bestand (`css/tokens.css`).
+Indeling: zijbalk op de computer, onderbalk op de telefoon (grens 900px). Modules: Overzicht, Ontdek plekken, Mijn groepen, Agenda, Activiteit, Instellingen.
+Toegankelijkheid: klikdoelen minimaal 44px, focus naar de kop bij schermwissel, `prefers-reduced-motion` respecteren.
