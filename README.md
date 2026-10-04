@@ -5,6 +5,12 @@ Offline-first PWA that finds the fairest meeting place for a group, based on tra
 > **Demo mode:** all "online" data (routes, venues, bookings) is fictional and bundled in
 > this repository. The app makes no network requests to third parties and runs fully offline.
 
+## Live
+
+https://rienk-raket.github.io/Aether/
+
+Deploys automatically from the `main` branch (GitHub Pages, root folder).
+
 ## Run locally
 
 ```bash
@@ -18,6 +24,8 @@ Open the printed `http://localhost:...` URL.
 
 - `npm test` — unit tests (Vitest) for pure logic
 - `npm run lint` — ESLint
+- `npm run sw` — regenerate the offline file list in `sw.js` (run after adding files or changing the version in `package.json`)
+- `npm run vendor` — copy browser builds of dependencies into `vendor/`
 
 ## Docs
 
