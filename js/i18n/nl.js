@@ -279,6 +279,12 @@ export const t = {
 
   search: { noResults: (q) => `Geen resultaten voor “${q}”` },
 
+  splash: {
+    slogan: 'Meet in the middle',
+    sub: 'Eerlijk afspreken op basis van reistijd.',
+    hint: 'Tik om door te gaan',
+  },
+
   welcome: {
     title: 'Welkom bij Aether',
     subtitle: 'Vind de eerlijkste ontmoetingsplek in seconden',

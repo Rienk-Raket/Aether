@@ -21,6 +21,7 @@ import { renderStepGroup } from './screens/new/step-group.js';
 import { renderStepWhen } from './screens/new/step-when.js';
 import { renderStepWhere } from './screens/new/step-where.js';
 import { renderWelcome, ONBOARDED_KEY } from './screens/welcome.js';
+import { hasSeenSplash, showSplash } from './ui/splash.js';
 
 const main = document.querySelector('#main');
 
@@ -92,8 +93,11 @@ registerServiceWorker();
 requestPersistentStorage();
 await ensureSelf();
 startSimulation();
+// Fresh start of the app: opening screen first.
+const landing = ['', '#', '#/overzicht'].includes(location.hash);
+if (!hasSeenSplash()) await showSplash();
 // First visit: show the welcome carousel once.
-if (!localStorage.getItem(ONBOARDED_KEY) && ['', '#', '#/overzicht'].includes(location.hash)) {
+if (!localStorage.getItem(ONBOARDED_KEY) && landing) {
   history.replaceState(null, '', '#/welkom'); // no hashchange event, so no double render
 }
 router.start();

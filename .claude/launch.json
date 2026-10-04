@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", ".", "-l", "5173"],
       "port": 5173
+    },
+    {
+      "name": "aether-dev",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", ".", "-l", "5180"],
+      "port": 5180
     }
   ]
 }
