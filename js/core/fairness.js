@@ -7,6 +7,10 @@
 //   cost         = μ + FAIRNESS_WEIGHT · α · σ
 // α is the slider: 0 = most efficient (only the average counts), 1 = most fair.
 // The candidate with the lowest cost wins.
+//
+// A candidate may carry `costTimes`: the travel times adjusted for personal preferences (a maximum
+// travel time, avoiding rush hour). The cost is then computed from those, while `stats` and
+// `fairness` still describe the real travel times that people will experience.
 
 export const FAIRNESS_WEIGHT = 2;
 
@@ -40,7 +44,8 @@ export function rankCandidates(candidates, alpha) {
   return candidates
     .map((candidate) => {
       const stats = travelStats(candidate.times);
-      return { ...candidate, stats, fairness: fairnessScore(stats), cost: cost(stats, alpha) };
+      const costStats = candidate.costTimes ? travelStats(candidate.costTimes) : stats;
+      return { ...candidate, stats, fairness: fairnessScore(stats), cost: cost(costStats, alpha) };
     })
     .sort(compareRanked);
 }
