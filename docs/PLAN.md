@@ -129,6 +129,6 @@ Plus/Teams alleen als demo-label, bouwen in stappen met akkoord.
 | **O3b** | Module "Aanbod & wensen": fictieve boekingssites/bureaus aan/uit, wensen (eten, overnachten, ontbijt, lunch, koffie, vergaderzaal, evenement, dieet, prijs), zakenkaart met aanklikbare zaken en kaartje (foto, diensten, beoordeling, prijsrange) | **klaar** |
 | **O4** | Agenda met "wanneer kan iedereen" en spitsdrukte-model | **klaar** |
 | **O5** | Reserveren via Tafelaar/Overnachter, `.ics`, delen, Plus-label | **klaar** |
-| **O6** | 3D-orb met 2D-terugval (optioneel) | open |
+| **O6** | 3D-orb met 2D-terugval (optioneel) | **klaar** |
 
 CO₂-factoren (g per reizigerskilometer): auto 146, OV 28, fiets/lopen 0. Bron: CO2emissiefactoren.nl en CE Delft (STREAM Personenvervoer).

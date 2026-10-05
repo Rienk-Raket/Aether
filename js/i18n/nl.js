@@ -77,6 +77,14 @@ export const t = {
     listTitle: 'Voor jullie groep',
   },
 
+  orb: {
+    toggle: '3D weergave',
+    hint: 'Sleep om te draaien. De lengte van een lijn is een reistijd; een eerlijke plek zweeft in het midden.',
+    fallback: '3D modus niet beschikbaar op dit apparaat: we tonen de 2D-kaart.',
+    caption: (name, minutes, fairness) => `${name} · gemiddeld ${minutes} min · eerlijkheid ${fairness}`,
+    alt: (name) => `3D-weergave van de plekken rond de groep. Geselecteerd: ${name}.`,
+  },
+
   slots: {
     bestTitle: 'Beste momenten voor jullie',
     estimateNote: 'Een schatting op basis van reistijd naar het midden, de spits en ieders grenzen.',

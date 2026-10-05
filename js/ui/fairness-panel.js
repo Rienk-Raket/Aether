@@ -5,7 +5,7 @@
 import { t } from '../i18n/nl.js';
 import { icon } from './icons.js';
 import { esc, initials, hueFor } from './dom.js';
-import { renderMap2d } from './map2d.js';
+import { createMapView } from './map-view.js';
 import { createFairnessSlider } from './fairness-slider.js';
 import { rankCandidates } from '../core/fairness.js';
 import { personLevel, fairnessLevel, durationLevel } from '../core/levels.js';
@@ -24,6 +24,7 @@ export function createFairnessPanel(data, slots, options) {
   let notifiedId = null;
 
   const find = (id) => ranked.find((c) => c.id === id);
+  const mapView = slots.map ? createMapView(slots.map, { participants, candidates, orbAllowed: Boolean(options.orb) }) : null;
 
   function update() {
     ranked = rankCandidates(candidates, alpha).slice(0, options.topN);
@@ -34,9 +35,8 @@ export function createFairnessPanel(data, slots, options) {
       options.onSelect?.(selected);
     }
 
-    if (slots.map) {
-      renderMap2d(slots.map, {
-        participants,
+    if (mapView) {
+      mapView.render({
         candidates: ranked,
         selectedId,
         venueCount: options.venueCount?.() ?? null,

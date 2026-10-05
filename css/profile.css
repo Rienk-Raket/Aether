@@ -64,3 +64,11 @@ details.card > summary { cursor: pointer; min-height: var(--tap); display: flex;
 /* Booking */
 .plus-badge { margin-left: auto; }
 .hero-buttons { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+/* 3D orb */
+.map-tools { display: flex; justify-content: flex-end; margin-bottom: var(--space-2); }
+.orb-wrap { position: relative; border-radius: var(--radius-md); background: #132c39; overflow: hidden; }
+.orb-canvas { display: block; width: 100%; touch-action: pan-y; cursor: grab; }
+.orb-canvas:active { cursor: grabbing; }
+.orb-caption { position: absolute; left: var(--space-3); bottom: var(--space-2); right: var(--space-3); color: #b4c9cd; font-size: 12px; pointer-events: none; }
+.map-tools .chip-btn { min-height: var(--tap); }

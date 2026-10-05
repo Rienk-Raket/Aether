@@ -143,6 +143,7 @@ export async function renderDiscover(container, _params, query) {
       alpha: appointment.fairness_priority ?? self.preferences.fairness_priority,
       topN: TOP,
       detail: true,
+      orb: true,
       onSelect: (area) => {
         venueCount = null; // unknown until the venues of this area are loaded
         venues.show(area);
