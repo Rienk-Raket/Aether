@@ -21,6 +21,8 @@ export async function confirmBooking(appointment, details) {
   appointment.status = 'confirmed';
   await saveAppointment(appointment);
   await logActivity('place', t.bookingDone.activity(appointment.selected_poi?.name ?? ''), details.reference, `#/bevestigd?afspraak=${appointment.id}`);
+  // Demo: a business account that owns this venue receives the booking as a request.
+  import('../business/data/booking-hook.js').then((m) => m.receiveBooking(appointment));
   document.dispatchEvent(new CustomEvent('aether:data'));
   return appointment;
 }

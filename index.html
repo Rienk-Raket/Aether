@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/collab.css" />
     <link rel="stylesheet" href="css/offer.css" />
     <link rel="stylesheet" href="css/profile.css" />
+    <link rel="stylesheet" href="css/business.css" />
     <link rel="stylesheet" href="css/splash.css" />
 
     <script>
@@ -76,7 +77,20 @@
           <a class="nav-link" href="#/instellingen" data-route="/instellingen"><span data-icon="settings"></span>Instellingen</a>
         </nav>
 
+        <!-- Zakelijk (business portal): shown instead of the personal navigation on #/zakelijk/... -->
+        <nav class="nav-group nav-business" aria-label="Zakelijk">
+          <p class="nav-title">Zaak</p>
+          <a class="nav-link" href="#/zakelijk" data-route="/zakelijk" data-exact><span data-icon="home"></span>Overzicht</a>
+          <a class="nav-link" href="#/zakelijk/statistieken" data-route="/zakelijk/statistieken"><span data-icon="activity"></span>Statistieken</a>
+          <a class="nav-link" href="#/zakelijk/zaak" data-route="/zakelijk/zaak"><span data-icon="restaurant"></span>Mijn zaak</a>
+          <a class="nav-link" href="#/zakelijk/aanvragen" data-route="/zakelijk/aanvragen"><span data-icon="calendar"></span>Aanvragen</a>
+          <a class="nav-link" href="#/zakelijk/abonnement" data-route="/zakelijk/abonnement"><span data-icon="sliders"></span>Abonnement</a>
+          <a class="nav-link" href="#/zakelijk/facturen" data-route="/zakelijk/facturen"><span data-icon="copy"></span>Facturen</a>
+          <a class="nav-link" href="#/zakelijk/team" data-route="/zakelijk/team"><span data-icon="users"></span>Team &amp; rechten</a>
+        </nav>
+
         <div class="side-bottom">
+          <a class="btn btn-small btn-block" href="#/zakelijk" data-mode-switch><span data-icon="restaurant"></span>Zakelijk account</a>
           <a class="profile-link" href="#/start" data-profile>
             <span class="avatar" data-profile-avatar>?</span>
             <span><strong data-profile-name>Jij</strong><small>Lokaal profiel · demo</small></span>
@@ -89,6 +103,7 @@
           <div class="eyebrow" data-today></div>
           <div class="top-actions">
             <span class="status-chip" data-status><span data-status-label>Demo</span><span class="status-long" data-status-long> · lokaal opgeslagen</span></span>
+            <a class="btn btn-small" href="#/overzicht" data-to-personal>Naar persoonlijke app</a>
             <a class="icon-btn" href="#/activiteit" aria-label="Activiteit" data-bell>
               <span data-icon="bell"></span><span class="dot-badge" data-bell-dot hidden></span>
             </a>
@@ -106,6 +121,15 @@
         <a class="nav-link" href="#/groepen" data-route="/groepen"><span data-icon="users"></span>Groepen</a>
         <a class="nav-link" href="#/agenda" data-route="/agenda"><span data-icon="calendar"></span>Agenda</a>
         <button class="nav-link" type="button" data-more data-route-group="/aanbod /activiteit /instellingen"><span data-icon="more-h"></span>Meer</button>
+      </nav>
+
+      <!-- Phone, business portal -->
+      <nav class="bottom bottom-business" aria-label="Zakelijk">
+        <a class="nav-link" href="#/zakelijk" data-route="/zakelijk" data-exact><span data-icon="home"></span>Overzicht</a>
+        <a class="nav-link" href="#/zakelijk/statistieken" data-route="/zakelijk/statistieken"><span data-icon="activity"></span>Cijfers</a>
+        <a class="nav-link" href="#/zakelijk/zaak" data-route="/zakelijk/zaak"><span data-icon="restaurant"></span>Zaak</a>
+        <a class="nav-link" href="#/zakelijk/aanvragen" data-route="/zakelijk/aanvragen"><span data-icon="calendar"></span>Aanvragen</a>
+        <button class="nav-link" type="button" data-more-business data-route-group="/zakelijk/abonnement /zakelijk/facturen /zakelijk/team"><span data-icon="more-h"></span>Meer</button>
       </nav>
     </div>
 
