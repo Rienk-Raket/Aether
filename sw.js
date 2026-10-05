@@ -42,6 +42,7 @@ const APP_SHELL = [
   './js/business/services/business-api.js',
   './js/business/services/mock/zaakwijzer-mock.js',
   './js/business/ui/plan-card.js',
+  './js/business/ui/promo.js',
   './js/business/ui/widgets.js',
   './js/core/booking.js',
   './js/core/candidates.js',

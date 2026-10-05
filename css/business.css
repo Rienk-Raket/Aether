@@ -153,3 +153,6 @@ ol.steps { list-style: none; padding: 0; }
 .usage-line { margin: 10px 0 14px; }
 .usage-line .bar-track { margin-top: 6px; }
 .biz-toolbar.chips { justify-content: flex-start; }
+.business-promo { margin-top: 18px; border-color: rgba(136, 185, 255, 0.35); }
+.business-promo .card-row { flex-wrap: wrap; }
+.business-promo .btn { flex-shrink: 0; }

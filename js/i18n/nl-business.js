@@ -7,6 +7,12 @@ export const businessStrings = {
   eur,
   num,
   title: 'Aether Zakelijk',
+  promo: {
+    eyebrow: 'Voor ondernemers',
+    title: 'Heb je een restaurant, café of vergaderzaal?',
+    text: 'Sluit je zaak aan bij Aether en zie hoeveel groepen jou kiezen, met statistieken, reserveringsaanvragen en een abonnement dat meegroeit. Demo met fictieve data.',
+    action: 'Aether Zakelijk',
+  },
   eyebrow: 'Zakelijk',
   demoChip: 'Demo · fictieve data',
   toPersonal: 'Naar persoonlijke app',
