@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Facturen en betaalgegevens. — Aether Zakelijk (mockup)</title>
+<link rel="stylesheet" href="../../../css/tokens.css"><link rel="stylesheet" href="../../../css/fonts.css">
+<link rel="stylesheet" href="../../../css/base.css"><link rel="stylesheet" href="../../../css/components.css">
+<link rel="stylesheet" href="business.css"></head>
+<body><div class="app">
+<aside class="sidebar" aria-label="Zijbalk">
+  <a class="brand" href="#"><span class="brand-mark">A</span><strong>Aether</strong> <span class="plan-pill blue" style="margin-left:6px">Zakelijk</span></a>
+  <div class="biz-switch"><span class="avatar" style="--hue:160">KK</span><span><strong>Keuken Kade</strong><small>Amsterdam · 1 locatie</small></span></div>
+  <nav class="nav-group" aria-label="Zakelijk"><p class="nav-title">Zaak</p>
+  <a class="nav-link" href="#" ><span data-icon="home"></span>Overzicht</a><a class="nav-link" href="#" ><span data-icon="activity"></span>Statistieken</a><a class="nav-link" href="#" ><span data-icon="restaurant"></span>Mijn zaak</a><a class="nav-link" href="#" ><span data-icon="calendar"></span>Aanvragen</a><a class="nav-link" href="#" ><span data-icon="sliders"></span>Abonnement</a><a class="nav-link" href="#" aria-current="page"><span data-icon="copy"></span>Facturen</a><a class="nav-link" href="#" ><span data-icon="users"></span>Team & rechten</a>
+  </nav>
+  <div class="side-bottom"><a class="profile-link" href="#"><span class="avatar" style="--hue:210">SB</span><span><strong>Sanne Bakker</strong><small>Eigenaar · Groei-abonnement</small></span></a></div>
+</aside>
+<div class="content">
+<header class="topbar"><div class="eyebrow">Zakelijk · maandag 5 oktober</div>
+<div class="top-actions"><span class="status-chip"><span>Demo</span><span> · fictieve data</span></span>
+<a class="icon-btn" href="#"><span data-icon="bell"></span></a><a class="btn btn-small" href="#">Naar persoonlijke app</a></div></header>
+<main class="main"><div class="screen"><div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px;flex-wrap:wrap">
+<div><p class="eyebrow">Facturen</p><h1 style="margin-top:6px">Facturen en betaalgegevens.</h1><p class="sub">Download je facturen als PDF of exporteer ze voor je boekhouding.</p></div></div>
+
+<div class="biz-grid cols-2">
+ <div class="card"><table class="table"><tr><th>Factuur</th><th>Datum</th><th>Omschrijving</th><th>Bedrag</th><th>Status</th><th></th></tr>
+ <tr><td class="mono">AE-2026-0142</td><td>1 mrt 2026</td><td>Groei · jaarcontract</td><td class="mono">€ 592,90</td><td><span class="status ok">Betaald</span></td><td><span class="btn btn-small">PDF</span></td></tr>
+ <tr><td class="mono">AE-2026-0388</td><td>14 jun 2026</td><td>Extra uitgelichte week</td><td class="mono">€ 30,25</td><td><span class="status ok">Betaald</span></td><td><span class="btn btn-small">PDF</span></td></tr>
+ <tr><td class="mono">AE-2026-0591</td><td>2 sep 2026</td><td>+50 reserveringsaanvragen</td><td class="mono">€ 14,52</td><td><span class="status ok">Betaald</span></td><td><span class="btn btn-small">PDF</span></td></tr>
+ <tr><td class="mono">AE-2027-0007</td><td>1 mrt 2027</td><td>Groei · verlenging</td><td class="mono">€ 592,90</td><td><span class="status wait">Gepland</span></td><td></td></tr></table></div>
+ <div style="display:grid;gap:16px;align-self:start"><div class="card"><h2>Factuurgegevens</h2><p class="small muted" style="margin-top:8px">Keuken Kade B.V. (fictief)<br>KvK 00000000 · btw NL000000000B01<br>facturen@keukenkade.example</p><a class="btn btn-small" href="#" style="margin-top:12px">Wijzigen</a></div><div class="card"><h2>Betaalmethode</h2><p class="small muted" style="margin-top:8px">Automatische incasso (demo)<br>NL00 DEMO 0000 0000 00</p></div></div>
+</div>
+</div></main></div></div>
+<script type="module">import { icon } from '../../../js/ui/icons.js'; document.querySelectorAll('[data-icon]').forEach(e => e.innerHTML = icon(e.dataset.icon)); document.body.dataset.ready = '1';</script>
+</body></html>

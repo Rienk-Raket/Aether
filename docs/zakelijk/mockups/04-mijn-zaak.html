@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zo zien groepen jullie zaak. — Aether Zakelijk (mockup)</title>
+<link rel="stylesheet" href="../../../css/tokens.css"><link rel="stylesheet" href="../../../css/fonts.css">
+<link rel="stylesheet" href="../../../css/base.css"><link rel="stylesheet" href="../../../css/components.css">
+<link rel="stylesheet" href="business.css"></head>
+<body><div class="app">
+<aside class="sidebar" aria-label="Zijbalk">
+  <a class="brand" href="#"><span class="brand-mark">A</span><strong>Aether</strong> <span class="plan-pill blue" style="margin-left:6px">Zakelijk</span></a>
+  <div class="biz-switch"><span class="avatar" style="--hue:160">KK</span><span><strong>Keuken Kade</strong><small>Amsterdam · 1 locatie</small></span></div>
+  <nav class="nav-group" aria-label="Zakelijk"><p class="nav-title">Zaak</p>
+  <a class="nav-link" href="#" ><span data-icon="home"></span>Overzicht</a><a class="nav-link" href="#" ><span data-icon="activity"></span>Statistieken</a><a class="nav-link" href="#" aria-current="page"><span data-icon="restaurant"></span>Mijn zaak</a><a class="nav-link" href="#" ><span data-icon="calendar"></span>Aanvragen</a><a class="nav-link" href="#" ><span data-icon="sliders"></span>Abonnement</a><a class="nav-link" href="#" ><span data-icon="copy"></span>Facturen</a><a class="nav-link" href="#" ><span data-icon="users"></span>Team & rechten</a>
+  </nav>
+  <div class="side-bottom"><a class="profile-link" href="#"><span class="avatar" style="--hue:210">SB</span><span><strong>Sanne Bakker</strong><small>Eigenaar · Groei-abonnement</small></span></a></div>
+</aside>
+<div class="content">
+<header class="topbar"><div class="eyebrow">Zakelijk · maandag 5 oktober</div>
+<div class="top-actions"><span class="status-chip"><span>Demo</span><span> · fictieve data</span></span>
+<a class="icon-btn" href="#"><span data-icon="bell"></span></a><a class="btn btn-small" href="#">Naar persoonlijke app</a></div></header>
+<main class="main"><div class="screen"><div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px;flex-wrap:wrap">
+<div><p class="eyebrow">Mijn zaak</p><h1 style="margin-top:6px">Zo zien groepen jullie zaak.</h1><p class="sub">Wijzigingen zijn direct zichtbaar in Ontdek plekken en op de zakenkaart.</p></div><a class="btn btn-primary" href="#">Opslaan</a></div>
+
+<div class="biz-grid cols-2">
+ <div style="display:grid;gap:16px">
+  <div class="card"><h2>Basisgegevens</h2><div class="biz-grid cols-2e" style="margin-top:14px"><label class="field">Naam<span class="input">Keuken Kade</span></label><label class="field">Type<span class="input">Restaurant · Mediterraans</span></label><label class="field">Adres<span class="input">Duinroosstraat 78, Amsterdam</span></label><label class="field">Capaciteit (zitplaatsen)<span class="input">34</span></label></div></div>
+  <div class="card"><h2>Diensten en voorzieningen</h2><div class="chips" style="margin-top:12px;flex-wrap:wrap;display:flex;gap:8px"><span class="chip" style="color:var(--mint);border-color:var(--mint-line)">Diner</span><span class="chip" style="color:var(--mint);border-color:var(--mint-line)">Lunch</span><span class="chip">Vergaderen</span><span class="chip" style="color:var(--mint);border-color:var(--mint-line)">Vegetarisch</span><span class="chip" style="color:var(--mint);border-color:var(--mint-line)">Halal</span><span class="chip" style="color:var(--mint);border-color:var(--mint-line)">Kindvriendelijk</span><span class="chip">Terras</span><span class="chip">Rolstoeltoegankelijk</span></div>
+  <p class="small muted" style="margin-top:12px">Prijsindicatie per persoon: € 33 – € 54 · Groepsmenu vanaf 8 personen</p></div>
+  <div class="card"><h2>Openingstijden</h2><table class="table" style="margin-top:8px"><tr><td>Ma – Za</td><td class="mono">17:00 – 23:00</td></tr><tr><td>Zondag</td><td class="muted">Gesloten</td></tr><tr><td>Uitzondering</td><td class="muted">Geen — <a href="#">toevoegen</a></td></tr></table></div>
+  <div class="card"><h2>Reserveren</h2><label class="toggle" style="display:flex;gap:10px;margin-top:10px"><span class="toggle-track"></span>Aanvragen via Aether aannemen</label><p class="small muted" style="margin-top:8px">Aanvragen komen in het tabblad Aanvragen. Max. 100 per maand in jouw abonnement.</p></div>
+ </div>
+ <div class="card" style="align-self:start;position:sticky;top:20px"><p class="eyebrow">Voorbeeld voor groepen</p>
+  <div class="card preview-venue" style="margin-top:12px"><div class="photo"></div><div><strong>Keuken Kade</strong> <span class="badge">★ 4,7</span><p class="muted small">Restaurant · Mediterraans · €€€</p><p class="small" style="margin-top:8px">Past bij jullie wensen: vegetarisch, halal</p><p class="small" style="margin-top:4px;color:var(--mint)">Gem. reistijd 23 min · fairness 0,84</p></div></div>
+  <p class="small muted" style="margin-top:12px">Reistijd en fairness berekent Aether per groep; die kun je niet aanpassen.</p></div>
+</div>
+</div></main></div></div>
+<script type="module">import { icon } from '../../../js/ui/icons.js'; document.querySelectorAll('[data-icon]').forEach(e => e.innerHTML = icon(e.dataset.icon)); document.body.dataset.ready = '1';</script>
+</body></html>

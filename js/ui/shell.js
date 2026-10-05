@@ -30,6 +30,17 @@ export function initShell(handlers) {
       { label: t.nav.offer, value: '/aanbod', icon: 'sliders' },
       { label: t.nav.activity, value: '/activiteit', icon: 'activity' },
       { label: t.nav.settings, value: '/instellingen', icon: 'settings' },
+      { label: t.business.toBusiness, value: '/zakelijk', icon: 'restaurant' },
+    ]);
+    if (choice) navigate(choice);
+  });
+
+  document.querySelector('[data-more-business]').addEventListener('click', async () => {
+    const choice = await actionSheet(t.business.title, [
+      { label: t.business.nav.subscription, value: '/zakelijk/abonnement', icon: 'sliders' },
+      { label: t.business.nav.invoices, value: '/zakelijk/facturen', icon: 'copy' },
+      { label: t.business.nav.team, value: '/zakelijk/team', icon: 'users' },
+      { label: t.business.toPersonal, value: '/overzicht', icon: 'home' },
     ]);
     if (choice) navigate(choice);
   });
@@ -44,17 +55,20 @@ export function initShell(handlers) {
 
 // Marks the link that belongs to the current screen (aria-current="page").
 export function setActiveRoute(path) {
-  const matches = (route) => path === route || path.startsWith(`${route}/`) || (route === '/overzicht' && path.startsWith('/nieuw')) || (route === '/ontdek' && path.startsWith('/plek'));
+  // The business portal (#/zakelijk/...) swaps the navigation; see css/business.css.
+  document.body.dataset.mode = path.startsWith('/zakelijk') ? 'business' : 'personal';
+  const matches = (route) => path === route || (route !== '/zakelijk' && path.startsWith(`${route}/`)) || (route === '/overzicht' && path.startsWith('/nieuw')) || (route === '/ontdek' && path.startsWith('/plek'));
 
   document.querySelectorAll('[data-route]').forEach((el) => {
     if (matches(el.dataset.route)) el.setAttribute('aria-current', 'page');
     else el.removeAttribute('aria-current');
   });
 
-  const more = document.querySelector('[data-more]');
-  const inMore = more.dataset.routeGroup.split(' ').some(matches);
-  if (inMore) more.setAttribute('aria-current', 'page');
-  else more.removeAttribute('aria-current');
+  for (const more of document.querySelectorAll('[data-more], [data-more-business]')) {
+    const inMore = more.dataset.routeGroup.split(' ').some(matches);
+    if (inMore) more.setAttribute('aria-current', 'page');
+    else more.removeAttribute('aria-current');
+  }
 }
 
 export async function refreshProfile() {

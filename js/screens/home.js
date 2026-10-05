@@ -1,5 +1,6 @@
 // Overzicht: the next appointment as a hero, the group's status, a live fairness map and the top places.
 
+import { businessPromoHtml } from '../business/ui/promo.js';
 import { t } from '../i18n/nl.js';
 import { icon } from '../ui/icons.js';
 import { esc } from '../ui/dom.js';
@@ -97,6 +98,7 @@ export async function renderHome(container) {
           <a class="btn btn-block section-gap" href="#/ontdek?afspraak=${appointment.id}">${t.home.allPlaces} ${icon('chevron')}</a>
         </div>
       </div>
+      ${businessPromoHtml()}
     </section>`;
 
   const currentAlpha = () => appointment.fairness_priority ?? self.preferences.fairness_priority;
@@ -144,6 +146,7 @@ async function renderEmpty(container, brokenAppointment) {
           <ol class="steps">${t.home.steps.map((s) => `<li>${s}</li>`).join('')}</ol>
         </div>
       </div>
+      ${businessPromoHtml()}
     </section>`;
   wireDemoButtons(container, () => renderHome(container));
 }

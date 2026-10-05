@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kies de bundel die bij je zaak past. — Aether Zakelijk (mockup)</title>
+<link rel="stylesheet" href="../../../css/tokens.css"><link rel="stylesheet" href="../../../css/fonts.css">
+<link rel="stylesheet" href="../../../css/base.css"><link rel="stylesheet" href="../../../css/components.css">
+<link rel="stylesheet" href="business.css"></head>
+<body><div class="app">
+<aside class="sidebar" aria-label="Zijbalk">
+  <a class="brand" href="#"><span class="brand-mark">A</span><strong>Aether</strong> <span class="plan-pill blue" style="margin-left:6px">Zakelijk</span></a>
+  <div class="biz-switch"><span class="avatar" style="--hue:160">KK</span><span><strong>Keuken Kade</strong><small>Amsterdam · 1 locatie</small></span></div>
+  <nav class="nav-group" aria-label="Zakelijk"><p class="nav-title">Zaak</p>
+  <a class="nav-link" href="#" ><span data-icon="home"></span>Overzicht</a><a class="nav-link" href="#" ><span data-icon="activity"></span>Statistieken</a><a class="nav-link" href="#" ><span data-icon="restaurant"></span>Mijn zaak</a><a class="nav-link" href="#" ><span data-icon="calendar"></span>Aanvragen</a><a class="nav-link" href="#" aria-current="page"><span data-icon="sliders"></span>Abonnement</a><a class="nav-link" href="#" ><span data-icon="copy"></span>Facturen</a><a class="nav-link" href="#" ><span data-icon="users"></span>Team & rechten</a>
+  </nav>
+  <div class="side-bottom"><a class="profile-link" href="#"><span class="avatar" style="--hue:210">SB</span><span><strong>Sanne Bakker</strong><small>Eigenaar · Groei-abonnement</small></span></a></div>
+</aside>
+<div class="content">
+<header class="topbar"><div class="eyebrow">Zakelijk · maandag 5 oktober</div>
+<div class="top-actions"><span class="status-chip"><span>Demo</span><span> · fictieve data</span></span>
+<a class="icon-btn" href="#"><span data-icon="bell"></span></a><a class="btn btn-small" href="#">Naar persoonlijke app</a></div></header>
+<main class="main"><div class="screen"><div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px;flex-wrap:wrap">
+<div><p class="eyebrow">Abonnement kiezen</p><h1 style="margin-top:6px">Kies de bundel die bij je zaak past.</h1><p class="sub">Elk plan bouwt voort op het vorige. Betalen verandert nooit de rangorde of de fairness-score: dat blijft eerlijk voor groepen.</p></div></div>
+
+<div style="text-align:center;margin-bottom:22px"><span class="seg"><span>Maandelijks</span><span class="on">Jaarlijks · 2 maanden gratis</span></span></div>
+<div class="plans">
+<div class="card plan "><h3>Basis</h3><div class="price">€ 0<small> / mnd</small></div><ul><li>Vermelding in Aether</li><li>Zaakprofiel (1 locatie)</li><li>Aantal keren gekozen (30 dagen)</li><li>1 gebruiker</li><li class="off">Reserveringsaanvragen</li><li class="off">Uitgelicht</li><li class="off">Benchmark</li></ul><a class="btn " href="#">Gratis starten</a></div>
+<div class="card plan "><h3>Start</h3><div class="price">€ 19<small> / mnd</small></div><ul><li>Alles van Basis</li><li>Statistieken 90 dagen</li><li>Reserveringsaanvragen (25 / mnd)</li><li>Foto-galerij (10 foto's)</li><li>2 gebruikers</li><li class="off">Uitgelicht</li><li class="off">Benchmark</li></ul><a class="btn " href="#">Kies Start</a></div>
+<div class="card plan featured"><span class="plan-pill ribbon">Meest gekozen</span><h3>Groei</h3><div class="price">€ 49<small> / mnd</small></div><ul><li>Alles van Start</li><li>Reserveringsaanvragen (100 / mnd)</li><li>Herkomst- en tijdsanalyse</li><li>Vergelijking met de buurt</li><li>4 uitgelichte weken / jaar</li><li>Groepsaanbiedingen</li><li>5 gebruikers</li><li class="off">API en export</li></ul><a class="btn btn-primary" href="#">Kies Groei</a></div>
+<div class="card plan "><h3>Pro</h3><div class="price">€ 99<small> / mnd</small></div><ul><li>Alles van Groei</li><li>Onbeperkt reserveringsaanvragen</li><li>Statistieken 12 maanden</li><li>CSV-export en API</li><li>12 uitgelichte weken / jaar</li><li>Tot 3 locaties</li><li>15 gebruikers</li></ul><a class="btn " href="#">Kies Pro</a></div>
+<div class="card plan "><h3>Keten</h3><div class="price">Op maat<small> </small></div><ul><li>Alles van Pro</li><li>Onbeperkt locaties en gebruikers</li><li>Eigen accountmanager</li><li>Koppeling met kassa/reserveringssysteem</li><li>Maatwerkrapportage</li><li>Meerjarig contract</li></ul><a class="btn " href="#">Neem contact op</a></div>
+</div>
+<div class="card" style="margin-top:18px"><h2>Contractvormen</h2><div class="biz-grid cols-3" style="margin-top:12px"><div><strong>Maandelijks</strong><p class="small muted">Elke maand opzegbaar. Prijs per maand.</p></div><div><strong>Jaarcontract</strong><p class="small muted">Betaal 10 maanden, gebruik 12. Opzeggen vóór verlenging.</p></div><div><strong>Meerjarig (Keten)</strong><p class="small muted">Vaste prijs, eigen voorwaarden en servicelevel.</p></div></div></div>
+<p class="demo-note" style="margin-top:12px">Demo-prijzen en fictieve bundels. Geen echte betaling.</p>
+</div></main></div></div>
+<script type="module">import { icon } from '../../../js/ui/icons.js'; document.querySelectorAll('[data-icon]').forEach(e => e.innerHTML = icon(e.dataset.icon)); document.body.dataset.ready = '1';</script>
+</body></html>

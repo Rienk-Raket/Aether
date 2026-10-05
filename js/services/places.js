@@ -11,7 +11,7 @@ export const PROVIDER_NAME = 'Plekwijzer (demo)';
 const TTL_MS = 24 * 60 * 60 * 1000;
 // Part of every cache key. Raise it when the shape of a venue changes, so answers saved by an
 // older version are not mixed with new ones.
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 
 // Thrown when we are offline and nothing was stored earlier.
 export class OfflineError extends Error {

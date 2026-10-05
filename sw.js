@@ -1,13 +1,14 @@
 // Service worker: stores the app files on the device so Aether works offline.
 // APP_SHELL and CACHE_VERSION are generated: run `npm run sw` after adding files or bumping the version.
 
-const CACHE_VERSION = 'aether-v0.8.0';
+const CACHE_VERSION = 'aether-v0.9.0';
 
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './css/base.css',
+  './css/business.css',
   './css/collab.css',
   './css/components.css',
   './css/fonts.css',
@@ -20,6 +21,29 @@ const APP_SHELL = [
   './css/venues.css',
   './css/widgets.css',
   './js/app.js',
+  './js/business/core/billing.js',
+  './js/business/core/entitlements.js',
+  './js/business/core/plans.js',
+  './js/business/core/roles.js',
+  './js/business/core/stats.js',
+  './js/business/data/booking-hook.js',
+  './js/business/data/seed.js',
+  './js/business/data/store.js',
+  './js/business/screens/guard.js',
+  './js/business/screens/invoices.js',
+  './js/business/screens/onboarding.js',
+  './js/business/screens/overview.js',
+  './js/business/screens/plans.js',
+  './js/business/screens/requests.js',
+  './js/business/screens/stats.js',
+  './js/business/screens/subscription.js',
+  './js/business/screens/team.js',
+  './js/business/screens/venue-profile.js',
+  './js/business/services/business-api.js',
+  './js/business/services/mock/zaakwijzer-mock.js',
+  './js/business/ui/plan-card.js',
+  './js/business/ui/promo.js',
+  './js/business/ui/widgets.js',
   './js/core/booking.js',
   './js/core/candidates.js',
   './js/core/co2.js',
@@ -58,6 +82,7 @@ const APP_SHELL = [
   './js/data/slot-travelers.js',
   './js/data/venue-choice.js',
   './js/i18n/nl-booking.js',
+  './js/i18n/nl-business.js',
   './js/i18n/nl-collab.js',
   './js/i18n/nl-offer.js',
   './js/i18n/nl-profile.js',

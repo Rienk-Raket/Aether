@@ -30,6 +30,22 @@ import { hasSeenSplash, showSplash } from './ui/splash.js';
 
 const main = document.querySelector('#main');
 
+// The business portal is only downloaded when someone opens it (dynamic import).
+function businessRoutes() {
+  const screen = (name) => (view, params, query) => import(`./business/screens/${name}.js`).then((m) => m.render(view, params, query));
+  return {
+    '/zakelijk': screen('overview'),
+    '/zakelijk/aansluiten': screen('onboarding'),
+    '/zakelijk/statistieken': screen('stats'),
+    '/zakelijk/zaak': screen('venue-profile'),
+    '/zakelijk/aanvragen': screen('requests'),
+    '/zakelijk/abonnement': screen('subscription'),
+    '/zakelijk/abonnement/kiezen': screen('plans'),
+    '/zakelijk/facturen': screen('invoices'),
+    '/zakelijk/team': screen('team'),
+  };
+}
+
 // Page title per first part of the route, e.g. "#/groepen/abc" → "Mijn groepen".
 const TITLES = {
   overzicht: t.nav.overview,
@@ -47,6 +63,7 @@ const TITLES = {
   reserveren: t.booking.eyebrow,
   bevestigd: t.bookingDone.eyebrow,
   profiel: t.profile.eyebrow,
+  zakelijk: t.business.title,
 };
 
 applySettings();
@@ -74,6 +91,7 @@ const router = createRouter({
     '/profiel': renderProfile,
     '/reserveren': renderBooking,
     '/bevestigd': renderBookingDone,
+    ...businessRoutes(),
   },
   onChange(path, render, params, query) {
     setActiveRoute(path);
