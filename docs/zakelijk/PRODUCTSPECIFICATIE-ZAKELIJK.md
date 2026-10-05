@@ -5,7 +5,7 @@
 | **Product** | Aether Zakelijk (zakelijk portaal voor aangesloten zaken) |
 | **Versie document** | 1.0 — concept ter goedkeuring |
 | **Datum** | 5 oktober 2026 |
-| **Status** | Ontwerp. Er is **niets** in de app gebouwd; de screenshots zijn mockups in `docs/zakelijk/mockups/` |
+| **Status** | **Gebouwd als demo (app-versie 0.9.0).** Hoofdstuk 14 beschrijft wat er staat en waarin het van dit ontwerp afwijkt. De screenshots in hoofdstuk 5 zijn de oorspronkelijke ontwerp-mockups (`mockups/`); echte schermen van de app staan in `screenshots/app/` |
 | **Hoort bij** | `docs/SPEC.md` (app), `docs/PLAN.md` (plan, demo-modus) |
 | **Taal** | UI Nederlands, code en commit-berichten Engels |
 
@@ -524,6 +524,59 @@ Zoals gebruikelijk: na elke milestone stoppen, laten zien wat werkt en hoe het g
 | Z-4 | Moduswissel in dezelfde app (aanbevolen) of apart `zakelijk.html`? | Dezelfde app |
 | Z-5 | Uitgelicht-blok toestaan (gelabeld, buiten de ranglijst)? | Ja, onder voorwaarden §6.6 |
 | Z-6 | Mogen we met Z0 beginnen? | Ja, na akkoord |
+
+---
+
+## 14. Implementatiestatus (demo, versie 0.9.0)
+
+Alles uit Z0–Z4 is gebouwd als **demo**: de zakelijke kant werkt volledig lokaal, met fictieve data die zich gedraagt als een online dienst. Echte inlog, tellingen en betalingen (Z5) zijn bewust niet gebouwd.
+
+### Hoe de demo "online" lijkt zonder het te zijn
+
+| Wat | Hoe nagebootst |
+|---|---|
+| **Zaakwijzer (demo)** — de verzonnen server achter het portaal | `js/business/services/mock/zaakwijzer-mock.js`: antwoordt na 250–700 ms vertraging, net als Routara en Plekwijzer |
+| Statistieken | Berekend uit een vaste seed (zaak + datum), dus elke dag toont altijd dezelfde cijfers; antwoorden worden 15 minuten gecachet |
+| **Simuleer offline** (Instellingen) | Statistieken tonen het laatst opgehaalde antwoord met "Offline — laatst bijgewerkt …"; acties die een server nodig hebben (aanvraag bevestigen, plan wijzigen, opslaan, uitnodigen) geven "Voor deze actie is verbinding nodig" |
+| Verifiëren bij aansluiten | Code `123456` is al ingevuld; er wordt niets verstuurd |
+| Facturen en betalen | Facturen worden berekend uit het abonnement; "PDF" opent een printbare demo-pagina; niets wordt betaald |
+| Aanvragen van groepen | Zes verzonnen aanvragen; een boeking in de persoonlijke app bij de eigen zaak verschijnt ook als aanvraag |
+| Zaakprofiel | Wijzigingen worden opgeslagen en zijn direct zichtbaar in "Ontdek plekken" (de Plekwijzer-mock voegt ze samen) |
+| Buurtvergelijking | Anonieme mediaan van vergelijkbare zaken; zoekt in 2 km en vergroot het gebied tot er minimaal 3 zaken zijn |
+
+### Afwijkingen van het ontwerp (bewust, eenvoudiger)
+
+| Ontwerp | Gebouwd | Reden |
+|---|---|---|
+| Opslag in IndexedDB (versie 3) | Eén `localStorage`-sleutel `aether.business` | Klein en synchroon; geen databasemigratie nodig voor demo |
+| `scripts/gen-business-stats.js` schrijft `data/business-demo.json` | Statistieken worden bij het openen berekend (`core/stats.js`) | Minder bestanden, zelfde resultaat, volledig offline |
+| Moduswissel met knop die een modus onthoudt | De modus volgt de URL: alles onder `#/zakelijk` is zakelijk | Geen extra toestand die kan afwijken |
+| Kleine `ledenlijst` voor rollen | Rollen zijn echt afgedwongen in de schermen; in Team kun je "bekijken als" een rol | Zodat je in de demo ziet wat elke rol mag |
+
+### Bestanden
+
+```
+css/business.css                      js/i18n/nl-business.js
+js/business/core/        plans, entitlements, billing, stats, roles   (puur, getest)
+js/business/data/        store, seed, booking-hook
+js/business/services/    business-api.js, mock/zaakwijzer-mock.js
+js/business/screens/     overview, stats, venue-profile, requests, subscription,
+                         plans, invoices, team, onboarding, guard
+js/business/ui/          widgets.js, plan-card.js
+tests/business.test.js   14 tests (plannen, rechten, facturatie, statistiek, eerlijkheid)
+```
+
+Wijzigingen aan bestaande bestanden: `index.html` (stylesheet, zakelijke zijbalk en onderbalk, knop), `js/app.js` (routes met dynamic import), `js/ui/shell.js` (modus per route, Meer-menu), `js/data/bookings.js` (boeking → aanvraag), `js/services/mock/plekwijzer-mock.js` (zaakprofiel samenvoegen), `js/services/places.js` (cacheversie), `package.json` en `sw.js` (versie 0.9.0).
+
+### Hoe gecontroleerd
+
+- `npm test`: alle tests groen, inclusief de eerlijkheidstest (de rangschik-code kent abonnementen niet) en de offline-controle van de service worker.
+- `npm run lint`: schoon.
+- Doorlopen in een echte browser: aansluiten (4 stappen) → overzicht; proefperiode- en demo-account; aanvraag bevestigen; offline-simulatie; downgrade met "dit verdwijnt dan"; zaakprofiel wijzigen en terugzien in de zakenlijst; rol "Alleen lezen" krijgt geen toegang tot abonnement; persoonlijke app en telefoon-onderbalk. Screenshots: `screenshots/app/`.
+
+![Overzicht in de echte app](screenshots/app/02-overzicht.png)
+
+![Abonnement kiezen in de echte app](screenshots/app/07-plannen.png)
 
 ---
 

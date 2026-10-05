@@ -132,3 +132,9 @@ Plus/Teams alleen als demo-label, bouwen in stappen met akkoord.
 | **O6** | 3D-orb met 2D-terugval (optioneel) | **klaar** |
 
 CO₂-factoren (g per reizigerskilometer): auto 146, OV 28, fiets/lopen 0. Bron: CO2emissiefactoren.nl en CE Delft (STREAM Personenvervoer).
+
+---
+
+## 9. Aether Zakelijk (demo, 5 oktober 2026)
+
+Zakelijk portaal voor aangesloten zaken met statistieken, aanvragen, zaakprofiel en een fictief abonnementssysteem (Basis, Start, Groei, Pro, Keten). Volledig volgens de demo-modus: fictieve dienst **Zaakwijzer (demo)**, geen betalingen, geen server. Ontwerp en uitwerking: `docs/zakelijk/PRODUCTSPECIFICATIE-ZAKELIJK.md`. Versie 0.9.0.
