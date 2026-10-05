@@ -24,7 +24,9 @@ export const DEFAULT_PROFILE_EXTRAS = {
 };
 
 // Fills in anything missing and drops unknown values, without changing the original object.
-export function normalizePreferences(prefs = {}) {
+// Contacts have no preferences at all (null): they get the defaults too.
+export function normalizePreferences(rawPrefs) {
+  const prefs = rawPrefs ?? {};
   const base = DEFAULT_PROFILE_EXTRAS;
   const vehicles = Array.isArray(prefs.vehicles) ? prefs.vehicles.filter((v) => VEHICLE_KINDS.includes(v?.kind)) : [];
   return {

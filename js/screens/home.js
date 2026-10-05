@@ -24,8 +24,12 @@ export async function nextAppointment() {
 export async function renderHome(container) {
   const next = await nextAppointment();
   const stopLoading = loadingFor(container, t.loading.routes);
-  const data = next && (await loadResults(next.id));
-  stopLoading();
+  let data;
+  try {
+    data = next && (await loadResults(next.id));
+  } finally {
+    stopLoading();
+  }
   if (!data || !data.candidates.length) return renderEmpty(container, Boolean(next));
 
   const { appointment, group, participants } = data;

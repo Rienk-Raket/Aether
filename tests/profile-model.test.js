@@ -20,6 +20,13 @@ describe('normalizePreferences', () => {
     expect(result.dining.quiet).toBe('no');
   });
 
+  it('accepts null and undefined (contacts without a profile)', () => {
+    expect(normalizePreferences(null).vehicles).toEqual([]);
+    expect(normalizePreferences(undefined).travel.max_minutes).toBe(0);
+    expect(hasElectricCar(null)).toBe(false);
+    expect(availableModes(null).sort()).toEqual(['bike', 'car', 'transit', 'walk']);
+  });
+
   it('does not change its input', () => {
     const input = { dining: { terrace: 'prefer' } };
     normalizePreferences(input);

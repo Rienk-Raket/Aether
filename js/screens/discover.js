@@ -27,8 +27,12 @@ const TOP = 10;
 export async function renderDiscover(container, _params, query) {
   const wantedId = query.get('afspraak') ?? (await nextAppointment())?.id;
   const stopLoading = loadingFor(container, t.loading.routes);
-  const data = wantedId && (await loadResults(wantedId));
-  stopLoading();
+  let data;
+  try {
+    data = wantedId && (await loadResults(wantedId));
+  } finally {
+    stopLoading(); // also when loading fails, so the screen never hangs on "loading"
+  }
 
   if (!data) {
     container.innerHTML = `
