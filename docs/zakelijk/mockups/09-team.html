@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wie mag wat? — Aether Zakelijk (mockup)</title>
+<link rel="stylesheet" href="../../../css/tokens.css"><link rel="stylesheet" href="../../../css/fonts.css">
+<link rel="stylesheet" href="../../../css/base.css"><link rel="stylesheet" href="../../../css/components.css">
+<link rel="stylesheet" href="business.css"></head>
+<body><div class="app">
+<aside class="sidebar" aria-label="Zijbalk">
+  <a class="brand" href="#"><span class="brand-mark">A</span><strong>Aether</strong> <span class="plan-pill blue" style="margin-left:6px">Zakelijk</span></a>
+  <div class="biz-switch"><span class="avatar" style="--hue:160">KK</span><span><strong>Keuken Kade</strong><small>Amsterdam · 1 locatie</small></span></div>
+  <nav class="nav-group" aria-label="Zakelijk"><p class="nav-title">Zaak</p>
+  <a class="nav-link" href="#" ><span data-icon="home"></span>Overzicht</a><a class="nav-link" href="#" ><span data-icon="activity"></span>Statistieken</a><a class="nav-link" href="#" ><span data-icon="restaurant"></span>Mijn zaak</a><a class="nav-link" href="#" ><span data-icon="calendar"></span>Aanvragen</a><a class="nav-link" href="#" ><span data-icon="sliders"></span>Abonnement</a><a class="nav-link" href="#" ><span data-icon="copy"></span>Facturen</a><a class="nav-link" href="#" aria-current="page"><span data-icon="users"></span>Team & rechten</a>
+  </nav>
+  <div class="side-bottom"><a class="profile-link" href="#"><span class="avatar" style="--hue:210">SB</span><span><strong>Sanne Bakker</strong><small>Eigenaar · Groei-abonnement</small></span></a></div>
+</aside>
+<div class="content">
+<header class="topbar"><div class="eyebrow">Zakelijk · maandag 5 oktober</div>
+<div class="top-actions"><span class="status-chip"><span>Demo</span><span> · fictieve data</span></span>
+<a class="icon-btn" href="#"><span data-icon="bell"></span></a><a class="btn btn-small" href="#">Naar persoonlijke app</a></div></header>
+<main class="main"><div class="screen"><div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px;flex-wrap:wrap">
+<div><p class="eyebrow">Team & rechten</p><h1 style="margin-top:6px">Wie mag wat?</h1><p class="sub">3 van 5 plekken in gebruik (Groei).</p></div><a class="btn btn-primary" href="#">Collega uitnodigen</a></div>
+
+<div class="card"><table class="table"><tr><th>Naam</th><th>E-mail</th><th>Rol</th><th>Laatst actief</th><th></th></tr>
+<tr><td><strong>Sanne Bakker</strong></td><td>sanne@keukenkade.example</td><td><span class="plan-pill">Eigenaar</span></td><td>Vandaag</td><td></td></tr>
+<tr><td><strong>Joost Maas</strong></td><td>joost@keukenkade.example</td><td><span class="plan-pill blue">Beheerder</span></td><td>Gisteren</td><td><span class="btn btn-small">Wijzigen</span></td></tr>
+<tr><td><strong>Lieke Smit</strong></td><td>lieke@keukenkade.example</td><td><span class="plan-pill orange">Alleen lezen</span></td><td>3 dagen geleden</td><td><span class="btn btn-small">Wijzigen</span></td></tr></table></div>
+<div class="biz-grid cols-3" style="margin-top:16px">
+ <div class="card"><h3>Eigenaar</h3><p class="small muted">Alles, inclusief abonnement, facturen en opzeggen.</p></div>
+ <div class="card"><h3>Beheerder</h3><p class="small muted">Zaakprofiel, aanvragen en statistieken. Geen abonnement of facturen.</p></div>
+ <div class="card"><h3>Alleen lezen</h3><p class="small muted">Statistieken en aanvragen bekijken, niets wijzigen.</p></div>
+</div>
+</div></main></div></div>
+<script type="module">import { icon } from '../../../js/ui/icons.js'; document.querySelectorAll('[data-icon]').forEach(e => e.innerHTML = icon(e.dataset.icon)); document.body.dataset.ready = '1';</script>
+</body></html>

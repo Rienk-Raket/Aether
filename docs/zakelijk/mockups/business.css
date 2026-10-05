@@ -1,0 +1,92 @@
+/* Aether Zakelijk — styles for the business portal. Uses only tokens from css/tokens.css. */
+
+.biz-switch { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin: 0 0 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--hover); }
+.biz-switch .avatar { flex: none; }
+.biz-switch strong { display: block; font-size: 14px; line-height: 1.2; }
+.biz-switch small { color: var(--muted); font-size: 12px; }
+
+.plan-pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px solid var(--mint-line); color: var(--mint); background: var(--mint-tint); }
+.plan-pill.blue { color: var(--blue); border-color: rgba(136,185,255,.4); background: rgba(136,185,255,.1); }
+.plan-pill.orange { color: var(--orange); border-color: rgba(255,189,114,.4); background: var(--orange-tint); }
+
+.biz-grid { display: grid; gap: 16px; }
+.biz-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.biz-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.biz-grid.cols-2 { grid-template-columns: 1.6fr 1fr; }
+.biz-grid.cols-2e { grid-template-columns: 1fr 1fr; }
+.biz-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+
+.kpi { padding: 18px; }
+.kpi .label { color: var(--muted); font-size: 13px; }
+.kpi .value { font: 600 34px/1.1 var(--font-display); letter-spacing: -0.03em; margin-top: 6px; }
+.kpi .delta { font-size: 13px; margin-top: 6px; color: var(--mint); }
+.kpi .delta.down { color: var(--red); }
+
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font: 11px var(--font-body); }
+
+.funnel { display: grid; gap: 10px; margin-top: 14px; }
+.funnel-row { display: grid; grid-template-columns: 150px 1fr 70px; gap: 12px; align-items: center; font-size: 14px; }
+.funnel-bar { height: 26px; border-radius: 8px; background: linear-gradient(90deg, var(--mint), var(--blue)); }
+.funnel-row .num { text-align: right; font-family: var(--font-display); font-weight: 600; }
+.funnel-row small { color: var(--muted); }
+
+.bars { display: grid; gap: 8px; margin-top: 12px; }
+.bar-row { display: grid; grid-template-columns: 110px 1fr 48px; gap: 10px; align-items: center; font-size: 13px; }
+.bar-track { height: 10px; border-radius: 6px; background: var(--hover); overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 6px; background: var(--blue); }
+.bar-fill.mint { background: var(--mint); }
+
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th { text-align: left; color: var(--muted); font-weight: 500; font-size: 12px; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.table td { padding: 12px 10px; border-bottom: 1px solid var(--border); }
+.table tr:last-child td { border-bottom: 0; }
+
+.status { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.status.ok { background: var(--mint-tint); color: var(--mint); }
+.status.wait { background: var(--orange-tint); color: var(--orange); }
+.status.bad { background: var(--red-tint); color: var(--red); }
+
+.plans { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; align-items: stretch; }
+.plan { display: flex; flex-direction: column; gap: 10px; padding: 18px 16px; position: relative; }
+.plan.featured { border-color: var(--mint-line); box-shadow: var(--mint-glow); }
+.plan .ribbon { position: absolute; top: -11px; left: 16px; }
+.plan h3 { font: 600 18px var(--font-display); }
+.plan .price { font: 600 30px/1 var(--font-display); letter-spacing: -0.03em; }
+.plan .price small { font: 400 13px var(--font-body); color: var(--muted); letter-spacing: 0; }
+.plan ul { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 7px; font-size: 13px; }
+.plan li { display: flex; gap: 8px; }
+.plan li::before { content: '✓'; color: var(--mint); font-weight: 700; }
+.plan li.off { color: var(--muted); opacity: .6; }
+.plan li.off::before { content: '–'; color: var(--muted); }
+.plan .btn { margin-top: auto; }
+
+.seg { display: inline-flex; padding: 4px; border: 1px solid var(--border); border-radius: 999px; background: var(--hover); }
+.seg span { padding: 6px 16px; border-radius: 999px; font-size: 14px; color: var(--muted); }
+.seg span.on { background: var(--mint); color: var(--on-mint); font-weight: 700; }
+
+.field { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+.field .input { padding: 11px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--hover); color: var(--text); font-size: 15px; min-height: 44px; }
+
+.steps { display: flex; gap: 10px; margin: 18px 0; flex-wrap: wrap; }
+.step { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.step b { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--border); font-family: var(--font-display); }
+.step.on { color: var(--text); }
+.step.on b { background: var(--mint); color: var(--on-mint); border-color: var(--mint); }
+.step.done b { border-color: var(--mint-line); color: var(--mint); }
+
+.preview-venue { display: grid; grid-template-columns: 120px 1fr; gap: 14px; }
+.preview-venue .photo { border-radius: 14px; min-height: 110px; background: linear-gradient(135deg, #1f5d6e, #5b3b8c 70%, #c35f7a); }
+
+.demo-note { font-size: 12px; color: var(--orange); }
+.phone { width: 390px; }
+@media (max-width: 900px) {
+  .biz-grid.cols-4, .biz-grid.cols-3, .biz-grid.cols-2, .biz-grid.cols-2e, .biz-grid.cols-5, .plans { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .biz-grid.cols-4, .biz-grid.cols-3, .biz-grid.cols-2, .biz-grid.cols-2e, .plans { grid-template-columns: 1fr; }
+  .funnel-row { grid-template-columns: 100px 1fr 52px; }
+}
+.biz-grid > .card, .plans > .card, .biz-grid > div > .card { margin-top: 0; }
+.plan { overflow: visible; }
+.funnel-bar { min-width: 6px; }

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jouw abonnement en gebruik. — Aether Zakelijk (mockup)</title>
+<link rel="stylesheet" href="../../../css/tokens.css"><link rel="stylesheet" href="../../../css/fonts.css">
+<link rel="stylesheet" href="../../../css/base.css"><link rel="stylesheet" href="../../../css/components.css">
+<link rel="stylesheet" href="business.css"></head>
+<body><div class="app">
+<aside class="sidebar" aria-label="Zijbalk">
+  <a class="brand" href="#"><span class="brand-mark">A</span><strong>Aether</strong> <span class="plan-pill blue" style="margin-left:6px">Zakelijk</span></a>
+  <div class="biz-switch"><span class="avatar" style="--hue:160">KK</span><span><strong>Keuken Kade</strong><small>Amsterdam · 1 locatie</small></span></div>
+  <nav class="nav-group" aria-label="Zakelijk"><p class="nav-title">Zaak</p>
+  <a class="nav-link" href="#" ><span data-icon="home"></span>Overzicht</a><a class="nav-link" href="#" ><span data-icon="activity"></span>Statistieken</a><a class="nav-link" href="#" ><span data-icon="restaurant"></span>Mijn zaak</a><a class="nav-link" href="#" ><span data-icon="calendar"></span>Aanvragen</a><a class="nav-link" href="#" aria-current="page"><span data-icon="sliders"></span>Abonnement</a><a class="nav-link" href="#" ><span data-icon="copy"></span>Facturen</a><a class="nav-link" href="#" ><span data-icon="users"></span>Team & rechten</a>
+  </nav>
+  <div class="side-bottom"><a class="profile-link" href="#"><span class="avatar" style="--hue:210">SB</span><span><strong>Sanne Bakker</strong><small>Eigenaar · Groei-abonnement</small></span></a></div>
+</aside>
+<div class="content">
+<header class="topbar"><div class="eyebrow">Zakelijk · maandag 5 oktober</div>
+<div class="top-actions"><span class="status-chip"><span>Demo</span><span> · fictieve data</span></span>
+<a class="icon-btn" href="#"><span data-icon="bell"></span></a><a class="btn btn-small" href="#">Naar persoonlijke app</a></div></header>
+<main class="main"><div class="screen"><div class="screen-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px;flex-wrap:wrap">
+<div><p class="eyebrow">Abonnement</p><h1 style="margin-top:6px">Jouw abonnement en gebruik.</h1><p class="sub">Alles wat je nu gebruikt, en wat je erbij kunt nemen.</p></div></div>
+
+<div class="biz-grid cols-2">
+ <div class="card"><div class="card-row"><div><span class="plan-pill">Groei · demo</span><h2 style="margin-top:10px">€ 490 <small class="muted" style="font:400 14px var(--font-body)">per jaar, excl. btw</small></h2><p class="muted small">Jaarcontract · gestart 1 maart 2026 · verlengt 1 maart 2027</p></div><div class="card-side"><a class="btn" href="#">Plan wijzigen</a><a class="btn btn-small" href="#">Opzeggen</a></div></div>
+  <h3 style="margin:22px 0 4px">Gebruik deze maand</h3>
+  <div class="bars"><div class="bar-row"><span>Reserveringsaanvragen</span><div class="bar-track"><div class="bar-fill mint" style="width:76%"></div></div><span class="mono" style="text-align:right">76 / 100</span></div><div class="bar-row"><span>Uitgelichte weken</span><div class="bar-track"><div class="bar-fill mint" style="width:50%"></div></div><span class="mono" style="text-align:right">2 / 4</span></div><div class="bar-row"><span>Team-gebruikers</span><div class="bar-track"><div class="bar-fill mint" style="width:60%"></div></div><span class="mono" style="text-align:right">3 / 5</span></div><div class="bar-row"><span>Statistiek-historie</span><div class="bar-track"><div class="bar-fill mint" style="width:25%"></div></div><span class="mono" style="text-align:right">90 dagen</span></div></div></div>
+ <div style="display:grid;gap:16px;align-self:start">
+  <div class="card"><h2>Volgende factuur</h2><p class="mono" style="font-size:30px;margin-top:8px">1 mrt 2027</p><p class="muted small">€ 490,00 + 21% btw = € 592,90 · automatische incasso (demo)</p></div>
+  <div class="card"><h2>Extra's toevoegen</h2><table class="table" style="margin-top:6px"><tr><td>Extra locatie</td><td class="mono">€ 15 / mnd</td></tr><tr><td>Extra team-gebruiker</td><td class="mono">€ 5 / mnd</td></tr><tr><td>Extra uitgelichte week</td><td class="mono">€ 25</td></tr><tr><td>+50 reserveringsaanvragen</td><td class="mono">€ 12 / mnd</td></tr></table></div>
+ </div>
+</div>
+<p class="demo-note" style="margin-top:14px">Demo: er wordt niets betaald en niets geïncasseerd. Het abonnement is een label dat functies in het portaal aan- of uitzet.</p>
+</div></main></div></div>
+<script type="module">import { icon } from '../../../js/ui/icons.js'; document.querySelectorAll('[data-icon]').forEach(e => e.innerHTML = icon(e.dataset.icon)); document.body.dataset.ready = '1';</script>
+</body></html>
