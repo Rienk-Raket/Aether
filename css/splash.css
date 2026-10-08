@@ -1,6 +1,5 @@
-/* Opening screen: four routes run to the middle, each triangle shows another piece of map,
-   then the Aether logo appears. Timeline (seconds): lines 0.2–1.7, map pieces 0.5–1.7, pulse 1.7,
-   logo 1.8, texts 2.2. Animations only start when #splash has the class "go". */
+/* Opening screen: six wedges of city map around the logo, icons that leave dashed routes (js/ui/splash-play.js).
+   The movement itself is drawn by script in 5 seconds; this file only holds layout and small fades. */
 
 /* Hides the app until the splash is ready (set by an inline script in index.html). */
 html.splash-pending .app { visibility: hidden; }
@@ -10,11 +9,7 @@ html.splash-pending .app { visibility: hidden; }
   inset: 0;
   z-index: 100;
   display: grid;
-  place-content: center;
   justify-items: center;
-  gap: var(--space-2);
-  padding: var(--space-5);
-  text-align: center;
   overflow: hidden;
   cursor: pointer;
   background: var(--bg);
@@ -23,88 +18,24 @@ html.splash-pending .app { visibility: hidden; }
 #splash.leaving { opacity: 0; }
 #splash:focus-visible { outline: 2px solid var(--mint); outline-offset: -6px; }
 
-.splash-art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.splash-stage { height: 100%; max-width: 100%; aspect-ratio: 390 / 844; }
+.splash-stage svg { display: block; width: 100%; height: 100%; }
 
-/* Map-like backdrops (own artwork, see js/ui/splash-art.js). */
-.splash-tri { opacity: 0; }
+.splash-wedge { animation: splash-wedge 0.6s calc(var(--i) * 0.08s) var(--ease) backwards; }
+.splash-pin { transform-box: fill-box; transform-origin: 50% 100%; animation: splash-pop 0.45s var(--ease) backwards; }
+.splash-ring { transform-box: fill-box; transform-origin: center; animation: splash-ripple 2.4s ease-out infinite; }
 
-.splash-line {
-  fill: none;
-  stroke: var(--mint);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  filter: drop-shadow(0 0 6px var(--mint));
-}
+.splash-mark-letter { font: 700 28px var(--font-display); fill: var(--bg); text-anchor: middle; }
+.splash-word { font: 700 38px var(--font-display); fill: var(--text); letter-spacing: -1px; }
 
-/* Dark veil over the backdrops, darkest behind the logo. */
-.splash-shade {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(7, 19, 33, 0.8) 0, rgba(7, 19, 33, 0.4) 36%, rgba(7, 19, 33, 0.12) 100%);
-  pointer-events: none;
-}
+@keyframes splash-wedge { from { opacity: 0; } to { opacity: 1; } }
+@keyframes splash-pop { from { opacity: 0; transform: translateY(-8px) scale(0.4); } to { opacity: 1; transform: none; } }
+@keyframes splash-ripple { from { opacity: 0.8; transform: scale(0.6); } to { opacity: 0; transform: scale(3.4); } }
 
-.splash-pulse {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 30vmin;
-  aspect-ratio: 1;
-  margin: -15vmin 0 0 -15vmin;
-  border: 2px solid var(--mint);
-  border-radius: 50%;
-  opacity: 0;
-}
-
-.splash-brand, .splash-fade { z-index: 2; opacity: 0; }
-.splash-brand { display: flex; align-items: center; gap: var(--space-3); text-shadow: 0 2px 18px rgba(7, 19, 33, 0.8); }
-.splash-mark {
-  display: grid;
-  place-items: center;
-  width: clamp(54px, 12vw, 84px);
-  aspect-ratio: 1;
-  border-radius: 24%;
-  background: var(--gradient-brand);
-  color: #09202a;
-  font: 700 clamp(30px, 7vw, 48px) var(--font-display);
-  box-shadow: 0 0 60px rgba(157, 240, 207, 0.55);
-}
-.splash-name { font: 700 clamp(44px, 11vw, 88px) var(--font-display); letter-spacing: -0.04em; }
-
-.splash-slogan { margin-top: var(--space-4); font: 600 clamp(20px, 4.5vw, 30px) var(--font-display); color: var(--mint); text-shadow: 0 2px 14px rgba(7, 19, 33, 0.9); }
-.splash-sub { color: var(--text); max-width: 30ch; text-shadow: 0 2px 14px rgba(7, 19, 33, 0.9); }
-.splash-hint { margin-top: var(--space-5); font-size: 12px; color: var(--muted); }
-
-#splash.go .splash-line { animation: splash-draw 1.5s calc(0.2s + var(--i) * 0.1s) cubic-bezier(0.45, 0, 0.3, 1) forwards; }
-#splash.go .splash-tri { animation: splash-reveal 0.9s calc(0.5s + var(--i) * 0.2s) var(--ease) forwards; }
-#splash.go .splash-pulse { animation: splash-pulse 0.9s 1.7s ease-out forwards; }
-#splash.go .splash-brand { animation: splash-logo 0.7s 1.8s cubic-bezier(0.2, 1.2, 0.4, 1) forwards; }
-#splash.go .splash-fade { animation: splash-fade 0.7s 2.2s var(--ease) forwards; }
-
-@keyframes splash-draw { to { stroke-dashoffset: 0; } }
-@keyframes splash-reveal { to { opacity: 1; } }
-@keyframes splash-pulse {
-  0% { transform: scale(0.2); opacity: 0.9; }
-  100% { transform: scale(3.2); opacity: 0; }
-}
-@keyframes splash-logo {
-  from { opacity: 0; transform: scale(0.82); filter: blur(6px); }
-  to { opacity: 1; transform: none; filter: none; }
-}
-@keyframes splash-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-@keyframes splash-calm { from { opacity: 0; } to { opacity: 1; } }
-
-/* Calm version: no moving lines or pulse. Routes and maps are there at once, the logo fades in. */
+/* Calm version: everything is there at once (the script draws the final frame). */
 @media (prefers-reduced-motion: reduce) {
-  #splash.go .splash-line { animation: none; stroke-dashoffset: 0; }
-  #splash.go .splash-tri { animation: none; opacity: 1; }
-  #splash .splash-pulse { display: none; }
-  #splash.go .splash-brand, #splash.go .splash-fade { animation: splash-calm 0.8s 0.2s var(--ease) forwards; }
+  .splash-wedge, .splash-pin { animation: none; }
+  .splash-ring { display: none; }
 }
-.reduce-motion #splash.go .splash-line { animation: none; stroke-dashoffset: 0; }
-.reduce-motion #splash.go .splash-tri { animation: none; opacity: 1; }
-.reduce-motion #splash .splash-pulse { display: none; }
-.reduce-motion #splash.go .splash-brand, .reduce-motion #splash.go .splash-fade { animation: splash-calm 0.8s 0.2s var(--ease) forwards; }
+.reduce-motion .splash-wedge, .reduce-motion .splash-pin { animation: none; }
+.reduce-motion .splash-ring { display: none; }
