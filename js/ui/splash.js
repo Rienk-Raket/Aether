@@ -3,14 +3,11 @@
 // appears. Shown once per fresh start of the app. Tap, press a key or wait to continue.
 
 import { t } from '../i18n/nl.js';
-import { buildRoutes, buildTriangles, boundingBox, toPoints, toPath } from './splash-routes.js';
+import { buildRoutes, buildTriangles, toPoints, toPath } from './splash-routes.js';
+import { PIECES, drawPiece } from './splash-art.js';
 
 export const SPLASH_SEEN_KEY = 'aether.splashSeen';
 const AUTO_CONTINUE_MS = 4000; // from the start of the animation; the logo shows from ~1.9 s
-const IMAGE_WAIT_MS = 1500; // do not wait longer than this for the map pictures
-
-// Map pieces: top, right, bottom, left (fictional demo backdrop, stored in assets/splash/).
-const MAPS = ['kaart-groningen', 'kaart-veghel', 'kaart-rosmalen', 'kaart-houten'].map((name) => `assets/splash/${name}.jpg`);
 
 export function hasSeenSplash() {
   try {
@@ -20,29 +17,14 @@ export function hasSeenSplash() {
   }
 }
 
-// Resolves with the pictures that loaded (a failed picture is simply left out).
-function preloadMaps() {
-  const load = (src) =>
-    new Promise((resolve) => {
-      const image = new Image();
-      image.onload = () => resolve(src);
-      image.onerror = () => resolve(null);
-      image.src = src;
-    });
-  return Promise.race([Promise.all(MAPS.map(load)), new Promise((resolve) => setTimeout(() => resolve(MAPS.map(() => null)), IMAGE_WAIT_MS))]);
-}
-
-function buildArt(width, height, loaded) {
+function buildArt(width, height) {
   const routes = buildRoutes(width, height);
   const triangles = buildTriangles(routes);
   const pieces = triangles
     .map((points, i) => {
-      const box = boundingBox(points);
       return `
         <clipPath id="splash-clip-${i}"><polygon points="${toPoints(points)}"/></clipPath>
-        <g class="splash-tri" style="--i:${i}" clip-path="url(#splash-clip-${i})">
-          ${loaded[i] ? `<image href="${loaded[i]}" x="${box.x}" y="${box.y}" width="${box.width}" height="${box.height}" preserveAspectRatio="xMidYMid slice"/>` : ''}
-        </g>`;
+        <g class="splash-tri" style="--i:${i}" clip-path="url(#splash-clip-${i})">${drawPiece(PIECES[i], i, width, height)}</g>`;
     })
     .join('');
   const lines = routes.map((points, i) => `<path class="splash-line" d="${toPath(points)}" pathLength="1" style="--i:${i}"/>`).join('');
@@ -95,12 +77,8 @@ export function showSplash() {
       }
     });
 
-    // The animation starts once the map pictures are ready (or after a short wait).
-    preloadMaps().then((loaded) => {
-      if (done) return;
-      splash.insertAdjacentHTML('afterbegin', buildArt(splash.clientWidth || innerWidth, splash.clientHeight || innerHeight, loaded));
-      splash.classList.add('go');
-      timer = setTimeout(finish, AUTO_CONTINUE_MS);
-    });
+    splash.insertAdjacentHTML('afterbegin', buildArt(splash.clientWidth || innerWidth, splash.clientHeight || innerHeight));
+    splash.classList.add('go');
+    timer = setTimeout(finish, AUTO_CONTINUE_MS);
   });
 }
