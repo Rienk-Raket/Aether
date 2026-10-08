@@ -1,22 +1,16 @@
-// Opening screen: name and logo burst into view with a shockwave and glass cracks.
-// Shown once per fresh start of the app (not on every screen change). Tap, press a key or
-// wait ~3 seconds to continue.
+// Opening screen: four routes run from outside the corners to the middle of the screen, each
+// triangle between them reveals another piece of map. When the routes meet, the Aether logo
+// appears. Shown once per fresh start of the app. Tap, press a key or wait to continue.
 
 import { t } from '../i18n/nl.js';
+import { buildRoutes, buildTriangles, boundingBox, toPoints, toPath } from './splash-routes.js';
 
 export const SPLASH_SEEN_KEY = 'aether.splashSeen';
-const AUTO_CONTINUE_MS = 3000;
+const AUTO_CONTINUE_MS = 4000; // from the start of the animation; the logo shows from ~1.9 s
+const IMAGE_WAIT_MS = 1500; // do not wait longer than this for the map pictures
 
-// Crack lines radiate from the centre of a 200x200 box (pathLength 1 lets CSS draw them).
-const CRACKS = [
-  'M100 100 L62 70 L48 40 L20 18',
-  'M100 100 L138 66 L150 38 L184 14',
-  'M100 100 L170 104 L190 128 L200 152',
-  'M100 100 L132 142 L128 170 L150 200',
-  'M100 100 L84 148 L52 166 L38 200',
-  'M100 100 L30 112 L10 98 L0 110',
-  'M100 100 L98 52 L112 24 L104 0',
-];
+// Map pieces: top, right, bottom, left (fictional demo backdrop, stored in assets/splash/).
+const MAPS = ['kaart-groningen', 'kaart-veghel', 'kaart-rosmalen', 'kaart-houten'].map((name) => `assets/splash/${name}.jpg`);
 
 export function hasSeenSplash() {
   try {
@@ -24,6 +18,35 @@ export function hasSeenSplash() {
   } catch {
     return false;
   }
+}
+
+// Resolves with the pictures that loaded (a failed picture is simply left out).
+function preloadMaps() {
+  const load = (src) =>
+    new Promise((resolve) => {
+      const image = new Image();
+      image.onload = () => resolve(src);
+      image.onerror = () => resolve(null);
+      image.src = src;
+    });
+  return Promise.race([Promise.all(MAPS.map(load)), new Promise((resolve) => setTimeout(() => resolve(MAPS.map(() => null)), IMAGE_WAIT_MS))]);
+}
+
+function buildArt(width, height, loaded) {
+  const routes = buildRoutes(width, height);
+  const triangles = buildTriangles(routes);
+  const pieces = triangles
+    .map((points, i) => {
+      const box = boundingBox(points);
+      return `
+        <clipPath id="splash-clip-${i}"><polygon points="${toPoints(points)}"/></clipPath>
+        <g class="splash-tri" style="--i:${i}" clip-path="url(#splash-clip-${i})">
+          ${loaded[i] ? `<image href="${loaded[i]}" x="${box.x}" y="${box.y}" width="${box.width}" height="${box.height}" preserveAspectRatio="xMidYMid slice"/>` : ''}
+        </g>`;
+    })
+    .join('');
+  const lines = routes.map((points, i) => `<path class="splash-line" d="${toPath(points)}" pathLength="1" style="--i:${i}"/>`).join('');
+  return `<svg class="splash-art" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">${pieces}${lines}</svg>`;
 }
 
 // Resolves when the user has continued.
@@ -40,11 +63,8 @@ export function showSplash() {
   splash.tabIndex = 0;
   splash.setAttribute('aria-label', `${t.appName}. ${t.splash.slogan} ${t.splash.hint}`);
   splash.innerHTML = `
-    <svg class="splash-cracks" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      ${CRACKS.map((d, i) => `<path d="${d}" pathLength="1" style="--i:${i}"/>`).join('')}
-    </svg>
-    <span class="splash-ring" aria-hidden="true"></span>
-    <span class="splash-ring second" aria-hidden="true"></span>
+    <div class="splash-shade" aria-hidden="true"></div>
+    <span class="splash-pulse" aria-hidden="true"></span>
     <div class="splash-brand" aria-hidden="true">
       <span class="splash-mark">A</span>
       <span class="splash-name">${t.appName}</span>
@@ -58,6 +78,7 @@ export function showSplash() {
 
   return new Promise((resolve) => {
     let done = false;
+    let timer = 0;
     const finish = () => {
       if (done) return;
       done = true;
@@ -66,13 +87,20 @@ export function showSplash() {
       setTimeout(() => splash.remove(), 350);
       resolve();
     };
-    const timer = setTimeout(finish, AUTO_CONTINUE_MS);
     splash.addEventListener('click', finish);
     splash.addEventListener('keydown', (event) => {
       if (['Enter', ' ', 'Escape'].includes(event.key)) {
         event.preventDefault();
         finish();
       }
+    });
+
+    // The animation starts once the map pictures are ready (or after a short wait).
+    preloadMaps().then((loaded) => {
+      if (done) return;
+      splash.insertAdjacentHTML('afterbegin', buildArt(splash.clientWidth || innerWidth, splash.clientHeight || innerHeight, loaded));
+      splash.classList.add('go');
+      timer = setTimeout(finish, AUTO_CONTINUE_MS);
     });
   });
 }

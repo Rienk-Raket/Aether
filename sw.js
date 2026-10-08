@@ -1,7 +1,7 @@
 // Service worker: stores the app files on the device so Aether works offline.
 // APP_SHELL and CACHE_VERSION are generated: run `npm run sw` after adding files or bumping the version.
 
-const CACHE_VERSION = 'aether-v0.9.0';
+const CACHE_VERSION = 'aether-v0.9.1';
 
 const APP_SHELL = [
   './',
@@ -149,6 +149,7 @@ const APP_SHELL = [
   './js/ui/shell.js',
   './js/ui/slot-hints.js',
   './js/ui/source-badge.js',
+  './js/ui/splash-routes.js',
   './js/ui/splash.js',
   './js/ui/toast.js',
   './js/ui/transport.js',
@@ -163,6 +164,10 @@ const APP_SHELL = [
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/icons/icon-maskable-512.png',
+  './assets/splash/kaart-groningen.jpg',
+  './assets/splash/kaart-houten.jpg',
+  './assets/splash/kaart-rosmalen.jpg',
+  './assets/splash/kaart-veghel.jpg',
   './data/addresses.json',
   './data/nl-places.json',
   './data/providers.json',
