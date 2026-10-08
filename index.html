@@ -34,7 +34,7 @@
       // Hide the app until the opening screen is ready (once per fresh start; see js/ui/splash.js).
       if (!sessionStorage.getItem('aether.splashSeen')) {
         document.documentElement.classList.add('splash-pending');
-        setTimeout(() => document.documentElement.classList.remove('splash-pending'), 4000);
+        setTimeout(() => document.documentElement.classList.remove('splash-pending'), 6000);
       }
     </script>
     <script>
