@@ -1,13 +1,14 @@
-// Opening screen: four routes run from outside the corners to the middle of the screen, each
-// triangle between them reveals another piece of map. When the routes meet, the Aether logo
-// appears. Shown once per fresh start of the app. Tap, press a key or wait to continue.
+// Opening screen: a map of six wedges around the Aether logo. Icons run dashed routes over the streets,
+// leave their own wedge and meet in the bottom one (js/ui/splash-play.js). Shown once per fresh start.
+// Tap, press a key or wait to continue.
 
 import { t } from '../i18n/nl.js';
-import { buildRoutes, buildTriangles, toPoints, toPath } from './splash-routes.js';
-import { PIECES, drawPiece } from './splash-art.js';
+import { createScene } from './splash-play.js';
+import { T_TOTAL } from './splash-routes.js';
 
 export const SPLASH_SEEN_KEY = 'aether.splashSeen';
-const AUTO_CONTINUE_MS = 4000; // from the start of the animation; the logo shows from ~1.9 s
+const AUTO_CONTINUE_MS = T_TOTAL * 1000 + 500;
+const CALM_CONTINUE_MS = 2500;
 
 export function hasSeenSplash() {
   try {
@@ -17,18 +18,8 @@ export function hasSeenSplash() {
   }
 }
 
-function buildArt(width, height) {
-  const routes = buildRoutes(width, height);
-  const triangles = buildTriangles(routes);
-  const pieces = triangles
-    .map((points, i) => {
-      return `
-        <clipPath id="splash-clip-${i}"><polygon points="${toPoints(points)}"/></clipPath>
-        <g class="splash-tri" style="--i:${i}" clip-path="url(#splash-clip-${i})">${drawPiece(PIECES[i], i, width, height)}</g>`;
-    })
-    .join('');
-  const lines = routes.map((points, i) => `<path class="splash-line" d="${toPath(points)}" pathLength="1" style="--i:${i}"/>`).join('');
-  return `<svg class="splash-art" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">${pieces}${lines}</svg>`;
+function prefersCalm() {
+  return document.documentElement.classList.contains('reduce-motion') || matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 // Resolves when the user has continued.
@@ -44,19 +35,15 @@ export function showSplash() {
   splash.setAttribute('role', 'button');
   splash.tabIndex = 0;
   splash.setAttribute('aria-label', `${t.appName}. ${t.splash.slogan} ${t.splash.hint}`);
-  splash.innerHTML = `
-    <div class="splash-shade" aria-hidden="true"></div>
-    <span class="splash-pulse" aria-hidden="true"></span>
-    <div class="splash-brand" aria-hidden="true">
-      <span class="splash-mark">A</span>
-      <span class="splash-name">${t.appName}</span>
-    </div>
-    <p class="splash-slogan splash-fade" aria-hidden="true">${t.splash.slogan}</p>
-    <p class="splash-sub splash-fade" aria-hidden="true">${t.splash.sub}</p>
-    <p class="splash-hint splash-fade" aria-hidden="true">${t.splash.hint}</p>`;
+  const stage = document.createElement('div');
+  stage.className = 'splash-stage';
+  splash.append(stage);
   document.body.append(splash);
   document.documentElement.classList.remove('splash-pending');
   splash.focus();
+
+  const scene = createScene(stage);
+  const calm = prefersCalm();
 
   return new Promise((resolve) => {
     let done = false;
@@ -65,6 +52,7 @@ export function showSplash() {
       if (done) return;
       done = true;
       clearTimeout(timer);
+      scene.stop();
       splash.classList.add('leaving');
       setTimeout(() => splash.remove(), 350);
       resolve();
@@ -77,8 +65,8 @@ export function showSplash() {
       }
     });
 
-    splash.insertAdjacentHTML('afterbegin', buildArt(splash.clientWidth || innerWidth, splash.clientHeight || innerHeight));
-    splash.classList.add('go');
-    timer = setTimeout(finish, AUTO_CONTINUE_MS);
+    if (calm) scene.showFinal();
+    else scene.play();
+    timer = setTimeout(finish, calm ? CALM_CONTINUE_MS : AUTO_CONTINUE_MS);
   });
 }

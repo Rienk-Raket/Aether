@@ -71,4 +71,29 @@
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-fast: 200ms;
   --dur-med: 350ms;
+
+  /* Opening screen map (js/ui/splash-*.js): six wedges of city */
+  --map-wedge-0: #0d2b3e;
+  --map-wedge-1: #0e2342;
+  --map-wedge-2: #0b2a3a;
+  --map-wedge-3: #0c2140;
+  --map-wedge-4: #0b1d3a;
+  --map-wedge-5: #0d2444;
+  --map-blue-1: #14335d;
+  --map-blue-2: #12305a;
+  --map-blue-3: #173a68;
+  --map-blue-4: #102a4e;
+  --map-teal-1: #123b4e;
+  --map-teal-2: #0f3345;
+  --map-teal-3: #164459;
+  --map-teal-4: #0d2c3d;
+  --map-park: #17454d;
+  --map-water: #174a82;
+  --map-shore: #0a1c36;
+  --map-bridge: #2a5d96;
+  --map-road: #12376a;
+  --map-road-edge: #2a62a8;
+  --map-street-blue: #1f5190;
+  --map-street-teal: #2d7089;
+  --map-outline: #7fc9b0;
 }
