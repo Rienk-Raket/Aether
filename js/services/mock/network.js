@@ -5,6 +5,13 @@ export function simulateLatency(min = 200, max = 600) {
   return new Promise((resolve) => setTimeout(resolve, min + Math.random() * (max - min)));
 }
 
+// Loads a bundled text file (for example the example guide in data/).
+export async function loadBundledText(path) {
+  const response = await fetch(new URL(`../../../${path}`, import.meta.url));
+  if (!response.ok) throw new Error(`Could not load ${path}`);
+  return response.text();
+}
+
 // Loads a bundled JSON file once and keeps it in memory.
 const jsonCache = new Map();
 

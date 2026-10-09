@@ -30,7 +30,7 @@ export const t = {
     overview: 'Overzicht',
     discover: 'Ontdek plekken',
     offer: 'Aanbod & wensen',
-    landmap: 'Kaart van Nederland',
+    landmap: 'Kaart',
     groups: 'Mijn groepen',
     agenda: 'Agenda',
     activity: 'Activiteit',

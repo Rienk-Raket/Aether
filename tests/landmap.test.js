@@ -1,19 +1,22 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { parseGuide, parseHours } from '../js/core/guide-import.js';
 import { applyFilters, emptyFilters, normalizeFilters, activeCount, CONDITIONS } from '../js/core/map-filters.js';
 import { clusterPoints, boundsOf } from '../js/core/map-cluster.js';
 import { project, MAP_WIDTH, MAP_HEIGHT, MAINLAND, toPolygon } from '../js/core/nl-outline.js';
 import { VENUE_TYPES } from '../js/core/venues.js';
 
 const read = (file) => JSON.parse(readFileSync(new URL(`../data/${file}`, import.meta.url), 'utf8'));
-const guide = read('gids-venues.json').venues;
 const base = read('venues.json').venues;
 const places = read('nl-places.json').places;
+const guideText = readFileSync(new URL('../data/gids_locaties_nederland.md', import.meta.url), 'utf8');
+const imported = parseGuide(guideText, places);
+const guide = imported.venues;
 const now = new Date('2026-10-07T13:00:00'); // a Wednesday afternoon
 
 const venue = (over) => ({ id: 'v', name: 'Test', type: 'cafe', rating: 4.4, hours: Array(7).fill([480, 1200]), cuisine: 'Koffie', ...over });
 
-describe('guide data (data/gids-venues.json)', () => {
+describe('guide import (data/gids_locaties_nederland.md)', () => {
   it('has unique ids and the same shape as the other venues', () => {
     expect(new Set(guide.map((v) => v.id)).size).toBe(guide.length);
     expect(guide.length).toBeGreaterThan(600);
@@ -27,6 +30,35 @@ describe('guide data (data/gids-venues.json)', () => {
     }
     const ids = new Set(base.map((v) => v.id));
     expect(guide.some((v) => ids.has(v.id))).toBe(false);
+  });
+
+  it('reads all cities and reports how many venues of each kind', () => {
+    expect(imported.cityCount).toBe(49);
+    expect(imported.skipped).toEqual([]);
+    expect(imported.counts.restaurant).toBeGreaterThan(100);
+    expect(guide).toHaveLength(Object.values(imported.counts).reduce((a, b) => a + b, 0));
+  });
+
+  it('gives the same result every time and a different id range per import', () => {
+    expect(parseGuide(guideText, places)).toEqual(imported);
+    expect(parseGuide(guideText, places, 'other').venues[0].id.startsWith('other-')).toBe(true);
+  });
+
+  it('skips cities it does not know and copes with empty or odd files', () => {
+    const odd = parseGuide('# Titel\n\n## 1. Atlantis\n* **3x Restaurants:** A, B\n\n## 2. Utrecht\n* **3x Hotels:** Hotel Een, Hotel Twee', places);
+    expect(odd.skipped).toEqual(['Atlantis']);
+    expect(odd.venues.map((v) => v.name)).toEqual(['Hotel Een', 'Hotel Twee']);
+    expect(parseGuide('', places).venues).toEqual([]);
+    expect(parseGuide('Zomaar tekst zonder kopjes', places).venues).toEqual([]);
+  });
+
+  it('reads opening hours of the guide', () => {
+    expect(parseHours('Dagelijks van 12:00 – 23:00', 'restaurant').hours.every((h) => h[0] === 720 && h[1] === 1380)).toBe(true);
+    expect(parseHours('24 uur geopend', 'hotel').hours[3]).toEqual([0, 1440]);
+    const byAppointment = parseHours('Op afspraak', 'event');
+    expect(byAppointment.byAppointment).toBe(true);
+    expect(byAppointment.hours[0]).toBeNull();
+    expect(byAppointment.hours[2]).toEqual([540, 1020]);
   });
 
   it('has all five kinds and the details of the first six cities', () => {
@@ -50,6 +82,20 @@ describe('map filters', () => {
     expect(ids({ conditions: { terrace: 'yes', parking: 'yes' } })).toEqual(['c']);
     expect(ids({ conditions: { terrace: 'yes', parking: 'no' } })).toEqual(['a']);
   });
+  it('filters on services (any of the chosen ones)', () => {
+    const withServices = [venue({ id: 'x', services: ['stay'] }), venue({ id: 'y', services: ['coffee', 'lunch'] }), venue({ id: 'z', services: [] })];
+    const pick = (services) => applyFilters(withServices, { ...emptyFilters(), services }, now).map((v) => v.id);
+    expect(pick([])).toEqual(['x', 'y', 'z']);
+    expect(pick(['stay'])).toEqual(['x']);
+    expect(pick(['stay', 'lunch'])).toEqual(['x', 'y']);
+  });
+
+  it('searches in name, city, kind, address and highlights', () => {
+    const one = venue({ id: 's', name: 'Zonnehof', address: 'Kerkstraat 1', highlights: ['Grachtenpand'], area_id: 'x' });
+    const find = (search) => applyFilters([one], { ...emptyFilters(), search }, now, () => 'Utrecht').length;
+    expect([find('zonne'), find('utrecht'), find('kerkstraat'), find('gracht'), find('koffie'), find('hotel')]).toEqual([1, 1, 1, 1, 1, 0]);
+  });
+
   it('filters on type, rating and search text', () => {
     expect(ids({ types: ['hotel'] })).toEqual(['b']);
     expect(ids({ minRating: 4.3 })).toEqual(['a', 'b']);
@@ -65,7 +111,7 @@ describe('map filters', () => {
   });
   it('cleans up damaged saved filters and counts what is active', () => {
     const f = normalizeFilters({ types: ['hotel', 'ufo'], minRating: 9, search: 5, conditions: { terrace: 'yes', nonsense: 'yes', parking: 'maybe' } });
-    expect(f).toEqual({ types: ['hotel'], minRating: 0, search: '', conditions: { terrace: 'yes' } });
+    expect(f).toEqual({ types: ['hotel'], services: [], minRating: 0, search: '', conditions: { terrace: 'yes' } });
     expect(activeCount(emptyFilters())).toBe(0);
     expect(activeCount(f)).toBe(2);
   });

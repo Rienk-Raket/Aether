@@ -1,7 +1,7 @@
 // Service worker: stores the app files on the device so Aether works offline.
 // APP_SHELL and CACHE_VERSION are generated: run `npm run sw` after adding files or bumping the version.
 
-const CACHE_VERSION = 'aether-v0.10.0';
+const CACHE_VERSION = 'aether-v0.10.1';
 
 const APP_SHELL = [
   './',
@@ -52,6 +52,7 @@ const APP_SHELL = [
   './js/core/fairness.js',
   './js/core/geo.js',
   './js/core/group-warnings.js',
+  './js/core/guide-import.js',
   './js/core/hash.js',
   './js/core/ics.js',
   './js/core/invite.js',
@@ -78,6 +79,7 @@ const APP_SHELL = [
   './js/data/db.js',
   './js/data/demo-seed.js',
   './js/data/groups.js',
+  './js/data/imported-venues.js',
   './js/data/offer.js',
   './js/data/people.js',
   './js/data/polls.js',
@@ -103,6 +105,7 @@ const APP_SHELL = [
   './js/screens/groups.js',
   './js/screens/home.js',
   './js/screens/invite-import.js',
+  './js/screens/landmap-import.js',
   './js/screens/landmap.js',
   './js/screens/new/flow.js',
   './js/screens/new/step-group.js',
@@ -177,7 +180,7 @@ const APP_SHELL = [
   './assets/icons/icon-512.png',
   './assets/icons/icon-maskable-512.png',
   './data/addresses.json',
-  './data/gids-venues.json',
+  './data/gids_locaties_nederland.md',
   './data/nl-places.json',
   './data/providers.json',
   './data/venues.json',

@@ -53,3 +53,29 @@
   .landmap-stage { order: -1; } /* map first on a phone, filters below it */
   .nl-map { height: 62vh; }
 }
+
+/* ---------- Import card and search results ---------- */
+.landmap-import { display: grid; gap: var(--space-3); }
+.drop { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); padding: var(--space-4); border: 1px dashed var(--mint-line); border-radius: var(--radius-md); background: var(--mint-tint); }
+.drop.over { background: rgba(157, 240, 207, 0.22); border-style: solid; }
+.drop label { cursor: pointer; }
+.drop input:focus-visible + * , .drop label:focus-within { outline: 2px solid var(--mint); outline-offset: 2px; }
+.imported-row { padding: var(--space-1) 0; }
+.notice.bad { border-color: var(--red); color: var(--red); background: var(--red-tint); }
+
+.result-list { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: grid; gap: 2px; }
+.result-list button { display: flex; align-items: center; gap: var(--space-2); width: 100%; min-height: 44px; padding: 6px 10px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text); text-align: left; }
+.result-list button:hover, .result-list button:focus-visible { background: var(--hover); }
+.result-list small { display: block; color: var(--muted); font-size: 12px; }
+.result-list .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--mint); }
+.result-list .dot.restaurant { background: var(--type-restaurant); }
+.result-list .dot.cafe { background: var(--type-cafe); }
+.result-list .dot.bar { background: var(--type-bar); }
+.result-list .dot.meeting_room { background: var(--type-meeting_room); }
+.result-list .dot.hotel { background: var(--type-hotel); }
+.result-list .dot.event { background: var(--type-event); }
+.landmap-filters .chip[data-service][aria-pressed='true'] { border-color: var(--mint-line); background: var(--mint-tint); color: var(--mint); }
+.landmap-import > summary { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); cursor: pointer; min-height: 44px; list-style: none; }
+.landmap-import > summary::-webkit-details-marker { display: none; }
+.landmap-import[open] > summary { margin-bottom: var(--space-2); }
+.landmap-import > p, .landmap-import > .drop, .landmap-import > div { margin-top: var(--space-3); }

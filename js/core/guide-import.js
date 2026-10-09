@@ -1,13 +1,8 @@
-// Builds data/gids-venues.json from docs/gids_locaties_nederland.md: the venues of the guide as
-// demo data in the same shape as data/venues.json. The guide has no coordinates, so every venue
-// is placed near the centre of its city (a fixed seed keeps the result identical on every run).
-// Facts the guide does not give (price level, facilities...) are filled in with seeded numbers.
-// Run: node scripts/build-gids.js
-
-import { readFileSync, writeFileSync } from 'node:fs';
-
-const guide = readFileSync('docs/gids_locaties_nederland.md', 'utf8');
-const { places } = JSON.parse(readFileSync('data/nl-places.json', 'utf8'));
+// Turns a guide in Markdown (like the "Gids locaties Nederland") into demo venues, in the same
+// shape as data/venues.json. Used by the "Kaart" screen when someone uploads the file.
+// The guide has no coordinates: every venue is placed near the centre of its city (a fixed seed
+// keeps the result the same every time). Facts the guide does not give (price level,
+// facilities...) are filled in with seeded numbers. Pure code: no browser needed.
 
 function seeded(seed) {
   let a = seed >>> 0;
@@ -23,83 +18,107 @@ const hashText = (text) => [...text].reduce((h, c) => (Math.imul(h, 31) + c.char
 const range = (r, min, max) => min + r() * (max - min);
 const norm = (text) => text.toLowerCase().replace(/[’']/g, '');
 
+export const MAX_GUIDE_BYTES = 2 * 1024 * 1024;
+
 const CATEGORY = { restaurants: 'restaurant', overleg: 'meeting_room', hotels: 'hotel', cafés: 'cafe', 'eet)cafés': 'cafe', evenementenlocaties: 'event', events: 'event', vergaderen: 'meeting_room' };
 const typeOf = (heading) => {
   const key = norm(heading).replace(/^\(/, '').replace(/^3x /, '').replace(/[^a-zé)]+/g, ' ').trim().split(' ')[0];
   return CATEGORY[key] ?? CATEGORY[norm(heading).replace(/[^a-zé)]/g, '')] ?? null;
 };
 
-// ---- Parsing ----
-const cities = []; // { place, byType: { type: [{ name, detail }] } }
-let current = null;
-let type = null;
-let item = null;
-const lines = guide.split('\n');
+// ---- Reading the Markdown ----
+// Returns { cities: [{ place, byType }], skipped: [names of cities we do not know] }
+export function readGuide(guide, places) {
+  const cities = [];
+  const skipped = [];
+  let current = null;
+  let type = null;
+  let item = null;
 
-function startCity(name) {
-  const place = places.find((p) => norm(p.name) === norm(name));
-  if (!place) throw new Error(`Unknown city in guide: ${name}`);
-  current = { place, byType: {} };
-  cities.push(current);
-  type = null;
-  item = null;
-}
-const add = (t, entry) => ((current.byType[t] ??= []).push(entry));
+  const add = (t, entry) => (current.byType[t] ??= []).push(entry);
 
-for (const raw of lines) {
-  const line = raw.trimEnd();
-  const city = line.match(/^## \d+\. (.+)$/);
-  if (city) { startCity(city[1]); continue; }
-  if (!current) continue;
-
-  const heading = line.match(/^### (.+)$/);
-  if (heading) { type = typeOf(heading[1]); item = null; continue; }
-
-  // Short form: "3x Restaurants: A, B, C | 3x Vergaderen: ..." (cities 7–49: names only)
-  if (/3x /.test(line) && /\|/.test(line)) {
-    for (const part of line.replace(/^\*?\(?\s*\*?\s*/, '').replace(/\)\*?\s*$/, '').split('|')) {
-      const m = part.match(/3x\s+([^:*]+):\**\s*(.+)$/);
-      const t = m && typeOf(m[1]);
-      if (!t) continue;
-      for (const name of m[2].replace(/[.)*]+\s*$/, '').split(/,\s+(?![^(]*\))/)) if (name.trim()) add(t, { name: name.trim() });
+  for (const raw of String(guide).split('\n')) {
+    const line = raw.trimEnd();
+    const city = line.match(/^## \d+\. (.+)$/);
+    if (city) {
+      const place = places.find((p) => norm(p.name) === norm(city[1]));
+      if (!place) skipped.push(city[1].trim());
+      current = place ? { place, byType: {} } : null;
+      if (current) cities.push(current);
+      type = null;
+      item = null;
+      continue;
     }
-    continue;
-  }
+    if (!current) continue;
 
-  // Long form: a numbered, bold name starts an item; the lines below belong to it.
-  const start = line.match(/^\d+\. \*\*(.+)\*\*$/);
-  if (start && type) { item = { name: start[1].trim() }; add(type, item); continue; }
-  if (!item) continue;
-  let m;
-  if ((m = line.match(/^\s+\*\*([\d,]+)\*\*.*\(([\d.]+) reviews\)/))) { item.rating = Number(m[1].replace(',', '.')); item.reviews = Number(m[2].replace('.', '')); }
-  else if ((m = line.match(/^\s+\*(.+?) · (.+)\*$/))) { item.kind = m[1].trim(); item.address = m[2].trim(); }
-  else if ((m = line.match(/^\s+[🟢🔴🟡]\s*\*\*[^*]+\*\*\s*·\s*(.+)$/u))) item.hours = m[1].trim();
-  else if (/^\s+✓/.test(line)) item.highlights = line.split('✓').map((s) => s.replace(/·\s*$/, '').trim()).filter(Boolean);
-  else if ((m = line.match(/^\s+\* \*\*Zakelijk(?:e)?:\*\*\s*(.+)$/))) item.business = m[1].trim();
-  else if ((m = line.match(/^\s+\* \*\*Privé:\*\*\s*(.+)$/))) item.private = m[1].trim();
+    const heading = line.match(/^### (.+)$/);
+    if (heading) {
+      type = typeOf(heading[1]);
+      item = null;
+      continue;
+    }
+
+    // Short form: "3x Restaurants: A, B, C | 3x Vergaderen: ..." (names only; the number is ignored)
+    if (/\d+x\s+[^:|]+:/.test(line)) {
+      for (const part of line.replace(/^\*?\(?\s*\*?\s*/, '').replace(/\)\*?\s*$/, '').split('|')) {
+        const m = part.match(/\d+x\s+([^:*]+):\**\s*(.+)$/);
+        const t = m && typeOf(m[1]);
+        if (!t) continue;
+        for (const name of m[2].replace(/[.)*]+\s*$/, '').split(/,\s+(?![^(]*\))/)) if (name.trim()) add(t, { name: name.trim() });
+      }
+      continue;
+    }
+
+    // Long form: a numbered, bold name starts an item; the lines below belong to it.
+    const start = line.match(/^\d+\. \*\*(.+)\*\*$/);
+    if (start && type) {
+      item = { name: start[1].trim() };
+      add(type, item);
+      continue;
+    }
+    if (!item) continue;
+    let m;
+    if ((m = line.match(/^\s+\*\*([\d,]+)\*\*.*\(([\d.]+) reviews\)/))) {
+      item.rating = Number(m[1].replace(',', '.'));
+      item.reviews = Number(m[2].replace('.', ''));
+    } else if ((m = line.match(/^\s+\*(.+?) · (.+)\*$/))) {
+      item.kind = m[1].trim();
+      item.address = m[2].trim();
+    } else if ((m = line.match(/^\s+[🟢🔴🟡]\s*\*\*[^*]+\*\*\s*·\s*(.+)$/u))) item.hours = m[1].trim();
+    else if (/^\s+✓/.test(line)) item.highlights = line.split('✓').map((s) => s.replace(/·\s*$/, '').trim()).filter(Boolean);
+    else if ((m = line.match(/^\s+\* \*\*Zakelijk(?:e)?:\*\*\s*(.+)$/))) item.business = m[1].trim();
+    else if ((m = line.match(/^\s+\* \*\*Privé:\*\*\s*(.+)$/))) item.private = m[1].trim();
+  }
+  return { cities, skipped };
 }
 
 // ---- Opening hours ----
 const DAYS = { zondag: 0, maandag: 1, dinsdag: 2, woensdag: 3, donderdag: 4, vrijdag: 5, zaterdag: 6 };
-const clock = (text) => { const [h, m] = text.split(':').map(Number); return h * 60 + m; };
+const clock = (text) => {
+  const [h, m] = text.split(':').map(Number);
+  return h * 60 + m;
+};
 const DEFAULT_HOURS = { restaurant: [1020, 1380], cafe: [600, 1320], meeting_room: [480, 1080], hotel: [0, 1440], event: [540, 1320] };
 
-function parseHours(text, venueType) {
+// Returns 7 entries (Sunday first) of [open, close] or null. A close above 1440 means after midnight.
+export function parseHours(text, venueType) {
   const week = Array(7).fill(null);
   const fallback = DEFAULT_HOURS[venueType];
-  if (!text) { week.fill(fallback); return { hours: week.map((h) => h), byAppointment: false }; }
+  if (!text) return { hours: week.map(() => fallback), byAppointment: false };
   const lower = text.toLowerCase();
   if (lower.includes('24 uur')) return { hours: week.map(() => [0, 1440]), byAppointment: false };
   const byAppointment = lower.includes('op afspraak');
   const open = lower.match(/van (\d{2}:\d{2}) – (\d{2}:\d{2})/);
   let [from, to] = open ? [clock(open[1]), clock(open[2])] : byAppointment ? [540, 1020] : fallback;
   if (open && to <= from) to += 1440;
-  if (!open && lower.includes('dagelijks geopend')) [from, to] = fallback;
   const span = lower.match(/(\w+) t\/m (\w+)/);
   let days = [0, 1, 2, 3, 4, 5, 6];
   if (span && span[1] in DAYS && span[2] in DAYS) {
     days = [];
-    for (let d = DAYS[span[1]]; ; d = (d + 1) % 7) { days.push(d); if (d === DAYS[span[2]]) break; }
+    for (let d = DAYS[span[1]]; ; d = (d + 1) % 7) {
+      days.push(d);
+      if (d === DAYS[span[2]]) break;
+    }
   } else if (byAppointment) days = [1, 2, 3, 4, 5];
   days.forEach((d) => (week[d] = [from, to]));
   return { hours: week, byAppointment };
@@ -115,8 +134,11 @@ const CUISINES = {
 };
 const PRICE_BASE = { restaurant: [2, 4], cafe: [1, 2], meeting_room: [2, 3], hotel: [2, 4], event: [2, 4] };
 const PRICE_RANGE = {
-  restaurant: [[10, 22], [18, 35], [32, 55], [55, 95]], cafe: [[3, 9], [6, 14], [10, 20], [15, 28]],
-  meeting_room: [[10, 25], [18, 40], [30, 60], [50, 90]], hotel: [[60, 95], [90, 140], [130, 200], [190, 320]], event: [[15, 30], [25, 50], [40, 80], [70, 140]],
+  restaurant: [[10, 22], [18, 35], [32, 55], [55, 95]],
+  cafe: [[3, 9], [6, 14], [10, 20], [15, 28]],
+  meeting_room: [[10, 25], [18, 40], [30, 60], [50, 90]],
+  hotel: [[60, 95], [90, 140], [130, 200], [190, 320]],
+  event: [[15, 30], [25, 50], [40, 80], [70, 140]],
 };
 const CAPACITY = { restaurant: [20, 120], cafe: [15, 60], meeting_room: [8, 200], hotel: [15, 220], event: [150, 1500] };
 const SERVICE_CHANCE = {
@@ -137,9 +159,8 @@ const PARTNERS = { restaurant: ['tafelaar'], cafe: ['direct'], meeting_room: ['z
 const ALLERGENS = ['peanut', 'tree_nut', 'shellfish', 'egg', 'soy', 'fish', 'sesame'];
 const has = (item, re) => (item.highlights ?? []).some((h) => re.test(h)) || re.test(item.kind ?? '');
 
-function build(cityEntry, venueType, item, index) {
-  const place = cityEntry.place;
-  const id = `gids-${place.id}-${venueType}-${index + 1}`;
+function buildVenue(importId, place, venueType, item, index) {
+  const id = `${importId}-${place.id}-${venueType}-${index + 1}`;
   const r = seeded(hashText(id));
   const f = seeded(hashText(`${id}:facts`));
   const chance = CHANCE[venueType];
@@ -152,7 +173,10 @@ function build(cityEntry, venueType, item, index) {
   const accessible = has(item, /rolstoel|toegankelijk|lift/i) || f() < 0.7;
   const services = Object.entries(SERVICE_CHANCE[venueType]).filter(([, c]) => f() < c).map(([n]) => n);
   const diets = [];
-  if (vegetarian) { diets.push('vegetarian'); if (f() < 0.35) diets.push('vegan'); }
+  if (vegetarian) {
+    diets.push('vegetarian');
+    if (f() < 0.35) diets.push('vegan');
+  }
   if (f() < 0.5) diets.push('gluten_free');
   if (f() < 0.2) diets.push('halal');
   if (f() < 0.4) diets.push('lactose_free');
@@ -198,6 +222,7 @@ function build(cityEntry, venueType, item, index) {
     allergen_safe: ALLERGENS.filter(() => f() < 0.8),
     // Extra facts from the guide
     source: 'gids',
+    import_id: importId,
     by_appointment: byAppointment,
     highlights: item.highlights ?? [],
     use_business: item.business ?? '',
@@ -205,9 +230,12 @@ function build(cityEntry, venueType, item, index) {
   };
 }
 
-const venues = cities.flatMap((c) => Object.entries(c.byType).flatMap(([t, list]) => list.map((item, i) => build(c, t, item, i))));
-const source = 'Gids locaties Nederland (demo): namen uit de gids, overige gegevens en ligging zijn fictief. Gegenereerd door scripts/build-gids.js.';
-writeFileSync('data/gids-venues.json', `{\n"source": ${JSON.stringify(source)},\n"venues": [\n${venues.map((v) => JSON.stringify(v)).join(',\n')}\n]\n}\n`);
-const count = {};
-venues.forEach((v) => (count[v.type] = (count[v.type] ?? 0) + 1));
-console.log(`${venues.length} venues in ${cities.length} cities`, count);
+// guide: the Markdown text. places: data/nl-places.json. importId: short id for this upload.
+// Returns { venues, cityCount, skipped, counts: { restaurant: n, ... } }
+export function parseGuide(guide, places, importId = 'gids') {
+  const { cities, skipped } = readGuide(guide, places);
+  const venues = cities.flatMap((c) => Object.entries(c.byType).flatMap(([type, list]) => list.map((item, i) => buildVenue(importId, c.place, type, item, i))));
+  const counts = {};
+  for (const v of venues) counts[v.type] = (counts[v.type] ?? 0) + 1;
+  return { venues, cityCount: cities.length, skipped, counts };
+}

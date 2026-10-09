@@ -172,6 +172,16 @@ export function createNlMap(container, { places, onSelect }) {
   fit();
 
   return {
+    // Zoom in on one venue (used by the search results).
+    focus(venue, zoom = 14) {
+      const p = project(venue);
+      const w = MAP_WIDTH / zoom;
+      const ratio = size().width / size().height;
+      view = { w, h: w / ratio, x: p.x - w / 2, y: p.y - w / ratio / 2 };
+      clamp();
+      apply();
+      schedule();
+    },
     // venues: venues to show; selected: id or null
     update(venues, selected = null) {
       selectedId = selected;

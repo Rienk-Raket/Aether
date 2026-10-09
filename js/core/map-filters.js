@@ -26,7 +26,12 @@ export const CONDITIONS = {
   open_24h: (v) => is24h(v),
 };
 
-export const emptyFilters = () => ({ types: [...VENUE_TYPES], minRating: 0, search: '', conditions: {} });
+export const SERVICES = ['breakfast', 'lunch', 'dinner', 'coffee', 'drinks', 'stay', 'meeting', 'event'];
+
+export const emptyFilters = () => ({ types: [...VENUE_TYPES], services: [], minRating: 0, search: '', conditions: {} });
+
+// What the search box looks in: name, city, kind, address and the guide's highlights.
+export const searchText = (v, city = '') => `${v.name} ${city} ${v.cuisine ?? ''} ${v.address ?? ''} ${(v.highlights ?? []).join(' ')}`.toLowerCase();
 
 // conditions: { terrace: 'yes' | 'no' } — missing = do not care
 export function normalizeFilters(raw) {
@@ -35,6 +40,7 @@ export function normalizeFilters(raw) {
   const rating = Number(raw.minRating);
   return {
     types: Array.isArray(raw.types) ? VENUE_TYPES.filter((t) => raw.types.includes(t)) : base.types,
+    services: Array.isArray(raw.services) ? SERVICES.filter((s) => raw.services.includes(s)) : [],
     minRating: Number.isFinite(rating) && rating >= 0 && rating <= 5 ? rating : 0,
     search: typeof raw.search === 'string' ? raw.search.slice(0, 60) : '',
     conditions: Object.fromEntries(Object.entries(raw.conditions ?? {}).filter(([key, value]) => key in CONDITIONS && (value === 'yes' || value === 'no'))),
@@ -47,11 +53,12 @@ export function applyFilters(venues, filters, now = new Date(), cityName = () =>
   return venues.filter((v) => {
     if (!filters.types.includes(v.type)) return false;
     if (filters.minRating && (v.rating ?? 0) < filters.minRating) return false;
-    if (search && !`${v.name} ${cityName(v)} ${v.cuisine ?? ''}`.toLowerCase().includes(search)) return false;
+    if (filters.services.length && !filters.services.some((s) => v.services?.includes(s))) return false;
+    if (search && !searchText(v, cityName(v)).includes(search)) return false;
     return rules.every(([key, want]) => CONDITIONS[key](v, now) === (want === 'yes'));
   });
 }
 
 // How many conditions are set (for the "x filters actief" label).
 export const activeCount = (filters) =>
-  Object.keys(filters.conditions).length + (filters.types.length < VENUE_TYPES.length ? 1 : 0) + (filters.minRating ? 1 : 0) + (filters.search.trim() ? 1 : 0);
+  Object.keys(filters.conditions).length + (filters.services.length ? 1 : 0) + (filters.types.length < VENUE_TYPES.length ? 1 : 0) + (filters.minRating ? 1 : 0) + (filters.search.trim() ? 1 : 0);

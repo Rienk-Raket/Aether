@@ -7,10 +7,11 @@ import { icon } from '../ui/icons.js';
 import { loadingFor } from '../ui/loading.js';
 import { sourceBadge } from '../ui/source-badge.js';
 import { createNlMap } from '../ui/nl-map.js';
+import { mountImport } from './landmap-import.js';
 import { findAllVenues, OfflineError, PROVIDER_NAME } from '../services/places.js';
 import { loadBundledJson } from '../services/mock/network.js';
 import { VENUE_TYPES, openLabel, formatPriceRange } from '../core/venues.js';
-import { CONDITIONS, applyFilters, activeCount, emptyFilters, normalizeFilters } from '../core/map-filters.js';
+import { CONDITIONS, SERVICES, applyFilters, activeCount, emptyFilters, normalizeFilters } from '../core/map-filters.js';
 
 const KEY = 'aether.landmap.filters';
 const RATINGS = [0, 4, 4.3, 4.5, 4.7];
@@ -30,7 +31,7 @@ const saveFilters = (filters) => {
   }
 };
 
-export async function renderLandmap(container) {
+export async function renderLandmap(container, _params, _query, message = '') {
   const stop = loadingFor(container, t.landmap.loading);
   let result;
   let places;
@@ -55,6 +56,7 @@ export async function renderLandmap(container) {
       <div class="eyebrow">${t.landmap.eyebrow}</div>
       <h1 class="section-gap">${t.landmap.title}</h1>
       <p class="sub">${t.landmap.sub}</p>
+      <div class="section-gap" data-import></div>
       <div class="landmap-layout section-gap">
         <div class="card landmap-filters" data-filters></div>
         <div class="landmap-stage">
@@ -70,15 +72,33 @@ export async function renderLandmap(container) {
   const countEl = container.querySelector('[data-count]');
   const cardEl = container.querySelector('[data-card]');
   const map = createNlMap(container.querySelector('[data-map]'), { places, onSelect: select });
+  mountImport(container.querySelector('[data-import]'), {
+    places,
+    message,
+    onChange: (text) => {
+      map.destroy();
+      return renderLandmap(container, null, null, text); // reload the venues, keep the filters
+    },
+  }).then(() => {
+    const status = container.querySelector('[data-import-status]');
+    if (status && message) {
+      status.hidden = false;
+      status.textContent = message;
+    }
+  });
 
   function drawFilters() {
     const active = activeCount(filters);
     filterEl.innerHTML = `
       <div class="card-row"><h2>${t.landmap.filtersTitle}</h2>${active ? `<button type="button" class="link-btn" data-clear>${t.landmap.clear}</button>` : ''}</div>
       ${active ? `<p class="muted small">${t.landmap.activeFilters(active)}</p>` : ''}
-      <label class="field"><span class="field-label">${t.landmap.search}</span><input type="search" data-search value="${esc(filters.search)}" placeholder="${t.landmap.searchPlaceholder}" /></label>
+      <label class="field"><span class="field-label">${t.landmap.search}</span><input type="search" data-search value="${esc(filters.search)}" placeholder="${t.landmap.searchPlaceholder}" autocomplete="off" /></label>
+      <div class="search-results" data-results></div>
       <fieldset class="field"><legend class="field-label">${t.landmap.typesTitle}</legend>
         <div class="chips">${VENUE_TYPES.map((type) => `<button type="button" class="chip type-chip ${type}" data-type="${type}" aria-pressed="${filters.types.includes(type)}">${icon(type)} ${t.placeTypes[type]}</button>`).join('')}</div></fieldset>
+      <fieldset class="field"><legend class="field-label">${t.landmap.servicesTitle}</legend>
+        <div class="chips">${SERVICES.map((svc) => `<button type="button" class="chip" data-service="${svc}" aria-pressed="${filters.services.includes(svc)}">${t.serviceNames[svc]}</button>`).join('')}</div>
+        <p class="field-hint">${t.landmap.servicesHint}</p></fieldset>
       <label class="field"><span class="field-label">${t.landmap.ratingTitle}</span>
         <select data-rating>${RATINGS.map((n) => `<option value="${n}" ${n === filters.minRating ? 'selected' : ''}>${n ? t.landmap.ratingOption(n) : t.landmap.ratingAny}</option>`).join('')}</select></label>
       <fieldset class="field"><legend class="field-label">${t.landmap.conditionsTitle}</legend><p class="field-hint">${t.landmap.conditionsHint}</p>
@@ -98,7 +118,23 @@ export async function renderLandmap(container) {
     countEl.textContent = t.landmap.count(shown.length, venues.length);
     map.update(shown, selected);
     drawCard();
+    drawResults(shown);
     if (!shown.length) cardEl.innerHTML = `<p class="notice" role="status">${t.landmap.none}</p>`;
+  }
+
+  // While searching: the best matches as a list; a tap zooms the map to that place.
+  function drawResults(shown) {
+    const box = filterEl.querySelector('[data-results]');
+    if (!box) return;
+    const q = filters.search.trim();
+    if (!q) {
+      box.innerHTML = '';
+      return;
+    }
+    const top = shown.slice(0, 6);
+    box.innerHTML = top.length
+      ? `<ul class="result-list" aria-label="${t.landmap.searchResults(shown.length)}">${top.map((v) => `<li><button type="button" data-pick="${esc(v.id)}" aria-label="${esc(t.landmap.searchPick(v.name))}"><span class="dot ${v.type}"></span><span><strong>${esc(v.name)}</strong><small>${esc(t.placeTypes[v.type])} · ${esc(cityOf.get(v.area_id) ?? '')}</small></span></button></li>`).join('')}</ul>${shown.length > top.length ? `<p class="muted small">${t.landmap.searchMore(shown.length - top.length)}</p>` : ''}`
+      : `<p class="muted small">${t.landmap.searchNone}</p>`;
   }
 
   function select(id) {
@@ -142,6 +178,14 @@ export async function renderLandmap(container) {
   filterEl.addEventListener('click', (event) => {
     const type = event.target.closest('[data-type]')?.dataset.type;
     if (type) return change({ ...filters, types: filters.types.includes(type) ? filters.types.filter((x) => x !== type) : VENUE_TYPES.filter((x) => x === type || filters.types.includes(x)) });
+    const service = event.target.closest('[data-service]')?.dataset.service;
+    if (service) return change({ ...filters, services: filters.services.includes(service) ? filters.services.filter((x) => x !== service) : SERVICES.filter((x) => x === service || filters.services.includes(x)) });
+    const pick = event.target.closest('[data-pick]')?.dataset.pick;
+    if (pick) {
+      selected = pick;
+      map.focus(byId.get(pick));
+      return refresh();
+    }
     const cond = event.target.closest('[data-cond]');
     if (cond) {
       const conditions = { ...filters.conditions };
