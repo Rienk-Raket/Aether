@@ -27,6 +27,7 @@ export function initShell(handlers) {
 
   document.querySelector('[data-more]').addEventListener('click', async () => {
     const choice = await actionSheet(t.shell.moreTitle, [
+      { label: t.nav.landmap, value: '/kaart', icon: 'pin' },
       { label: t.nav.offer, value: '/aanbod', icon: 'sliders' },
       { label: t.nav.activity, value: '/activiteit', icon: 'activity' },
       { label: t.nav.settings, value: '/instellingen', icon: 'settings' },

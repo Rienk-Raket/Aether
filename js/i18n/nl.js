@@ -7,6 +7,7 @@ import { collab } from './nl-collab.js';
 import { offerStrings } from './nl-offer.js';
 import { bookingStrings } from './nl-booking.js';
 import { businessStrings } from './nl-business.js';
+import { landmapStrings } from './nl-landmap.js';
 import { profileStrings, profileScreen, appointmentPrefs } from './nl-profile.js';
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -14,6 +15,7 @@ const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 export const t = {
   ...services,
   business: businessStrings,
+  ...landmapStrings,
   ...offerStrings,
   ...profileStrings,
   ...bookingStrings,
@@ -28,6 +30,7 @@ export const t = {
     overview: 'Overzicht',
     discover: 'Ontdek plekken',
     offer: 'Aanbod & wensen',
+    landmap: 'Kaart van Nederland',
     groups: 'Mijn groepen',
     agenda: 'Agenda',
     activity: 'Activiteit',
@@ -208,7 +211,7 @@ export const t = {
     license: 'Open source (MIT)',
   },
 
-  placeTypes: { restaurant: 'Restaurant', cafe: 'Café', bar: 'Bar', meeting_room: 'Vergaderruimte', hotel: 'Hotel' },
+  placeTypes: { restaurant: 'Restaurant', cafe: 'Café', bar: 'Bar', meeting_room: 'Vergaderruimte', hotel: 'Hotel', event: 'Evenementlocatie' },
   fairness: {
     efficient: 'Kortste totale reistijd',
     fair: 'Niemand te zwaar',

@@ -35,6 +35,7 @@ const paths = {
   cafe: '<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2M8 3v3M11 3v3"/>',
   bar: '<path d="M5 4h14l-7 8z"/><path d="M12 12v8M8 20h8"/>',
   meeting_room: '<rect x="3" y="7" width="18" height="12" rx="2"/><path d="M9 7V5h6v2M3 12h18"/>',
+  event: '<path d="M12 3l2.2 5 5.3.6-4 3.6 1.2 5.3L12 14.8 7.3 17.5l1.2-5.3-4-3.6 5.3-.6z"/>',
   hotel: '<path d="M3 19V6M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11" r="1.5"/>',
   wheelchair: '<circle cx="10" cy="4.5" r="1.8"/><path d="M10 8v6h5l2 5M10 11h5M8 15a4 4 0 1 0 6 3"/>',
   quiet: '<path d="M4 10v4h4l5 4V6L8 10zM17 9l4 6M21 9l-4 6"/>',

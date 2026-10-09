@@ -4,7 +4,7 @@
 
 import { haversineKm } from './geo.js';
 
-export const VENUE_TYPES = ['restaurant', 'cafe', 'bar', 'meeting_room', 'hotel'];
+export const VENUE_TYPES = ['restaurant', 'cafe', 'bar', 'meeting_room', 'hotel', 'event'];
 
 // Opening status at a moment: { open: boolean, today: [open, close]|null }
 export function openStatus(venue, date) {

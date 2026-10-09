@@ -11,6 +11,7 @@ import { renderDiscover } from './screens/discover.js';
 import { renderGroups, createGroupFlow } from './screens/groups.js';
 import { renderVenue } from './screens/venue.js';
 import { renderOffer } from './screens/offer.js';
+import { renderLandmap } from './screens/landmap.js';
 import { renderInviteImport } from './screens/invite-import.js';
 import { startSimulation } from './services/simulation.js';
 import { renderGroupDetail } from './screens/group-detail.js';
@@ -52,6 +53,7 @@ const TITLES = {
   ontdek: t.nav.discover,
   plek: t.nav.discover,
   aanbod: t.nav.offer,
+  kaart: t.nav.landmap,
   uitnodiging: t.importInvite.title,
   groepen: t.nav.groups,
   agenda: t.nav.agenda,
@@ -76,6 +78,7 @@ const router = createRouter({
     '/ontdek': renderDiscover,
     '/plek/:id': renderVenue,
     '/aanbod': renderOffer,
+    '/kaart': renderLandmap,
     '/uitnodiging': renderInviteImport,
     '/groepen': renderGroups,
     '/groepen/:id': renderGroupDetail,

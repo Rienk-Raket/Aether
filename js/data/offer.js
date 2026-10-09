@@ -35,5 +35,6 @@ export async function listProviders() {
 
 // All venues in the demo data, for counting in the settings screen. No simulated delay.
 export async function allVenues() {
-  return (await loadBundledJson('data/venues.json')).venues;
+  const [base, guide] = await Promise.all([loadBundledJson('data/venues.json'), loadBundledJson('data/gids-venues.json')]);
+  return [...base.venues, ...guide.venues];
 }
