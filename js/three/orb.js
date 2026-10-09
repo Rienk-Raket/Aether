@@ -10,6 +10,8 @@ import { initials, hueFor } from '../ui/dom.js';
 const MINT = 0x9df0cf;
 const BLUE = 0x88b9ff;
 const ASPECT = 0.75; // height / width
+const MIN_DISTANCE = 3.2; // closest the camera may zoom
+const MAX_DISTANCE = 6.6; // furthest the camera may zoom
 
 // A round label with initials, drawn on a canvas and used as a sprite texture.
 function labelTexture(text, hue) {
@@ -180,6 +182,19 @@ export function createOrb(container, { participants, candidates }, { reducedMoti
     drag.y = event.clientY;
     world.rotation.y += dx * 0.008;
     world.rotation.x = Math.max(-1, Math.min(1, world.rotation.x + dy * 0.008));
+  });
+  // The page must not scroll while the visitor navigates inside the view: the wheel zooms the
+  // orb instead (CSS keeps touch swipes from scrolling the page, see .orb-canvas).
+  canvas.addEventListener(
+    'wheel',
+    (event) => {
+      event.preventDefault();
+      camera.position.z = Math.max(MIN_DISTANCE, Math.min(MAX_DISTANCE, camera.position.z + event.deltaY * 0.004));
+    },
+    { passive: false },
+  );
+  canvas.addEventListener('pointercancel', () => {
+    drag = null;
   });
   canvas.addEventListener('pointerup', (event) => {
     const tapped = drag && drag.moved < 5;
