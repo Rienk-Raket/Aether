@@ -11,7 +11,7 @@ import { why } from '../ui/form-bits.js';
 import { navigate } from '../router.js';
 import { normalizePreferences } from '../core/profile-model.js';
 import { ensureSelf, savePerson } from '../data/people.js';
-import { removeProfile } from '../data/profiles.js';
+import { removeProfile, profileKind } from '../data/profiles.js';
 import { locationsSection, wireLocations } from './profile-locations.js';
 import { vehiclesSection, wireVehicles } from './profile-vehicles.js';
 import { travelSection, showTravelLabels, readTravel } from './profile-travel.js';
@@ -35,10 +35,17 @@ export async function renderProfile(container) {
           ${avatar(self, 56)}
           <div>
             <div class="card-title">${esc(self.name)}</div>
-            <div class="muted small" role="status" data-saved>${t.settings.localProfile}</div>
+            <div class="muted small" role="status" data-saved>${t.settings.localProfile} · ${t.deck.kindBadge[profileKind(self)]}</div>
           </div>
         </div>
         <button type="button" class="icon-btn" data-edit-name aria-label="${t.profile.editName}">${icon('edit')}</button>
+      </div>
+      <div class="card card-row section-gap">
+        <span class="muted small">${profileKind(self) === 'business' ? t.deck.kinds.business.text : t.deck.kinds.personal.text}</span>
+        <span class="row">
+          ${profileKind(self) === 'business' ? `<a class="btn btn-small" href="#/zakelijk">${icon('restaurant')} ${t.business.toBusiness}</a>` : ''}
+          <a class="btn btn-small" href="#/profiel/nieuw?opnieuw=1">${icon('sliders')} ${t.deck.redo}</a>
+        </span>
       </div>
 
       <form data-profile-form novalidate>

@@ -5,9 +5,8 @@ import { t } from '../i18n/nl.js';
 import { icon } from '../ui/icons.js';
 import { esc, avatar } from '../ui/dom.js';
 import { actionSheet } from '../ui/modal.js';
-import { askName } from '../ui/name-form.js';
 import { navigate } from '../router.js';
-import { activeProfile, listProfiles, createProfile, switchProfile } from '../data/profiles.js';
+import { activeProfile, listProfiles, switchProfile, profileKind } from '../data/profiles.js';
 
 export async function renderStartMenu(container) {
   const [self, profiles] = await Promise.all([activeProfile(), listProfiles()]);
@@ -40,16 +39,11 @@ export async function renderStartMenu(container) {
 
   on('continue', () => navigate('/overzicht'));
   on('edit', () => navigate('/profiel'));
-  on('create', async () => {
-    const name = await askName('', t.start.createTitle);
-    if (!name) return;
-    await createProfile(name);
-    navigate('/profiel');
-  });
+  on('create', () => navigate('/profiel/nieuw'));
   on('choose', async () => {
     const id = await actionSheet(
       t.start.chooseTitle,
-      profiles.map((p) => ({ label: p.id === self.id ? `${p.name} (${t.start.activeMark})` : p.name, value: p.id, icon: 'user' })),
+      profiles.map((p) => ({ label: `${p.name} · ${t.deck.kindBadge[profileKind(p)]}${p.id === self.id ? ` (${t.start.activeMark})` : ''}`, value: p.id, icon: profileKind(p) === 'business' ? 'restaurant' : 'user' })),
     );
     if (!id) return;
     await switchProfile(id);
