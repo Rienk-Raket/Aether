@@ -186,3 +186,4 @@ ol.steps { list-style: none; padding: 0; }
 .swipe-dot[aria-current='true']::after { background: var(--mint); transform: scale(1.5); }
 .swipe-count { text-align: center; margin-top: 0; }
 @media (prefers-reduced-motion: reduce) { .swipe-track { scroll-behavior: auto; } }
+.biz-row { flex-wrap: wrap; }

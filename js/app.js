@@ -21,6 +21,7 @@ import { renderSettings } from './screens/settings.js';
 import { renderBooking } from './screens/booking.js';
 import { renderBookingDone } from './screens/booking-done.js';
 import { renderProfile } from './screens/profile.js';
+import { renderProfileWizard } from './screens/profile-wizard.js';
 import { renderStepGroup } from './screens/new/step-group.js';
 import { renderStepWhen } from './screens/new/step-when.js';
 import { renderStepPrefs } from './screens/new/step-prefs.js';
@@ -92,6 +93,7 @@ const router = createRouter({
     '/welkom': renderWelcome,
     '/start': renderStartMenu,
     '/profiel': renderProfile,
+    '/profiel/nieuw': renderProfileWizard,
     '/reserveren': renderBooking,
     '/bevestigd': renderBookingDone,
     ...businessRoutes(),

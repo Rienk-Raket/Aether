@@ -10,6 +10,7 @@ import { fetchAllVenues } from '../../services/mock/plekwijzer-mock.js';
 import { loadingFor } from '../../ui/loading.js';
 import { createBusiness, getState, saveState } from '../data/store.js';
 import { pageHead } from '../ui/widgets.js';
+import { ensureSelf } from '../../data/people.js';
 
 const b = t.business;
 const DEMO_CODE = '123456';
@@ -23,7 +24,9 @@ export async function render(container) {
   const venues = await fetchAllVenues();
   stop();
 
-  const model = { step: 1, venue: null, name: '', email: '', query: 'Keuken Kade' };
+  // A business profile (made with the profile cards) already tells us what kind of venue to look for.
+  const profile = await ensureSelf();
+  const model = { step: 1, venue: null, name: profile.kind === 'business' ? profile.name : '', email: '', query: profile.business?.venue_type ? '' : 'Keuken Kade', type: profile.business?.venue_type ?? null };
   const draw = () => {
     container.innerHTML = `<section class="screen">${pageHead(b.onboarding.eyebrow, b.onboarding.title)}${stepper(model.step + 1)}<div data-step></div></section>`;
     const body = container.querySelector('[data-step]');
@@ -39,6 +42,7 @@ export async function render(container) {
             <label class="field"><span class="field-label">${b.onboarding.ownerEmail}</span><input name="email" type="email" value="${esc(model.email)}" autocomplete="email" /></label>
             <label class="field"><span class="field-label">${b.onboarding.searchLabel}</span><input name="query" type="search" placeholder="${b.onboarding.searchPlaceholder}" value="${esc(model.query)}" /></label>
           </div>
+          ${model.type ? `<p class="notice small" data-type-note>${t.deck.businessFromProfile(t.placeTypes[model.type])} <button type="button" class="link-btn" data-clear-type>${t.deck.businessClearType}</button></p>` : ''}
           <div class="list-card" data-results></div></div>
         <div class="card"><h2>${b.onboarding.demoAccount}</h2><p class="muted small">${b.onboarding.demoAccountHint}</p>
           <button class="btn btn-block" type="button" data-demo>${b.onboarding.useDemo}</button>
@@ -49,12 +53,18 @@ export async function render(container) {
     const list = () => {
       model.query = input('query').value;
       const q = model.query.trim().toLowerCase();
-      const hits = q.length < 2 ? [] : venues.filter((v) => `${v.name} ${v.address}`.toLowerCase().includes(q)).slice(0, 5);
+      const pool = model.type ? venues.filter((v) => v.type === model.type) : venues;
+      const hits = q.length < 2 && !model.type ? [] : pool.filter((v) => `${v.name} ${v.address}`.toLowerCase().includes(q)).slice(0, 5);
       results.innerHTML = hits.length
         ? hits.map((v) => `<div class="card card-row biz-row"><div><strong>${esc(v.name)}</strong><p class="muted small">${t.placeTypes[v.type]} · ${esc(v.cuisine)} · ${esc(v.address)}</p></div><button class="btn btn-small btn-primary" type="button" data-pick="${esc(v.id)}">${b.onboarding.pick}</button></div>`).join('')
-        : `<p class="muted small">${q.length < 2 ? '' : b.onboarding.noResults}</p>`;
+        : `<p class="muted small">${q.length < 2 && !model.type ? '' : b.onboarding.noResults}</p>`;
     };
     input('query').addEventListener('input', list);
+    body.querySelector('[data-clear-type]')?.addEventListener('click', () => {
+      model.type = null;
+      body.querySelector('[data-type-note]').remove();
+      list();
+    });
     list();
     results.addEventListener('click', (event) => {
       const id = event.target.closest('[data-pick]')?.dataset.pick;
