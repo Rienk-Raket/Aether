@@ -1,0 +1,81 @@
+/* Kaart van Nederland: fictional map, pins and the filter panel. */
+
+.landmap-layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: var(--space-4); align-items: start; }
+.landmap-filters { display: grid; gap: var(--space-4); position: sticky; top: var(--space-4); max-height: calc(100vh - 32px); overflow-y: auto; }
+.landmap-stage { display: grid; gap: var(--space-3); min-width: 0; }
+.landmap-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+
+.landmap-map { position: relative; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border); background: #0a2233; }
+.nl-map { display: block; width: 100%; height: min(74vh, 760px); min-height: 380px; touch-action: none; overscroll-behavior: contain; cursor: grab; user-select: none; }
+.nl-map:active { cursor: grabbing; }
+.nl-sea { fill: #0a2233; }
+.nl-land { fill: #14384a; stroke: rgba(157, 240, 207, 0.35); stroke-width: 1.2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.nl-lake { fill: #0a2233; stroke: rgba(136, 185, 255, 0.25); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.nl-label { fill: rgba(244, 248, 247, 0.62); font-family: var(--font-body); font-weight: 600; paint-order: stroke; stroke: #14384a; stroke-width: 3px; pointer-events: none; }
+
+.nl-pin { cursor: pointer; }
+.nl-pin path { stroke: rgba(7, 19, 33, 0.85); stroke-width: 1.3; fill: var(--mint); }
+.nl-pin .hole { fill: rgba(7, 19, 33, 0.85); }
+.nl-pin .halo { fill: none; stroke: #fff; stroke-width: 2; }
+.nl-pin.restaurant path { fill: var(--type-restaurant); }
+.nl-pin.cafe path { fill: var(--type-cafe); }
+.nl-pin.bar path { fill: var(--type-bar); }
+.nl-pin.meeting_room path { fill: var(--type-meeting_room); }
+.nl-pin.hotel path { fill: var(--type-hotel); }
+.nl-pin.event path { fill: var(--type-event); }
+.nl-pin:focus-visible, .nl-cluster:focus-visible { outline: none; }
+.nl-pin:focus-visible path, .nl-cluster:focus-visible circle { stroke: #fff; stroke-width: 2.5; }
+
+.nl-cluster { cursor: pointer; }
+.nl-cluster circle { fill: rgba(157, 240, 207, 0.88); stroke: rgba(7, 19, 33, 0.8); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.nl-cluster text { fill: #08221d; font: 700 12px var(--font-display); text-anchor: middle; pointer-events: none; }
+
+.nl-map-tools { position: absolute; right: var(--space-3); top: var(--space-3); display: grid; gap: var(--space-2); }
+.nl-map-tools .icon-btn { background: rgba(7, 19, 33, 0.85); font-size: 22px; line-height: 1; }
+
+.type-chip[aria-pressed='true'] { border-color: var(--mint-line); background: var(--mint-tint); color: var(--mint); }
+.type-chip:not([aria-pressed='true']) { opacity: 0.6; }
+.type-chip svg { width: 16px; height: 16px; }
+
+.tri-list { display: grid; gap: var(--space-2); margin-top: var(--space-2); }
+.tri-row { display: grid; gap: 6px; font-size: 14px; }
+.tri { display: flex; border: 1px solid var(--border); border-radius: 999px; padding: 3px; background: var(--hover); }
+.tri button { flex: 1; min-height: 36px; min-width: 44px; padding: 0 8px; white-space: nowrap; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; }
+.tri button[aria-checked='true'] { background: var(--panel-2); color: var(--text); }
+.tri button[data-value='yes'][aria-checked='true'] { background: var(--mint); color: var(--on-mint); }
+.tri button[data-value='no'][aria-checked='true'] { background: var(--red-tint); color: var(--red); box-shadow: inset 0 0 0 1px var(--red); }
+
+.landmap-card { display: grid; gap: var(--space-2); }
+
+@media (max-width: 900px) {
+  .landmap-layout { grid-template-columns: 1fr; }
+  .landmap-filters { position: static; max-height: none; }
+  .landmap-stage { order: -1; } /* map first on a phone, filters below it */
+  .nl-map { height: 62vh; }
+}
+
+/* ---------- Import card and search results ---------- */
+.landmap-import { display: grid; gap: var(--space-3); }
+.drop { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); padding: var(--space-4); border: 1px dashed var(--mint-line); border-radius: var(--radius-md); background: var(--mint-tint); }
+.drop.over { background: rgba(157, 240, 207, 0.22); border-style: solid; }
+.drop label { cursor: pointer; }
+.drop input:focus-visible + * , .drop label:focus-within { outline: 2px solid var(--mint); outline-offset: 2px; }
+.imported-row { padding: var(--space-1) 0; }
+.notice.bad { border-color: var(--red); color: var(--red); background: var(--red-tint); }
+
+.result-list { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: grid; gap: 2px; }
+.result-list button { display: flex; align-items: center; gap: var(--space-2); width: 100%; min-height: 44px; padding: 6px 10px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text); text-align: left; }
+.result-list button:hover, .result-list button:focus-visible { background: var(--hover); }
+.result-list small { display: block; color: var(--muted); font-size: 12px; }
+.result-list .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--mint); }
+.result-list .dot.restaurant { background: var(--type-restaurant); }
+.result-list .dot.cafe { background: var(--type-cafe); }
+.result-list .dot.bar { background: var(--type-bar); }
+.result-list .dot.meeting_room { background: var(--type-meeting_room); }
+.result-list .dot.hotel { background: var(--type-hotel); }
+.result-list .dot.event { background: var(--type-event); }
+.landmap-filters .chip[data-service][aria-pressed='true'] { border-color: var(--mint-line); background: var(--mint-tint); color: var(--mint); }
+.landmap-import > summary { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); cursor: pointer; min-height: 44px; list-style: none; }
+.landmap-import > summary::-webkit-details-marker { display: none; }
+.landmap-import[open] > summary { margin-bottom: var(--space-2); }
+.landmap-import > p, .landmap-import > .drop, .landmap-import > div { margin-top: var(--space-3); }

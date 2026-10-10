@@ -2,6 +2,7 @@
 // The pure rules are in core/offer.js.
 
 import { defaultPrefs, normalizePrefs } from '../core/offer.js';
+import { listImported } from './imported-venues.js';
 import { loadBundledJson } from '../services/mock/network.js';
 
 const KEY = 'aether.offer';
@@ -35,5 +36,6 @@ export async function listProviders() {
 
 // All venues in the demo data, for counting in the settings screen. No simulated delay.
 export async function allVenues() {
-  return (await loadBundledJson('data/venues.json')).venues;
+  const [base, imported] = await Promise.all([loadBundledJson('data/venues.json'), listImported()]);
+  return [...base.venues, ...imported];
 }

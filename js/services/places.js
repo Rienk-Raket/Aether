@@ -11,7 +11,7 @@ export const PROVIDER_NAME = 'Plekwijzer (demo)';
 const TTL_MS = 24 * 60 * 60 * 1000;
 // Part of every cache key. Raise it when the shape of a venue changes, so answers saved by an
 // older version are not mixed with new ones.
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 
 // Thrown when we are offline and nothing was stored earlier.
 export class OfflineError extends Error {
@@ -34,6 +34,23 @@ export async function findVenues({ lat, lng, radiusKm = 10 }) {
   }
 
   const venues = venuesNear(await provider.fetchAllVenues(), { lat, lng }, radiusKm);
+  await cacheSet(key, venues, TTL_MS);
+  return { venues, source: 'live' };
+}
+
+// Every venue in the demo data (for the map of the Netherlands). Cached for 24 hours.
+// Returns { venues, source: 'live' | 'cache' | 'stale' }
+export async function findAllVenues() {
+  const key = `venues:${CACHE_VERSION}:all`;
+  const cached = await cacheGet(key);
+  if (cached && !cached.expired) return { venues: cached.data, source: 'cache' };
+
+  if (isOffline()) {
+    if (cached) return { venues: cached.data, source: 'stale' };
+    throw new OfflineError();
+  }
+
+  const venues = await provider.fetchAllVenues();
   await cacheSet(key, venues, TTL_MS);
   return { venues, source: 'live' };
 }

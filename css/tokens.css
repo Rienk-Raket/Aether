@@ -37,6 +37,7 @@
   --type-bar: #c08cff;
   --type-meeting_room: #6fd0ff;
   --type-hotel: #ff8fb3;
+  --type-event: #8fe388;
 
   --gradient-brand: linear-gradient(135deg, var(--mint), #73a8ff);
   --gradient-bar: linear-gradient(90deg, var(--mint-2), var(--blue));

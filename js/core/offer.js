@@ -27,9 +27,13 @@ export function defaultPrefs() {
     quiet: false,
     maxPriceLevel: 4, // 1 (€) … 4 (€€€€)
     types: [...VENUE_TYPES], // kinds of businesses that may be proposed
+    typesVersion: 2, // 1 (or missing) = saved before the type 'event' existed
     providers: {}, // { providerId: false } for switched-off ones; missing = on
   };
 }
+
+// Before venue type 'event' existed, "all types" meant these five: such saved wishes now include events.
+const LEGACY_ALL_TYPES = ['restaurant', 'cafe', 'bar', 'meeting_room', 'hotel'];
 
 const onlyKnown = (list, known) => (Array.isArray(list) ? known.filter((item) => list.includes(item)) : []);
 
@@ -45,9 +49,15 @@ export function normalizePrefs(raw) {
     accessible: raw.accessible === true,
     quiet: raw.quiet === true,
     maxPriceLevel: Number.isInteger(level) && level >= 1 && level <= 4 ? level : base.maxPriceLevel,
-    types: Array.isArray(raw.types) ? onlyKnown(raw.types, VENUE_TYPES) : base.types,
+    types: Array.isArray(raw.types) ? onlyKnown(raw.types, VENUE_TYPES).concat(migratedTypes(raw)) : base.types,
+    typesVersion: 2,
     providers: Object.fromEntries(Object.entries(raw.providers ?? {}).filter(([, on]) => on === false)),
   };
+}
+
+function migratedTypes(raw) {
+  const legacyAll = raw.typesVersion !== 2 && LEGACY_ALL_TYPES.every((type) => raw.types.includes(type));
+  return legacyAll && !raw.types.includes('event') ? ['event'] : [];
 }
 
 export const providerOn = (prefs, id) => prefs.providers[id] !== false;

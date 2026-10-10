@@ -3,7 +3,7 @@
 import { openDB, deleteDB } from '../../vendor/idb.js';
 
 const DB_NAME = 'aether';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 let dbPromise = null;
 
@@ -22,6 +22,10 @@ export function getDB() {
       if (oldVersion < 2) {
         // Feed of things that happened (shown in "Activiteit").
         db.createObjectStore('activity', { keyPath: 'id' });
+      }
+      if (oldVersion < 3) {
+        // Venues that came from an uploaded guide (see data/imported-venues.js).
+        db.createObjectStore('imported_venues', { keyPath: 'id' });
       }
     },
   });
