@@ -92,15 +92,19 @@
 .plan { overflow: visible; }
 .funnel-bar { min-width: 6px; }
 
-/* ---------- Mode: the business portal replaces the personal navigation ---------- */
-.nav-business, .bottom-business { display: none; }
-body[data-mode='business'] .sidebar .nav-group:not(.nav-business) { display: none; }
-body[data-mode='business'] .sidebar .nav-business { display: grid; }
-body[data-mode='business'] [data-mode-switch] { display: none; }
-body:not([data-mode='business']) [data-to-personal] { display: none; }
+/* ---------- Mode: the business portal and the work environment replace the personal navigation ---------- */
+.nav-business, .bottom-business, .nav-work, .bottom-work { display: none; }
+body[data-mode='business'] .sidebar .nav-group:not(.nav-business),
+body[data-mode='work'] .sidebar .nav-group:not(.nav-work) { display: none; }
+body[data-mode='business'] .sidebar .nav-business, body[data-mode='work'] .sidebar .nav-work { display: grid; }
+/* The button to the other environments: hidden inside an environment, and by kind of profile. */
+body[data-mode='business'] [data-mode-switch], body[data-mode='business'] [data-mode-switch-work],
+body[data-mode='work'] [data-mode-switch], body[data-mode='work'] [data-mode-switch-work] { display: none; }
+body[data-kind='work'] [data-mode-switch], body[data-kind='business'] [data-mode-switch-work] { display: none; }
+body[data-mode='personal'] [data-to-personal] { display: none; }
 @media (max-width: 900px) {
-  body[data-mode='business'] .bottom:not(.bottom-business) { display: none; }
-  body[data-mode='business'] .bottom-business { display: flex; }
+  body[data-mode='business'] .bottom:not(.bottom-business), body[data-mode='work'] .bottom:not(.bottom-work) { display: none; }
+  body[data-mode='business'] .bottom-business, body[data-mode='work'] .bottom-work { display: flex; }
   [data-to-personal] { display: none; }
 }
 
@@ -187,3 +191,16 @@ ol.steps { list-style: none; padding: 0; }
 .swipe-count { text-align: center; margin-top: 0; }
 @media (prefers-reduced-motion: reduce) { .swipe-track { scroll-behavior: auto; } }
 .biz-row { flex-wrap: wrap; }
+
+/* ---------- Work environment ---------- */
+.work-list { display: grid; gap: var(--space-3); }
+.work-venue { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); }
+.work-venue .grow { display: grid; gap: 4px; min-width: 0; }
+.work-icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: var(--hover); color: var(--mint); }
+.work-icon svg { width: 22px; height: 22px; }
+.work-icon.restaurant { color: var(--type-restaurant); } .work-icon.cafe { color: var(--type-cafe); } .work-icon.bar { color: var(--type-bar); }
+.work-icon.meeting_room { color: var(--type-meeting_room); } .work-icon.hotel { color: var(--type-hotel); } .work-icon.event { color: var(--type-event); }
+.work-next { display: grid; gap: 4px; margin: var(--space-2) 0; }
+.work-next strong { font: 600 22px var(--font-display); }
+.work-actions { display: grid; gap: var(--space-2); }
+tfoot td { border-top: 1px solid var(--border); padding-top: 12px; }

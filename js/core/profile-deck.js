@@ -4,7 +4,8 @@
 
 import { normalizePreferences } from './profile-model.js';
 
-export const PROFILE_KINDS = ['personal', 'business'];
+// personal = Particulier, work = Zakelijk afspreken (no venue of their own), business = zaak-eigenaar
+export const PROFILE_KINDS = ['personal', 'work', 'business'];
 
 // type 'statement': answer 'yes' | 'no'. type 'choice': answer is one of the option values.
 export const DECKS = {
@@ -21,6 +22,24 @@ export const DECKS = {
     { id: 'max_minutes', type: 'choice', options: ['15', '30', '45', '0'] },
     { id: 'budget', type: 'choice', options: ['1', '2', '3', '4'] },
     { id: 'place', type: 'choice', options: ['restaurant', 'cafe', 'bar', 'meeting_room'] },
+  ],
+  work: [
+    { id: 'meeting_kind', type: 'choice', options: ['lunch', 'meeting', 'client', 'workshop', 'drinks'] },
+    { id: 'group_size', type: 'choice', options: ['small', 'medium', 'large', 'xl'] },
+    { id: 'budget', type: 'choice', options: ['1', '2', '3', '4'] },
+    { id: 'transport', type: 'choice', options: ['car', 'transit', 'bike', 'walk'] },
+    { id: 'max_minutes', type: 'choice', options: ['15', '30', '45', '0'] },
+    { id: 'rush', type: 'statement' },
+    { id: 'quiet', type: 'statement' },
+    { id: 'av', type: 'statement' },
+    { id: 'wifi', type: 'statement' },
+    { id: 'catering', type: 'statement' },
+    { id: 'parking', type: 'statement' },
+    { id: 'near_centre', type: 'statement' },
+    { id: 'office_hours', type: 'statement' },
+    { id: 'receipt', type: 'statement' },
+    { id: 'co2', type: 'statement' },
+    { id: 'fair', type: 'statement' },
   ],
   business: [
     { id: 'venue_type', type: 'choice', options: ['restaurant', 'cafe', 'bar', 'hotel', 'meeting_room', 'event'] },
@@ -59,6 +78,20 @@ export function applyPersonalAnswers(answers, prefs) {
   if (['1', '2', '3', '4'].includes(answers.budget)) next.budget_level = Number(answers.budget);
   if (DECKS.personal.find((c) => c.id === 'place').options.includes(answers.place)) next.preferred_types = [answers.place];
   return normalizePreferences(next);
+}
+
+// Answers of someone who meets for work → preferences (travel, fairness) plus the work profile.
+export function applyWorkAnswers(answers, prefs) {
+  const preferences = applyPersonalAnswers(answers, prefs);
+  if (yes(answers, 'quiet')) preferences.dining = { ...preferences.dining, quiet: 'must' };
+  const needs = Object.fromEntries(['av', 'wifi', 'catering', 'parking', 'near_centre', 'office_hours', 'receipt', 'co2', 'quiet'].filter((id) => answered(answers, id)).map((id) => [id, yes(answers, id)]));
+  const work = {
+    meeting_kind: answers.meeting_kind ?? null,
+    group_size: answers.group_size ?? null,
+    budget_level: ['1', '2', '3', '4'].includes(answers.budget) ? Number(answers.budget) : null,
+    needs,
+  };
+  return { preferences, work };
 }
 
 // Business answers → what we know about the venue of this owner (used when connecting a zaak).

@@ -7,7 +7,7 @@ import { getStats, getVenue, OfflineError } from '../services/business-api.js';
 import { guard } from './guard.js';
 import { limit } from '../core/entitlements.js';
 import { funnel, splitShares, isoDay } from '../core/stats.js';
-import { swipeEnabled, setSwipeEnabled, swipeToggle, swipeCardsHtml, wireSwipeCards } from '../ui/swipe-cards.js';
+import { swipeEnabled, setSwipeEnabled, swipeToggle, swipeCardsHtml, wireSwipeCards } from '../../ui/swipe-cards.js';
 import { pageHead, kpi, bars, funnelHtml, lineChart, planPill, tooFew, offlineCard, dateTimeLabel } from '../ui/widgets.js';
 
 const b = t.business;

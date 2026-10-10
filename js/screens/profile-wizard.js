@@ -8,7 +8,7 @@ import { icon } from '../ui/icons.js';
 import { showToast } from '../ui/toast.js';
 import { navigate } from '../router.js';
 import { createDeck } from '../ui/card-deck.js';
-import { deckFor, applyPersonalAnswers, businessProfileFrom, PROFILE_KINDS } from '../core/profile-deck.js';
+import { deckFor, applyPersonalAnswers, applyWorkAnswers, businessProfileFrom, PROFILE_KINDS } from '../core/profile-deck.js';
 import { ensureSelf } from '../data/people.js';
 import { createProfile, updateProfileFromDeck, profileKind } from '../data/profiles.js';
 import { getState } from '../business/data/store.js';
@@ -35,7 +35,7 @@ export async function renderProfileWizard(container, _params, query) {
         <div class="kind-grid" role="radiogroup" aria-label="${D.kindTitle}">
           ${PROFILE_KINDS.map((kind) => `
             <button type="button" role="radio" aria-checked="${state.kind === kind}" class="card kind-card" data-kind="${kind}">
-              <span class="start-icon">${icon(kind === 'business' ? 'restaurant' : 'users')}</span>
+              <span class="start-icon">${icon({ business: 'restaurant', work: 'meeting_room', personal: 'users' }[kind])}</span>
               <strong>${D.kinds[kind].name}</strong><span class="muted">${D.kinds[kind].text}</span>
             </button>`).join('')}
         </div>
@@ -92,7 +92,7 @@ export async function renderProfileWizard(container, _params, query) {
       <div class="deck-step">
         <div class="eyebrow">${D.kindBadge[state.kind]} · ${esc(state.name)}</div>
         <h1 class="section-gap">${redo ? D.redoTitle : D.summaryTitle}</h1>
-        <p class="sub">${D.summaryText} ${state.kind === 'business' && !redo ? D.businessNext : ''}</p>
+        <p class="sub">${D.summaryText} ${!redo && state.kind === 'business' ? D.businessNext : ''}${!redo && state.kind === 'work' ? D.workNext : ''}</p>
         <div class="card deck-summary">${rows.join('')}</div>
         <div class="sheet-actions"><button type="button" class="btn" data-restart>${D.restart}</button><button type="button" class="btn btn-primary btn-large" data-save>${icon('check')} ${D.save}</button></div>
       </div>`);
@@ -101,17 +101,23 @@ export async function renderProfileWizard(container, _params, query) {
   }
 
   async function save() {
-    const personal = state.kind === 'personal';
-    const preferences = personal ? applyPersonalAnswers(state.answers, self?.preferences) : null;
-    const business = personal ? null : businessProfileFrom(state.answers);
+    const { kind, answers } = state;
+    // What the cards tell us, on top of what the profile already has (nothing, for a new profile).
+    const fromCards = (prefs) => {
+      if (kind === 'work') return applyWorkAnswers(answers, prefs);
+      if (kind === 'business') return { preferences: null, business: businessProfileFrom(answers) };
+      return { preferences: applyPersonalAnswers(answers, prefs) };
+    };
     if (redo) {
-      await updateProfileFromDeck(self.id, { preferences, business, answers: state.answers });
+      await updateProfileFromDeck(self.id, { ...fromCards(self.preferences), answers });
       showToast(D.redoSaved);
-      return navigate('/profiel');
+      return navigate(kind === 'work' ? '/werk' : '/profiel');
     }
-    const profile = await createProfile(state.name, { kind: state.kind, preferences: personal ? applyPersonalAnswers(state.answers, null) : null, business, answers: state.answers });
+    const profile = await createProfile(state.name, { kind, ...fromCards(null), answers });
     showToast(D.saved(profile.name));
-    navigate(personal ? '/profiel' : getState() ? '/zakelijk' : '/zakelijk/aansluiten');
+    if (kind === 'work') navigate('/werk');
+    else if (kind === 'business') navigate(getState() ? '/zakelijk' : '/zakelijk/aansluiten');
+    else navigate('/profiel');
   }
 
   if (redo) stepDeck();

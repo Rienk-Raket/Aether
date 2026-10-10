@@ -1,6 +1,6 @@
 /* Profile cards: swipeable statements and choices. */
 
-.kind-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-4); }
+.kind-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-top: var(--space-4); }
 .kind-card { display: grid; gap: var(--space-2); align-content: start; text-align: left; padding: var(--space-5); min-height: 180px; color: var(--text); cursor: pointer; border: 1px solid var(--border); }
 .kind-card:hover, .kind-card:focus-visible { border-color: var(--mint-line); }
 .kind-card[aria-checked='true'] { border-color: var(--mint); background: var(--mint-tint); box-shadow: var(--mint-glow); }

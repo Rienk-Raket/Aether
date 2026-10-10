@@ -11,25 +11,10 @@ import { mountImport } from './landmap-import.js';
 import { findAllVenues, OfflineError, PROVIDER_NAME } from '../services/places.js';
 import { loadBundledJson } from '../services/mock/network.js';
 import { VENUE_TYPES, openLabel, formatPriceRange } from '../core/venues.js';
-import { CONDITIONS, SERVICES, applyFilters, activeCount, emptyFilters, normalizeFilters } from '../core/map-filters.js';
+import { CONDITIONS, SERVICES, applyFilters, activeCount, emptyFilters } from '../core/map-filters.js';
+import { loadFilters, saveFilters } from '../core/map-filters-store.js';
 
-const KEY = 'aether.landmap.filters';
 const RATINGS = [0, 4, 4.3, 4.5, 4.7];
-
-function loadFilters() {
-  try {
-    return normalizeFilters(JSON.parse(localStorage.getItem(KEY)));
-  } catch {
-    return emptyFilters();
-  }
-}
-const saveFilters = (filters) => {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(filters));
-  } catch {
-    // not remembered
-  }
-};
 
 export async function renderLandmap(container, _params, _query, message = '') {
   const stop = loadingFor(container, t.landmap.loading);

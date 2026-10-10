@@ -43,7 +43,7 @@ export async function renderStartMenu(container) {
   on('choose', async () => {
     const id = await actionSheet(
       t.start.chooseTitle,
-      profiles.map((p) => ({ label: `${p.name} · ${t.deck.kindBadge[profileKind(p)]}${p.id === self.id ? ` (${t.start.activeMark})` : ''}`, value: p.id, icon: profileKind(p) === 'business' ? 'restaurant' : 'user' })),
+      profiles.map((p) => ({ label: `${p.name} · ${t.deck.kindBadge[profileKind(p)]}${p.id === self.id ? ` (${t.start.activeMark})` : ''}`, value: p.id, icon: { business: 'restaurant', work: 'meeting_room', personal: 'user' }[profileKind(p)] })),
     );
     if (!id) return;
     await switchProfile(id);

@@ -41,9 +41,10 @@ export async function renderProfile(container) {
         <button type="button" class="icon-btn" data-edit-name aria-label="${t.profile.editName}">${icon('edit')}</button>
       </div>
       <div class="card card-row section-gap">
-        <span class="muted small">${profileKind(self) === 'business' ? t.deck.kinds.business.text : t.deck.kinds.personal.text}</span>
+        <span class="muted small">${t.deck.kinds[profileKind(self)].text}</span>
         <span class="row">
           ${profileKind(self) === 'business' ? `<a class="btn btn-small" href="#/zakelijk">${icon('restaurant')} ${t.business.toBusiness}</a>` : ''}
+          ${profileKind(self) === 'work' ? `<a class="btn btn-small" href="#/werk">${icon('meeting_room')} ${t.work.toWork}</a>` : ''}
           <a class="btn btn-small" href="#/profiel/nieuw?opnieuw=1">${icon('sliders')} ${t.deck.redo}</a>
         </span>
       </div>

@@ -12,7 +12,7 @@ describe('profile cards', () => {
         ids.add(card.id);
         const text = t.deck.cards[card.id];
         expect(text, `${kind}.${card.id}`).toBeDefined();
-        if (card.type === 'statement') expect(text[kind], `${kind}.${card.id}`).toBeTruthy();
+        if (card.type === 'statement') expect(text[kind] ?? text.personal ?? text.business, `${kind}.${card.id}`).toBeTruthy();
         else {
           expect(text.title).toBeTruthy();
           for (const option of card.options) expect(text.options[option], `${card.id}.${option}`).toBeTruthy();

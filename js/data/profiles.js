@@ -22,11 +22,12 @@ export async function switchProfile(id) {
 
 // kind: 'personal' | 'business'. `preferences` and `business` come from the profile cards
 // (core/profile-deck.js); `answers` are kept so the cards can be redone later.
-export async function createProfile(name, { kind = 'personal', preferences = null, business = null, answers = {} } = {}) {
+export async function createProfile(name, { kind = 'personal', preferences = null, business = null, work = null, answers = {} } = {}) {
   const person = newPerson({ name, isSelf: true });
   person.kind = kind;
   if (preferences) person.preferences = preferences;
   if (business) person.business = business;
+  if (work) person.work = work;
   person.deck_answers = answers;
   const profile = await savePerson(person);
   await switchProfile(profile.id);
@@ -34,18 +35,19 @@ export async function createProfile(name, { kind = 'personal', preferences = nul
 }
 
 // Redoing the cards of an existing profile.
-export async function updateProfileFromDeck(id, { preferences, business, answers }) {
+export async function updateProfileFromDeck(id, { preferences, business, work, answers }) {
   const person = await getPerson(id);
   if (!person) return null;
   if (preferences) person.preferences = preferences;
   if (business) person.business = business;
+  if (work) person.work = work;
   person.deck_answers = answers;
   await savePerson(person);
   announceProfileChange();
   return person;
 }
 
-export const profileKind = (person) => (person?.kind === 'business' ? 'business' : 'personal');
+export const profileKind = (person) => (['business', 'work'].includes(person?.kind) ? person.kind : 'personal');
 
 // The last profile cannot be removed. Returns false when nothing was deleted.
 export async function removeProfile(id) {

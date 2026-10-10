@@ -92,7 +92,17 @@
           <a class="nav-link" href="#/zakelijk/team" data-route="/zakelijk/team"><span data-icon="users"></span>Team &amp; rechten</a>
         </nav>
 
+        <!-- Werkomgeving (zakelijk afspreken): shown instead of the personal navigation on #/werk/... -->
+        <nav class="nav-group nav-work" aria-label="Werk">
+          <p class="nav-title">Werk</p>
+          <a class="nav-link" href="#/werk" data-route="/werk" data-exact><span data-icon="home"></span>Overzicht</a>
+          <a class="nav-link" href="#/werk/plekken" data-route="/werk/plekken"><span data-icon="meeting_room"></span>Plekken</a>
+          <a class="nav-link" href="#/werk/declaraties" data-route="/werk/declaraties"><span data-icon="copy"></span>Declaraties</a>
+          <a class="nav-link" href="#/kaart" data-route="/kaart"><span data-icon="pin"></span>Kaart</a>
+        </nav>
+
         <div class="side-bottom">
+          <a class="btn btn-small btn-block" href="#/werk" data-mode-switch-work><span data-icon="meeting_room"></span>Werkomgeving</a>
           <a class="btn btn-small btn-block" href="#/zakelijk" data-mode-switch><span data-icon="restaurant"></span>Zakelijk account</a>
           <a class="profile-link" href="#/start" data-profile>
             <span class="avatar" data-profile-avatar>?</span>
@@ -133,6 +143,15 @@
         <a class="nav-link" href="#/zakelijk/zaak" data-route="/zakelijk/zaak"><span data-icon="restaurant"></span>Zaak</a>
         <a class="nav-link" href="#/zakelijk/aanvragen" data-route="/zakelijk/aanvragen"><span data-icon="calendar"></span>Aanvragen</a>
         <button class="nav-link" type="button" data-more-business data-route-group="/zakelijk/abonnement /zakelijk/facturen /zakelijk/team"><span data-icon="more-h"></span>Meer</button>
+      </nav>
+
+      <!-- Phone, work environment -->
+      <nav class="bottom bottom-work" aria-label="Werk">
+        <a class="nav-link" href="#/werk" data-route="/werk" data-exact><span data-icon="home"></span>Overzicht</a>
+        <a class="nav-link" href="#/werk/plekken" data-route="/werk/plekken"><span data-icon="meeting_room"></span>Plekken</a>
+        <a class="nav-link" href="#/nieuw" data-route="/nieuw"><span data-icon="plus"></span>Afspraak</a>
+        <a class="nav-link" href="#/werk/declaraties" data-route="/werk/declaraties"><span data-icon="copy"></span>Declaraties</a>
+        <button class="nav-link" type="button" data-more-work data-route-group="/kaart /agenda /instellingen"><span data-icon="more-h"></span>Meer</button>
       </nav>
     </div>
 
