@@ -7,6 +7,7 @@ import { getStats, getVenue, OfflineError } from '../services/business-api.js';
 import { guard } from './guard.js';
 import { limit } from '../core/entitlements.js';
 import { funnel, splitShares, isoDay } from '../core/stats.js';
+import { swipeEnabled, setSwipeEnabled, swipeToggle, swipeCardsHtml, wireSwipeCards } from '../ui/swipe-cards.js';
 import { pageHead, kpi, bars, funnelHtml, lineChart, planPill, tooFew, offlineCard, dateTimeLabel } from '../ui/widgets.js';
 
 const b = t.business;
@@ -39,35 +40,65 @@ export async function render(container) {
   const labels = [0, 7, 14, 21, DAYS - 1].map((i) => [i, new Date(range.days[i].date).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' })]);
   const alt = b.stats.chartAlt(b.num(range.shown), b.num(range.chosen));
 
-  container.innerHTML = `
-    <section class="screen">
-      ${pageHead(b.eyebrow, b.overview.greeting(ctx.user.name.split(' ')[0]), b.overview.sub(venue?.name ?? ctx.state.business.name, DAYS))}
-      ${ctx.banner}
-      ${staleNote(stats)}
-      <div class="biz-grid cols-4">
-        ${kpi(b.overview.chosen, b.num(range.chosen), range.trend.chosen)}
-        ${kpi(b.overview.shortlisted, b.num(range.shortlisted), range.trend.shortlisted)}
-        ${kpi(b.overview.requests, b.num(range.requests), range.trend.requests)}
-        ${kpi(b.overview.size, avgSize, null)}
-      </div>
-      <div class="biz-grid cols-2">
-        <div class="card"><h2>${b.overview.chartTitle}</h2>
+  // The blocks of information. In the original layout they sit in a grid; in the swipe view each
+  // block is one card.
+  const kpis = [
+    kpi(b.overview.chosen, b.num(range.chosen), range.trend.chosen),
+    kpi(b.overview.shortlisted, b.num(range.shortlisted), range.trend.shortlisted),
+    kpi(b.overview.requests, b.num(range.requests), range.trend.requests),
+    kpi(b.overview.size, avgSize, null),
+  ];
+  const chart = `<h2>${b.overview.chartTitle}</h2>
           <p class="muted small legend"><span style="color:var(--blue)">●</span> ${b.overview.legendShown} &nbsp; <span style="color:var(--mint)">●</span> ${b.overview.legendChosen}</p>
-          ${lineChart([range.days.map((d) => d.shown), range.days.map((d) => d.chosen * 8)], labels, alt)}</div>
-        <div class="card"><h2>${b.overview.funnelTitle}</h2>${funnelHtml(funnel(range))}</div>
-      </div>
-      <div class="biz-grid cols-3">
-        <div class="card"><h2>${b.overview.originTitle}</h2>${origins ? bars(origins.slice(0, 5).map((o) => ({ label: o.key, share: o.share })), 'mint') : tooFew()}</div>
-        <div class="card"><h2>${b.overview.momentsTitle}</h2>${bars(weekdays, '')}</div>
-        <div class="card"><h2>${b.overview.planTitle}</h2>
+          ${lineChart([range.days.map((d) => d.shown), range.days.map((d) => d.chosen * 8)], labels, alt)}`;
+  const funnelBlock = `<h2>${b.overview.funnelTitle}</h2>${funnelHtml(funnel(range))}`;
+  const originBlock = `<h2>${b.overview.originTitle}</h2>${origins ? bars(origins.slice(0, 5).map((o) => ({ label: o.key, share: o.share })), 'mint') : tooFew()}`;
+  const momentsBlock = `<h2>${b.overview.momentsTitle}</h2>${bars(weekdays, '')}`;
+  const planBlock = `<h2>${b.overview.planTitle}</h2>
           <p class="biz-pill-row">${planPill(ctx.plan, ' · demo')}</p>
           ${max > 0 ? `<div class="usage-line"><p class="small muted">${b.overview.usage(used, max === Infinity ? b.sub.unlimited : max)}</p><div class="bar-track"><div class="bar-fill mint" style="width:${max === Infinity ? 5 : Math.min(100, Math.round((used / max) * 100))}%"></div></div></div>` : `<p class="muted small">${b.sub.basisText}</p>`}
-          <a class="btn btn-small" href="#/zakelijk/abonnement">${b.overview.manage}</a></div>
+          <a class="btn btn-small" href="#/zakelijk/abonnement">${b.overview.manage}</a>`;
+  const requestsBlock = `<h2>${b.overview.newRequests}</h2>
+        ${fresh.length ? `<div class="list-card">${fresh.slice(0, 3).map(requestRow).join('')}</div>` : `<p class="muted">${b.overview.noNew}</p>`}`;
+
+  const swipe = swipeEnabled();
+  const cards = [
+    { title: b.overview.cardNames.numbers, html: `<h2>${b.overview.cardNames.numbers}</h2><div class="biz-grid kpi-pair">${kpis.join('')}</div>` },
+    { title: b.overview.chartTitle, html: chart },
+    { title: b.overview.funnelTitle, html: funnelBlock },
+    { title: b.overview.originTitle, html: originBlock },
+    { title: b.overview.momentsTitle, html: momentsBlock },
+    { title: b.overview.planTitle, html: planBlock },
+    { title: b.overview.newRequests, html: requestsBlock },
+  ];
+
+  const original = `
+      <div class="biz-grid cols-4">${kpis.join('')}</div>
+      <div class="biz-grid cols-2">
+        <div class="card">${chart}</div>
+        <div class="card">${funnelBlock}</div>
       </div>
-      <div class="card"><h2>${b.overview.newRequests}</h2>
-        ${fresh.length ? `<div class="list-card">${fresh.slice(0, 3).map(requestRow).join('')}</div>` : `<p class="muted">${b.overview.noNew}</p>`}</div>
+      <div class="biz-grid cols-3">
+        <div class="card">${originBlock}</div>
+        <div class="card">${momentsBlock}</div>
+        <div class="card">${planBlock}</div>
+      </div>
+      <div class="card">${requestsBlock}</div>`;
+
+  container.innerHTML = `
+    <section class="screen">
+      ${pageHead(b.eyebrow, b.overview.greeting(ctx.user.name.split(' ')[0]), b.overview.sub(venue?.name ?? ctx.state.business.name, DAYS), swipeToggle(swipe))}
+      ${ctx.banner}
+      ${staleNote(stats)}
+      ${swipe ? swipeCardsHtml(cards) : original}
       <p class="demo-note">${b.demoNote}</p>
     </section>`;
+
+  if (swipe) wireSwipeCards(container.querySelector('.swipe'), cards.map((c) => c.title));
+  container.querySelector('[data-swipe-toggle]').addEventListener('click', () => {
+    setSwipeEnabled(!swipe);
+    render(container);
+  });
 }
 
 function requestRow(r) {

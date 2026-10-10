@@ -156,3 +156,33 @@ ol.steps { list-style: none; padding: 0; }
 .business-promo { margin-top: 18px; border-color: rgba(136, 185, 255, 0.35); }
 .business-promo .card-row { flex-wrap: wrap; }
 .business-promo .btn { flex-shrink: 0; }
+
+/* ---------- Swipeable cards (overview) ---------- */
+[data-swipe-toggle][aria-pressed='true'] { border-color: var(--mint-line); color: var(--mint); background: var(--mint-tint); }
+.swipe { margin-top: 16px; }
+.swipe-track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y; /* swipe sideways for the next card, the page still scrolls up and down */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px 2px 8px;
+}
+.swipe-track::-webkit-scrollbar { display: none; }
+.swipe-track:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; border-radius: var(--radius-md); }
+.swipe-card { flex: 0 0 min(88%, 560px); scroll-snap-align: center; margin: 0; align-self: stretch; display: flex; flex-direction: column; gap: 10px; }
+.swipe-card + .swipe-card { margin-top: 0; }
+.swipe-card .kpi-pair { grid-template-columns: 1fr 1fr; gap: 10px; }
+.swipe-card .kpi { padding: 14px; }
+.swipe-card .kpi .value { font-size: 28px; }
+.swipe-controls { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.swipe-controls .icon-btn:disabled { opacity: 0.35; cursor: default; }
+.swipe-dots { display: flex; gap: 2px; }
+.swipe-dot { position: relative; width: 28px; height: 44px; border: 0; background: transparent; padding: 0; }
+.swipe-dot::after { content: ''; position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--line); transition: transform var(--dur-fast), background var(--dur-fast); }
+.swipe-dot[aria-current='true']::after { background: var(--mint); transform: scale(1.5); }
+.swipe-count { text-align: center; margin-top: 0; }
+@media (prefers-reduced-motion: reduce) { .swipe-track { scroll-behavior: auto; } }
