@@ -32,6 +32,7 @@ export function initShell(handlers) {
       { label: t.nav.activity, value: '/activiteit', icon: 'activity' },
       { label: t.nav.settings, value: '/instellingen', icon: 'settings' },
       { label: t.business.toBusiness, value: '/zakelijk', icon: 'restaurant' },
+      { label: t.work.toWork, value: '/werk', icon: 'meeting_room' },
     ]);
     if (choice) navigate(choice);
   });
@@ -42,6 +43,16 @@ export function initShell(handlers) {
       { label: t.business.nav.invoices, value: '/zakelijk/facturen', icon: 'copy' },
       { label: t.business.nav.team, value: '/zakelijk/team', icon: 'users' },
       { label: t.business.toPersonal, value: '/overzicht', icon: 'home' },
+    ]);
+    if (choice) navigate(choice);
+  });
+
+  document.querySelector('[data-more-work]').addEventListener('click', async () => {
+    const choice = await actionSheet(t.work.title, [
+      { label: t.work.nav.map, value: '/kaart', icon: 'pin' },
+      { label: t.work.nav.agenda, value: '/agenda', icon: 'calendar' },
+      { label: t.work.nav.settings, value: '/instellingen', icon: 'settings' },
+      { label: t.work.toPersonal, value: '/overzicht', icon: 'home' },
     ]);
     if (choice) navigate(choice);
   });
@@ -57,15 +68,15 @@ export function initShell(handlers) {
 // Marks the link that belongs to the current screen (aria-current="page").
 export function setActiveRoute(path) {
   // The business portal (#/zakelijk/...) swaps the navigation; see css/business.css.
-  document.body.dataset.mode = path.startsWith('/zakelijk') ? 'business' : 'personal';
-  const matches = (route) => path === route || (route !== '/zakelijk' && path.startsWith(`${route}/`)) || (route === '/overzicht' && path.startsWith('/nieuw')) || (route === '/ontdek' && path.startsWith('/plek'));
+  document.body.dataset.mode = path.startsWith('/zakelijk') ? 'business' : path.startsWith('/werk') ? 'work' : 'personal';
+  const matches = (route) => path === route || (!['/zakelijk', '/werk'].includes(route) && path.startsWith(`${route}/`)) || (route === '/overzicht' && path.startsWith('/nieuw')) || (route === '/ontdek' && path.startsWith('/plek'));
 
   document.querySelectorAll('[data-route]').forEach((el) => {
     if (matches(el.dataset.route)) el.setAttribute('aria-current', 'page');
     else el.removeAttribute('aria-current');
   });
 
-  for (const more of document.querySelectorAll('[data-more], [data-more-business]')) {
+  for (const more of document.querySelectorAll('[data-more], [data-more-business], [data-more-work]')) {
     const inMore = more.dataset.routeGroup.split(' ').some(matches);
     if (inMore) more.setAttribute('aria-current', 'page');
     else more.removeAttribute('aria-current');
@@ -78,6 +89,8 @@ export async function refreshProfile() {
   avatar.textContent = initials(self.name);
   avatar.style.setProperty('--hue', hueFor(self.id));
   document.querySelector('[data-profile-name]').textContent = self.name;
+  // The kind of profile decides which environment button is shown (see css/business.css).
+  document.body.dataset.kind = ['business', 'work'].includes(self.kind) ? self.kind : 'personal';
 }
 
 // "Demo · lokaal opgeslagen" normally, "Offline · lokale data" without a connection.

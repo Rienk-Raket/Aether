@@ -2,17 +2,17 @@
 // keyboard) to see the next one. The visitor can switch this view off in the overview to get the
 // original layout back; the choice is remembered on this device.
 
-import { t } from '../../i18n/nl.js';
-import { esc } from '../../ui/dom.js';
-import { icon } from '../../ui/icons.js';
+import { t } from '../i18n/nl.js';
+import { esc } from './dom.js';
+import { icon } from './icons.js';
 
 const KEY = 'aether.business.swipe';
 const b = t.business.overview;
 
 // Without a saved choice, the cards are on for phones and tablets and off on a computer.
-export function swipeEnabled() {
+export function swipeEnabled(key = KEY) {
   try {
-    const saved = localStorage.getItem(KEY);
+    const saved = localStorage.getItem(key);
     if (saved === '1' || saved === '0') return saved === '1';
   } catch {
     // storage blocked: use the default
@@ -20,9 +20,9 @@ export function swipeEnabled() {
   return window.matchMedia('(max-width: 900px)').matches;
 }
 
-export function setSwipeEnabled(on) {
+export function setSwipeEnabled(on, key = KEY) {
   try {
-    localStorage.setItem(KEY, on ? '1' : '0');
+    localStorage.setItem(key, on ? '1' : '0');
   } catch {
     // not remembered
   }

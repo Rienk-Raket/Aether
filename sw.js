@@ -1,7 +1,7 @@
 // Service worker: stores the app files on the device so Aether works offline.
 // APP_SHELL and CACHE_VERSION are generated: run `npm run sw` after adding files or bumping the version.
 
-const CACHE_VERSION = 'aether-v0.11.0';
+const CACHE_VERSION = 'aether-v0.12.0';
 
 const APP_SHELL = [
   './',
@@ -45,7 +45,6 @@ const APP_SHELL = [
   './js/business/services/mock/zaakwijzer-mock.js',
   './js/business/ui/plan-card.js',
   './js/business/ui/promo.js',
-  './js/business/ui/swipe-cards.js',
   './js/business/ui/widgets.js',
   './js/core/booking.js',
   './js/core/candidates.js',
@@ -60,6 +59,7 @@ const APP_SHELL = [
   './js/core/invite.js',
   './js/core/levels.js',
   './js/core/map-cluster.js',
+  './js/core/map-filters-store.js',
   './js/core/map-filters.js',
   './js/core/nl-outline.js',
   './js/core/offer.js',
@@ -75,6 +75,7 @@ const APP_SHELL = [
   './js/core/traffic.js',
   './js/core/travel-estimate.js',
   './js/core/venues.js',
+  './js/core/work-match.js',
   './js/data/activity.js',
   './js/data/appointments.js',
   './js/data/bookings.js',
@@ -98,6 +99,7 @@ const APP_SHELL = [
   './js/i18n/nl-offer.js',
   './js/i18n/nl-profile.js',
   './js/i18n/nl-services.js',
+  './js/i18n/nl-work.js',
   './js/i18n/nl.js',
   './js/router.js',
   './js/screens/activity.js',
@@ -172,6 +174,7 @@ const APP_SHELL = [
   './js/ui/splash-routes.js',
   './js/ui/splash-svg.js',
   './js/ui/splash.js',
+  './js/ui/swipe-cards.js',
   './js/ui/toast.js',
   './js/ui/transport.js',
   './js/ui/venue-art.js',
@@ -179,6 +182,12 @@ const APP_SHELL = [
   './js/ui/venue-map.js',
   './js/ui/venue-section.js',
   './js/version.js',
+  './js/work/data.js',
+  './js/work/open-map.js',
+  './js/work/screens/expenses.js',
+  './js/work/screens/overview.js',
+  './js/work/screens/places.js',
+  './js/work/ui.js',
   './assets/fonts/dmsans-latin.woff2',
   './assets/fonts/spacegrotesk-latin.woff2',
   './assets/icons/apple-touch-icon.png',

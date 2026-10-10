@@ -9,6 +9,7 @@ import { bookingStrings } from './nl-booking.js';
 import { businessStrings } from './nl-business.js';
 import { landmapStrings } from './nl-landmap.js';
 import { deckStrings } from './nl-deck.js';
+import { workStrings } from './nl-work.js';
 import { profileStrings, profileScreen, appointmentPrefs } from './nl-profile.js';
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -18,6 +19,7 @@ export const t = {
   business: businessStrings,
   ...landmapStrings,
   ...deckStrings,
+  ...workStrings,
   ...offerStrings,
   ...profileStrings,
   ...bookingStrings,
